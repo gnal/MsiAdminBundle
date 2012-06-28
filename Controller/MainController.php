@@ -20,7 +20,10 @@ class MainController extends ContainerAware
         return array();
     }
 
-    public function changeLocaleAction()
+    /**
+     * @Route("/admin/locale.html")
+     */
+    public function localeAction()
     {
         $request = $this->container->get('request');
 
@@ -30,7 +33,7 @@ class MainController extends ContainerAware
             $request->setLocale('fr');
         }
 
-        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $this->container->get('router')->generate('dashboard');
+        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $this->container->get('router')->generate('msi_admin_main_dashboard');
 
         return new RedirectResponse($url);
     }
