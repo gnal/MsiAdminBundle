@@ -1,0 +1,81 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}project_name{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/common.css') }}">
+<link rel="stylesheet" href="{{ asset('/vendor/bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/style.css') }}">
+{% endblock %}
+
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="{{ asset('/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('/bundles/msiadmin/js/app.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container" style="width: 960px;">
+            <ul class="nav">
+            {% block nav %}
+                <li><a href="{{ path('msi_admin_main_dashboard') }}">Dashboard</a></li>
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Modules <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_admin_main_dashboard') }}">some_module</a></li>
+                    </ul>
+                </li>
+            {% endblock %}
+            </ul>
+            <ul class="nav pull-right">
+            {% block right_nav %}
+                {% if app.user.id is defined %}
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ app.user }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_user_user_edit', {'id': app.user.id}) }}"><i class="icon-user"></i> {{ 'Profile'|trans({}, 'MsiAdminBundle') }}</a></li>
+                        <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-off"></i> {{ 'Logout'|trans({}, 'MsiAdminBundle') }}</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                <li class="divider-vertical"></li>
+                <li><a href="{{ path('msi_admin_change_locale') }}">{{ 'Français'|trans({}, 'MsiAdminBundle') }}</a></li>
+            {% endblock %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="body container well very-well">
+    <div class="page-header">
+        <div class="pull-right">
+            {% block actions %}{% endblock %}
+        </div>
+        <h1>{% block page_title %}{% endblock page_title %}</h1>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <div class="row">
+                <div class="span12">
+                    {% if app.session.hasFlash('success') %}
+                    <div class="alert alert-success fade in">
+                        <a class="close" data-dismiss="alert" href="#">×</a>
+                        {{ app.session.flash('success') }}
+                    </div>
+                    {% endif %}
+                    {% block breadcrumb %}
+                    {% if admin is defined %}
+                        {{ admin.renderBreadcrumb|raw }}
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+            {% block content %}{% endblock %}
+            <div class="clear"></div>
+        </div> <!-- endspan12 -->
+    </div> <!-- endrow -->
+</div> <!-- endcontainer -->
+<div class="footer container">
+    <p><small>{% block coypright %}&copy; {{ 'now'|date('Y') }} GROUPE MSI INC. ALL RIGHTS RESERVED.{% endblock %}</small></p>
+</div>
+{% endblock %}

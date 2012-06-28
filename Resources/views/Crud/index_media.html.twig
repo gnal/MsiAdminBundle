@@ -1,0 +1,28 @@
+{% extends 'MsiAdminBundle::layout.html.twig' %}
+
+{% block actions %}
+    <a class="btn btn-success" href="{{ admin.genUrl('new') }}"><i class="icon-white icon-plus"></i> Add</a>
+{% endblock %}
+
+{% block page_title %}
+    {{ admin.getLabel(2) }}
+{% endblock %}
+
+{% block content %}
+    {% render 'MsiAdminBundle:Core:limitForm' %}
+    {% include 'MsiAdminBundle:Core:search_form.html.twig' %}
+    <div class="clear"></div>
+    <ul class="thumbnails">
+    {% for photo in dataTable.data %}
+        <li class="span2">
+            <a class="thumbnail" href="#"><img src="/uploads/photos/t_{{ photo.name }}" alt="0"></a>
+            <p class="text-center">
+                <a class="btn btn-mini" href="#"><i class="icon-pencil"></i> EDIT</a>
+            <br>
+            <br>
+                <a class="action-delete btn btn-mini btn-danger" data-url="{{ admin.genUrl('delete', {'id': photo.id}) }}" href="{{ admin.genUrl('delete', {'id': photo.id}) }}"><i class="icon-remove icon-white"></i> DELETE</a>
+            </p>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

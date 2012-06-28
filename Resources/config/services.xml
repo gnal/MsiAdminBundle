@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!--
+    <parameters>
+        <parameter key="msi_admin.example.class">Msi\Bundle\AdminBundle\Example</parameter>
+    </parameters>
+    -->
+    <services>
+        <service id="msi_admin.crud.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\CrudFormHandler" scope="request">
+            <argument type="service" id="request" />
+        </service>
+
+        <service id="msi_admin.admin_loader" class="Msi\Bundle\AdminBundle\Routing\AdminLoader">
+            <argument />
+            <argument type="service" id="service_container" />
+            <tag name="routing.loader"></tag>
+        </service>
+
+        <service id="msi_admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
+        </service>
+
+        <service id="msi_admin.admin" class="Msi\Bundle\AdminBundle\Admin\Admin">
+            <call method="setRouter">
+                <argument type="service" id="router" />
+            </call>
+            <call method="setFormFactory">
+                <argument type="service" id="form.factory" />
+            </call>
+            <call method="setTranslator">
+                <argument type="service" id="translator" />
+            </call>
+            <call method="setTemplating">
+                <argument type="service" id="templating" />
+            </call>
+            <call method="setSecurityContext">
+                <argument type="service" id="security.context" />
+            </call>
+        </service>
+    </services>
+</container>

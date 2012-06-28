@@ -1,0 +1,28 @@
+{% extends 'MsiAdminBundle::layout.html.twig' %}
+
+{% block actions %}
+{% if is_granted('ROLE_ADMIN') %}
+    <a class="btn btn-primary btn-small" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel(1) }}</a>
+{% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {{ admin.getLabel(2) }}
+{% endblock %}
+
+{% block content %}
+    <div class="cool-box">
+        {#{% render 'MsiAdminBundle:Core:limitForm' %}#}
+
+        <form class="pull-right form-search" method=GET action="{{ admin.genUrl('index') }}">
+            {% if admin.hasParent() %}<input type="hidden" value="{{ admin.getRequest().query.get('parentId') }}" name="parentId">{% endif %}
+            <div class="input-append">
+                <input value="{{ admin.getRequest().query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-small"><i class="icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn btn-small" href="{{ admin.genUrl('index', {'parentId': admin.getRequest().query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
+            </div>
+        </form>
+
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    {{ renderer.render(dataTable)|raw }}
+{% endblock %}
