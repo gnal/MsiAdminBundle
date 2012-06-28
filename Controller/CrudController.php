@@ -57,11 +57,7 @@ class CrudController extends ContainerAware
         $dataTable->setData($paginator->getResult());
         $dataTable->setPaginator($paginator);
 
-        return $this->render($this->admin->getTemplate('index'), array(
-            'dataTable' => $dataTable,
-            'paginator' => $paginator,
-            'renderer' => new \Msi\Bundle\AdminBundle\Renderer\DataTableRenderer(),
-        ));
+        return $this->render($this->admin->getTemplate('index'), array());
     }
 
     public function newAction()
@@ -108,9 +104,9 @@ class CrudController extends ContainerAware
         return new RedirectResponse($this->admin->genUrl('index'));
     }
 
-    public function changeAction($field)
+    public function changeAction()
     {
-        $this->admin->getModelManager()->change($this->object, $field);
+        $this->admin->getModelManager()->change($this->object, $this->request->query->get('field'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
     }
@@ -131,7 +127,7 @@ class CrudController extends ContainerAware
         $this->admin->query->set('parentId', $this->parentId);
 
         if ($this->id) {
-            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $id), null, 1);
+            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), null, 1);
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
         }

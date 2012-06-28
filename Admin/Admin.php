@@ -160,6 +160,11 @@ abstract class Admin
         $this->label = $label;
     }
 
+    public function renderTable()
+    {
+        return $this->templating->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getDataTable()));
+    }
+
     public function renderBreadcrumb()
     {
         return $this->templating->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
@@ -365,9 +370,9 @@ abstract class Admin
         $routes = array(
             'index' => 'index',
             'new' => 'new',
-            'edit' => '{id}/edit',
-            'delete' => '{id}/delete',
-            'change' => '{id}/change/{field}',
+            'edit' => 'edit',
+            'delete' => 'delete',
+            'change' => 'change',
         );
 
         foreach ($routes as $key => $val) {

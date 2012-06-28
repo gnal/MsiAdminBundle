@@ -29,6 +29,8 @@ abstract class Column
     public function setObject($object)
     {
         $this->object = $object;
+
+        return $this;
     }
 
     public function getObject()
