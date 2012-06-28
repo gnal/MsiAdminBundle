@@ -48,11 +48,11 @@ class ActionColumn extends Column
         return array(
             'nested' => array(
                 'label' => $this->admin->getChild() ? $this->admin->getChild()->getLabel(2) : null,
-                'roles' => 'ROLE_CLIENT',
+                'roles' => 'ROLE_ADMIN',
             ),
             'edit' => array(
                 'label' => 'Edit',
-                'roles' => 'ROLE_CLIENT',
+                'roles' => 'ROLE_ADMIN',
             ),
             'delete' => array(
                 'label' => 'Delete',
