@@ -1,6 +1,9 @@
 body {
     background: #D0D0CF;
 }
+a:hover {
+    text-decoration: none;
+}
 #body {
     position: relative;
 }

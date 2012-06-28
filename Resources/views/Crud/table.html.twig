@@ -17,7 +17,7 @@
     {% if table.data.count > 0 %}
         {% set paginator = table.paginator %}
         <tr>
-            <td colspan="{{ table.columns|length }}">
+            <td style="background: #fff;" colspan="{{ table.columns|length }}">
                 <div style="line-height: 36px;float: left;">{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length}, 'MsiAdminBundle') }}</div>
                 {{ paginator.render|raw }}
             </td>
