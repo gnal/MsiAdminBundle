@@ -1,6 +1,11 @@
 <ul class="breadcrumb">
 {% for crumb in breadcrumbs %}
-    <li>{% if loop.index != 1 %}<span class="divider"><i class="icon-chevron-right"></i></span>{% endif %}
+    <li {% if crumb.class is defined %}class="{{ crumb.class }}"{% endif %}>
+        {% if loop.index != 1 %}
+            {% if crumb.class is not defined or crumb.class != 'pull-right' %}
+                <span class="divider"><i class="icon-chevron-right"></i></span>
+            {% endif %}
+        {% endif %}
         {% if crumb.path %}
             <a href="{{ crumb.path }}">{{ crumb.label }}</a>
         {% else %}

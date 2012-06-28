@@ -4,10 +4,6 @@
     {{ 'New'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel() }}
 {% endblock %}
 
-{% block actions %}
-    <a class="btn btn-inverse btn-small" href="{{ admin.genUrl('index') }}"><i class="icon-white icon-arrow-left"></i> {{ 'Back'|trans({}, 'MsiAdminBundle') }}</a>
-{% endblock %}
-
 {% block content %}
     <form class="form-vertical" novalidate action="{{ admin.genUrl('new') }}" method=POST {{ form_enctype(form) }}>
         {% include 'MsiAdminBundle:CRUD:form.html.twig' with {'form': form, 'admin': admin} %}

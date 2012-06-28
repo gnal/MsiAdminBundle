@@ -174,6 +174,7 @@ abstract class Admin
     {
         $request = $this->getRequest();
         $crumbs = array();
+        $back = 'Back';
         $edit = $this->translator->trans('Edit', array(), 'MsiAdminBundle');
         $add = $this->translator->trans('New', array(), 'MsiAdminBundle');
         $id = $request->query->get('id');
@@ -184,23 +185,26 @@ abstract class Admin
 
             $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
             $crumbs[] = array('label' => ucfirst($parent->getModelManager()->findBy(array('a.id' => $parentId), null, 1)->getQuery()->getSingleResult()), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
-
-            if ('index' === $this->action)
-                $crumbs[] = array('label' => $this->getLabel(2), 'path' => '');
-            else
-                $crumbs[] = array('label' => $this->getLabel(2), 'path' => $this->genUrl('index', array('parentId' => $parentId)));
-        } else {
-            if ('index' === $this->action)
-                $crumbs[] = array('label' => $this->getLabel(2), 'path' => '');
-            else
-                $crumbs[] = array('label' => $this->getLabel(2), 'path' => $this->genUrl('index'));
         }
 
-        if ($this->action === 'edit')
-            $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
+        if ('index' === $this->action)
+            $crumbs[] = array('label' => $this->getLabel(2), 'path' => '');
+        else
+            $crumbs[] = array('label' => $this->getLabel(2), 'path' => $this->genUrl('index'));
 
-        if ($this->action === 'new')
+        if ($this->action === 'edit') {
+            $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
+            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        if ($this->action === 'new') {
             $crumbs[] = array('label' => $add.' '.$this->getLabel(), 'path' => '');
+            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        if ($this->hasParent() && 'index' === $this->action) {
+            $crumbs[] = array('label' => $back, 'path' => $this->getParent()->genUrl('index'), 'class' => 'pull-right');
+        }
 
         return $crumbs;
     }
@@ -285,7 +289,7 @@ abstract class Admin
     public function setRequest($request)
     {
         $this->request = $request;
-        $this->action = preg_replace(array('#^[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
+        $this->action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
     }
 
     public function getRequest()
