@@ -97,3 +97,6 @@ td, th {
 .form-vertical input {
     width: 300px;
 }
+.text-right {
+    text-align: right !important;
+}
