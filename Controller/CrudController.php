@@ -42,7 +42,7 @@ class CrudController extends ContainerAware
             $qb = $this->admin->getModelManager()->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
         }
 
-        $qb = $this->configureIndexQuery($qb);
+        $this->configureIndexQuery($qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
         $dataTable = $this->admin->getDataTable();
@@ -132,7 +132,7 @@ class CrudController extends ContainerAware
 
         if ($this->id) {
             $qb = $this->admin->getModelManager()->findBy(array('a.id' => $id), null, 1);
-            $qb = $this->configureShowQuery($qb);
+            $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
         }
     }
