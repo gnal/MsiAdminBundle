@@ -187,7 +187,7 @@ abstract class Admin
             $crumbs[] = array('label' => ucfirst($parent->getModelManager()->findBy(array('a.id' => $parentId), null, 1)->getQuery()->getSingleResult()), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
         }
 
-        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' === $this->action ? $this->genUrl('index') : '');
+        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $this->action ? $this->genUrl('index') : '');
 
         if ($this->action === 'edit') {
             $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
