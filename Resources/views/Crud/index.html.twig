@@ -12,7 +12,16 @@
 
 {% block content %}
     <div class="cool-box">
-        {#{% render 'MsiAdminBundle:Core:limitForm' %}#}
+        <form class="pull-left form-limit" method=POST action="{{ path('msi_admin_main_limit') }}">
+            {{ 'Show'|trans({}, 'MsiAdminBundle') }}
+            <select class="span1" name="limit">
+                <option {% if app.session.get('limit') == '10' %}selected=selected{% endif %} value="10">10</option>
+                <option {% if app.session.get('limit') == '25' %}selected=selected{% endif %} value="25">25</option>
+                <option {% if app.session.get('limit') == '50' %}selected=selected{% endif %} value="50">50</option>
+                <option {% if app.session.get('limit') == '100' %}selected=selected{% endif %} value="100">100</option>
+            </select>
+            {{ 'entries'|trans({}, 'MsiAdminBundle') }}
+        </form>
         <form class="pull-right form-search" method=GET action="{{ admin.genUrl('index') }}">
             {% if admin.hasParent() %}<input type="hidden" value="{{ admin.getRequest().query.get('parentId') }}" name="parentId">{% endif %}
             <div class="input-append">

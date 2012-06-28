@@ -34,4 +34,14 @@ class MainController extends ContainerAware
 
         return new RedirectResponse($url);
     }
+
+    /**
+     * @Route("/admin/limit.html")
+     */
+    public function limitAction()
+    {
+        $this->container->get('session')->set('limit', $this->container->get('request')->request->get('limit'));
+
+        return new RedirectResponse(preg_replace('@\??&?page=\d+$@', '', $_SERVER['HTTP_REFERER']));
+    }
 }
