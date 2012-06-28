@@ -5,13 +5,13 @@
 {% block css %}
 <link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/common.css') }}">
 <link rel="stylesheet" href="{{ asset('/vendor/bootstrap/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/admin.css') }}">
 {% endblock %}
 
 {% block js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="{{ asset('/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('/bundles/msiadmin/js/app.js') }}"></script>
+<script src="{{ asset('/bundles/msiadmin/js/admin.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -71,7 +71,7 @@
                 </div>
             </div>
             {% block content %}{% endblock %}
-            <div class="clear"></div>
+            <div class="clearfix"></div>
         </div> <!-- endspan12 -->
     </div> <!-- endrow -->
 </div> <!-- endcontainer -->
