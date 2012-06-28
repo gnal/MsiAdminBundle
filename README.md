@@ -1,16 +1,20 @@
 MsiAdminBundle
 ===
-Add MsiGalleryBundle to your deps:
+Add to deps:
 
     [MsiAdminBundle]
         git=git://github.com/gnal/MsiAdminBundle.git
         target=bundles/Msi/Bundle/AdminBundle
 
-Add to kernel:
+Register bundle:
 
     new Msi\Bundle\AdminBundle\MsiAdminBundle(),
 
-Add to routing:
+Register namespace:
+
+    'Msi' => __DIR__.'/../vendor/bundles',
+
+Configure routing:
 
     MsiAdminBundle:
         resource: "@MsiAdminBundle/Controller/"
