@@ -24,11 +24,15 @@ abstract class Admin
 
     private $templates;
 
+    private $object;
+
     private $parent = null;
 
     private $child = null;
 
     private $router = null;
+
+    private $container = null;
 
     private $formFactory = null;
 
@@ -71,6 +75,18 @@ abstract class Admin
 
     public function configure()
     {
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    public function setContainer($container)
+    {
+        $this->container = $container;
+
+        return $this;
     }
 
     public function genUrl($route, $parameters = array(), $mergeQuery = true, $absolute = false)
@@ -168,6 +184,18 @@ abstract class Admin
     public function renderBreadcrumb()
     {
         return $this->templating->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
+    }
+
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    public function setObject($object)
+    {
+        $this->object = $object;
+
+        return $this;
     }
 
     public function buildBreadcrumb()

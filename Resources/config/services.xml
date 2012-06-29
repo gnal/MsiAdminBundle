@@ -39,6 +39,9 @@
             <call method="setSecurityContext">
                 <argument type="service" id="security.context" />
             </call>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
     </services>
 </container>

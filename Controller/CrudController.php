@@ -66,6 +66,7 @@ class CrudController extends ContainerAware
     public function newAction()
     {
         $object = $this->admin->getModelManager()->create();
+        $this->admin->setObject($object);
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
 
@@ -133,6 +134,7 @@ class CrudController extends ContainerAware
             $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), null, 1);
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
+            $this->admin->setObject($this->object);
         }
     }
 
