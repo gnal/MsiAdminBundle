@@ -48,7 +48,7 @@ class CrudController extends ContainerAware
         $this->configureIndexQuery($qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
-        $dataTable = $this->admin->getDataTable();
+        $dataTable = $this->admin->getTable();
 
         $paginator->setLimit($this->container->get('session')->get('limit', 10));
         $paginator->setPage($this->request->query->get('page', 1));

@@ -1,10 +1,10 @@
 <?php
 
-namespace Msi\Bundle\AdminBundle\DataTable;
+namespace Msi\Bundle\AdminBundle\Table;
 
 use Doctrine\Common\Collections\Collection;
 
-class DataTable
+class Table
 {
     private $columns = array();
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Msi\Bundle\AdminBundle\DataTable;
+namespace Msi\Bundle\AdminBundle\Table;
 
-class DataTableBuilder
+class TableBuilder
 {
     private $fields = array();
 
@@ -27,18 +27,18 @@ class DataTableBuilder
         $columns = array();
 
         foreach ($this->fields as $name => $builder) {
-            $class = 'Msi\Bundle\AdminBundle\DataTable\Column\\'.ucfirst($builder['type']).'Column';
+            $class = 'Msi\Bundle\AdminBundle\Table\Column\\'.ucfirst($builder['type']).'Column';
             $columns[$name] = new $class($name, $builder['options'], $this->admin);
         }
 
         return $columns;
     }
 
-    public function getDataTable()
+    public function getTable()
     {
         $columns = $this->buildColumns();
 
-        $dt = new DataTable($columns, $this->admin);
+        $dt = new Table($columns, $this->admin);
 
         return $dt;
     }

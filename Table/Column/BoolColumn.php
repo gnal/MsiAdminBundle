@@ -1,6 +1,6 @@
 <?php
 
-namespace Msi\Bundle\AdminBundle\DataTable\Column;
+namespace Msi\Bundle\AdminBundle\Table\Column;
 
 class BoolColumn extends Column
 {

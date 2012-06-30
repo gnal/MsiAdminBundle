@@ -3,7 +3,7 @@
 namespace Msi\Bundle\AdminBundle\Admin;
 
 use Symfony\Component\Form\FormBuilder;
-use Msi\Bundle\AdminBundle\DataTable\DataTableBuilder;
+use Msi\Bundle\AdminBundle\Table\TableBuilder;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -98,27 +98,25 @@ abstract class Admin
         return $this->getRouter()->generate($this->code.'_'.$route, $parameters, $absolute);
     }
 
-    public function createDataTableBuilder()
+    public function createTableBuilder()
     {
-        return new DataTableBuilder($this, $this->securityContext);
+        return new TableBuilder($this, $this->securityContext);
     }
 
-    public function configureDataTable($builder)
+    abstract public function configureTable($builder);
+
+    public function buildTable()
     {
+        $builder = $this->createTableBuilder();
+
+        $this->configureTable($builder);
+
+        $this->dataTable = $builder->getTable();
     }
 
-    public function buildDataTable()
+    public function getTable()
     {
-        $builder = $this->createDataTableBuilder();
-
-        $this->configureDataTable($builder);
-
-        $this->dataTable = $builder->getDataTable();
-    }
-
-    public function getDataTable()
-    {
-        if (!$this->dataTable) $this->buildDataTable();
+        if (!$this->dataTable) $this->buildTable();
 
         return $this->dataTable;
     }
@@ -128,9 +126,7 @@ abstract class Admin
         return $this->formFactory->createBuilder('form', $data, $options);
     }
 
-    public function configureForm($builder)
-    {
-    }
+    abstract public function configureForm($builder);
 
     public function buildForm()
     {
@@ -178,7 +174,7 @@ abstract class Admin
 
     public function renderTable()
     {
-        return $this->templating->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getDataTable()));
+        return $this->templating->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getTable()));
     }
 
     public function renderBreadcrumb()
