@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Msi\Bundle\PageBundle\Entity\PageTranslation;
+
 class CrudController extends ContainerAware
 {
     protected $admin;
@@ -67,6 +69,15 @@ class CrudController extends ContainerAware
     {
         $object = $this->admin->getModelManager()->create();
         $this->admin->setObject($object);
+
+        if (property_exists($object, 'translations')) {
+            foreach ($this->admin->getLocales() ?: array('fr', 'en') as $locale) {
+                $translation = new PageTranslation();
+                $translation->setLocale($locale);
+                $object->addTranslation($translation);
+            }
+        }
+
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
 

@@ -16,6 +16,8 @@ abstract class Admin
 
     private $controller;
 
+    private $locales = array();
+
     private $label = null;
 
     private $form = null;
@@ -180,6 +182,18 @@ abstract class Admin
     public function renderBreadcrumb()
     {
         return $this->templating->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
+    }
+
+    public function getLocales()
+    {
+        return $this->locales;
+    }
+
+    public function setLocales($locales)
+    {
+        $this->locales = $locales;
+
+        return $this;
     }
 
     public function getObject()
