@@ -66,11 +66,11 @@ abstract class Admin
 
         $this->code = preg_replace('@_admin$@', '', $id);
         $this->bundleName = $bundleName;
-        $this->controller = 'MsiAdminBundle:CRUD:';
+        $this->controller = 'MsiAdminBundle:Crud:';
         $this->templates = array(
-            'index' => 'MsiAdminBundle:CRUD:index.html.twig',
-            'new'   => 'MsiAdminBundle:CRUD:new.html.twig',
-            'edit'  => 'MsiAdminBundle:CRUD:edit.html.twig',
+            'index' => 'MsiAdminBundle:Crud:index.html.twig',
+            'new'   => 'MsiAdminBundle:Crud:new.html.twig',
+            'edit'  => 'MsiAdminBundle:Crud:edit.html.twig',
         );
         $this->query = new ParameterBag();
     }
