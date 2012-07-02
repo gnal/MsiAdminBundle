@@ -16,8 +16,8 @@ class ModelManager
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
     }
-    // Needs refactoring
-    public function findBy(array $criteria = null, array $orderBy = null, $limit = null, $offset = null)
+    // Needs refactoring (removes the null for empty arrays)
+    public function findBy(array $criteria = null, array $join = null, array $orderBy = null, $limit = null, $offset = null)
     {
         $qb = $this->repository->createQueryBuilder('a');
 
@@ -25,6 +25,12 @@ class ModelManager
             foreach ($criteria as $k => $v) {
                 $token = 'a'.substr($k, strpos($k, '.') + 1);
                 $qb->andWhere($k.' = :'.$token)->setParameter($token, $v);
+            }
+        }
+
+        if (null !== $join) {
+            foreach ($join as $k => $v) {
+                $qb->leftJoin($k, $v);
             }
         }
 

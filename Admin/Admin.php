@@ -222,7 +222,7 @@ abstract class Admin
             $parentId = $request->query->get('parentId');
 
             $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
-            $crumbs[] = array('label' => ucfirst($parent->getModelManager()->findBy(array('a.id' => $parentId), null, 1)->getQuery()->getSingleResult()), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
+            $crumbs[] = array('label' => ucfirst($parent->getModelManager()->findBy(array('a.id' => $parentId), null, null, 1)->getQuery()->getSingleResult()), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $this->action ? $this->genUrl('index') : '');

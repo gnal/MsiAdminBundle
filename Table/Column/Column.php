@@ -23,6 +23,7 @@ abstract class Column
         $this->set('attr', array());
 
         $this->options = array_merge($this->options, $this->getDefaultOptions(), $options);
+
         $this->getter = 'get'.ucfirst($name);
     }
 

@@ -142,7 +142,7 @@ class CrudController extends ContainerAware
         $this->admin->query->set('parentId', $this->parentId);
 
         if ($this->id) {
-            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), null, 1);
+            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), null, null, 1);
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
             $this->admin->setObject($this->object);
