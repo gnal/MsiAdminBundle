@@ -21,6 +21,7 @@ class ModelManager
 
     public function findBy(array $criteria = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null, $translate = true)
     {
+        $select = array('a');
         $qb = $this->repository->createQueryBuilder('a');
 
         foreach ($criteria as $k => $v) {
@@ -30,6 +31,7 @@ class ModelManager
 
         foreach ($join as $k => $v) {
             $qb->leftJoin($k, $v);
+            $select[] = $v;
         }
 
         foreach ($orderBy as $k => $v) {
@@ -46,9 +48,11 @@ class ModelManager
             $qb
                 ->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale())
                 ->leftJoin('a.translations', 't')
-                ->select(array('a', 't'))
             ;
+            $select[] = 't';
         }
+
+        $qb->select($select);
 
         return $qb;
     }
@@ -112,11 +116,17 @@ class ModelManager
         return $qb;
     }
 
-    public function savePosition($objects)
+    public function savePosition($objects, $disposition)
     {
         $i = 1;
+        $l = 0;
         foreach ($objects as $object) {
-            $object->setPosition($i);
+            if (in_array($object->getId(), $disposition)) {
+                $object->setPosition($i + array_search($object->getId(), $disposition) - $l);
+                $l++;
+            } else {
+                $object->setPosition($i);
+            }
             $i++;
             $this->save($object);
         }

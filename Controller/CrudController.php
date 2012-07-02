@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Msi\Bundle\PageBundle\Entity\PageTranslation;
-
 class CrudController extends ContainerAware
 {
     protected $admin;
@@ -37,9 +35,11 @@ class CrudController extends ContainerAware
     {
         $criteria = array();
         $orderBy = array();
+        $table = $this->admin->getTable();
 
         if (property_exists($this->admin->getModelManager()->getClass(), 'position')) {
             $orderBy['a.position'] = 'ASC';
+            $table->setSortable(true);
         }
 
         if ($this->parentId) {
@@ -63,7 +63,6 @@ class CrudController extends ContainerAware
             $paginator->setParameters(array('parentId' => $this->parentId));
         }
 
-        $table = $this->admin->getTable();
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
@@ -135,6 +134,17 @@ class CrudController extends ContainerAware
     public function sortAction()
     {
         $disposition = $this->request->query->get('disposition');
+        $criteria = array();
+
+        if ($this->parentId) {
+            $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
+        }
+        $orderBy['a.position'] = 'ASC';
+        $objects = $this->admin->getModelManager()->findBy($criteria, array(), $orderBy)->getQuery()->execute();
+
+        $this->admin->getModelManager()->savePosition($objects, $disposition);
+
+        return new Response();
     }
 
     protected function init()

@@ -14,10 +14,24 @@ class Table
 
     private $data;
 
+    private $sortable = false;
+
     public function __construct($columns, $admin)
     {
         $this->columns = $columns;
         $this->admin = $admin;
+    }
+
+    public function getSortable()
+    {
+        return $this->sortable;
+    }
+
+    public function setSortable($sortable)
+    {
+        $this->sortable = $sortable;
+
+        return $this;
     }
 
     public function setData(Collection $data)

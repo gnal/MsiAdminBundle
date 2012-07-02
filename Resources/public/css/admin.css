@@ -66,6 +66,9 @@ td, th {
 .table td:first-child, .table th:first-child {
     border-left: 0;
 }
+.table tfoot td {
+    border-top: 0 !important;
+}
 .breadcrumb {
     margin: -18px -20px 18px;
     border: 0;

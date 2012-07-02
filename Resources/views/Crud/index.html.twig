@@ -33,3 +33,40 @@
     <div class="clearfix"></div>
     {{ admin.renderTable|raw }}
 {% endblock %}
+
+{% block js %}
+{{ parent() }}
+<script>
+(function($) {
+    "use strict";
+    // Return a helper with preserved width of cells
+    var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    };
+
+    $("table.sortable tbody").sortable({
+        helper: fixHelper
+    }).disableSelection();
+})(jQuery);
+(function($) {
+    "use strict";
+    var $table = $('table.sortable');
+
+    $table.on('sortstop', function(e, ui) {
+
+        var disposition = [];
+
+        $table.find('tbody tr').each(function(i, e) {
+            disposition.push($(e).data('id'));
+        });
+
+        $.ajax("{{ admin.genUrl('sort') }}", {
+            data: {'disposition': disposition},
+        });
+    });
+})(jQuery);
+</script>
+{% endblock js %}

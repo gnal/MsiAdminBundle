@@ -413,6 +413,7 @@ abstract class Admin
             'edit' => 'edit',
             'delete' => 'delete',
             'change' => 'change',
+            'sort' => 'sort',
         );
 
         foreach ($routes as $key => $val) {
