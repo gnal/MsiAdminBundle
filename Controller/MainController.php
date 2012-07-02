@@ -21,7 +21,7 @@ class MainController extends ContainerAware
     }
 
     /**
-     * @Route("/admin/locale.html")
+     * @Route("/admin/locale")
      */
     public function localeAction()
     {

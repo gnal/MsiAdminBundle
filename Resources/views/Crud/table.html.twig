@@ -1,11 +1,14 @@
 <table class="table table-bordered table-striped">
     {# Head #}
+    <thead>
     <tr>
         {% for column in table.columns %}
             <th>{{ column.get('label')|trans({}, 'MsiAdminBundle')|capitalize }}</th>
         {% endfor %}
     </tr>
+    </thead>
     {# Body #}
+    <tbody>
     {% for object in table.data %}
         <tr data-id="{{ object.id }}" id="el{{ object.id }}">
             {% for column in table.columns %}
@@ -13,8 +16,10 @@
             {% endfor %}
         </tr>
     {% endfor %}
+    </tbody>
     {# Foot #}
     {% if table.data.count > 0 %}
+    <tfoot>
         {% set paginator = table.paginator %}
         <tr>
             <td style="background: #fff;" colspan="{{ table.columns|length }}">
@@ -22,5 +27,6 @@
                 {{ paginator.render|raw }}
             </td>
         </tr>
+    </tfoot>
     {% endif %}
 </table>

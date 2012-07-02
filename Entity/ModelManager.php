@@ -112,6 +112,16 @@ class ModelManager
         return $qb;
     }
 
+    public function savePosition($objects)
+    {
+        $i = 1;
+        foreach ($objects as $object) {
+            $object->setPosition($i);
+            $i++;
+            $this->save($object);
+        }
+    }
+
     public function save($object)
     {
         $this->em->persist($object);

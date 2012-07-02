@@ -26,9 +26,12 @@ abstract class Column
         $this->object = $object;
 
         if ($this->name) {
-            $getter = 'get'.ucfirst($this->name);
+            $pieces = explode('.', $this->name);
+            $getter = 'get'.ucfirst($pieces[0]);
 
-            if (!method_exists($this->object, $getter)) {
+            if (isset($pieces[1])) {
+                $this->value = $this->object->$getter($pieces[1]);
+            } else if (!method_exists($this->object, $getter)) {
                 $this->value = $this->object->getTranslation()->$getter();
             } else {
                 $this->value = $this->object->$getter();

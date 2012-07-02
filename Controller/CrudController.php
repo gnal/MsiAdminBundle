@@ -36,13 +36,18 @@ class CrudController extends ContainerAware
     public function indexAction()
     {
         $criteria = array();
+        $orderBy = array();
+
+        if (property_exists($this->admin->getModelManager()->getClass(), 'position')) {
+            $orderBy['a.position'] = 'ASC';
+        }
 
         if ($this->parentId) {
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
         if (!$this->request->query->get('q')) {
-            $qb = $this->admin->getModelManager()->findBy($criteria);
+            $qb = $this->admin->getModelManager()->findBy($criteria, array(), $orderBy);
         } else {
             $qb = $this->admin->getModelManager()->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
         }
@@ -72,7 +77,8 @@ class CrudController extends ContainerAware
 
         if (property_exists($object, 'translations')) {
             foreach ($this->admin->getLocales() ?: array('fr', 'en') as $locale) {
-                $translation = new PageTranslation();
+                $translationClassName = get_class($object).'Translation';
+                $translation = new $translationClassName();
                 $translation->setLocale($locale);
                 $object->addTranslation($translation);
             }
@@ -124,6 +130,11 @@ class CrudController extends ContainerAware
         $this->admin->getModelManager()->change($this->object, $this->request->query->get('field'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
+    }
+
+    public function sortAction()
+    {
+        $disposition = $this->request->query->get('disposition');
     }
 
     protected function init()
