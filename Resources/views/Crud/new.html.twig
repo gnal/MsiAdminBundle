@@ -6,7 +6,7 @@
 
 {% block content %}
     <form class="form-vertical" novalidate action="{{ admin.genUrl('new') }}" method=POST {{ form_enctype(form) }}>
-        {% include 'MsiAdminBundle:CRUD:form.html.twig' with {'form': form, 'admin': admin} %}
+        {% include 'MsiAdminBundle:Crud:form.html.twig' with {'form': form, 'admin': admin} %}
         <div class="form-actions">
             <button class="btn btn-primary btn-small" type="submit">{{ 'Save Changes'|trans({}, 'MsiAdminBundle') }}</button>
             <a class="btn btn-small" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans({}, 'MsiAdminBundle') }}</a>
