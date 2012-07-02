@@ -8,13 +8,13 @@ class DateColumn extends Column
     {
         $html = $this->value->format($this->options['format']);
 
-        return '<td>'.$html.'</td>';
+        return '<td title="'.$this->options['format'].'">'.$html.'</td>';
     }
 
     public function getDefaultOptions()
     {
         return array(
-            'format' => 'd-m-Y',
+            'format' => 'Y-m-d',
         );
     }
 }
