@@ -13,3 +13,8 @@
         </div>
     </form>
 {% endblock %}
+
+{% block js %}
+{{ parent() }}
+{% include 'MsiAdminBundle:Crud:tiny_mce.html.twig' %}
+{% endblock js %}
