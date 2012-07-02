@@ -2,7 +2,7 @@
     {# Head #}
     <tr>
         {% for column in table.columns %}
-            <th>{{ column.get('label')|capitalize }}</th>
+            <th>{{ column.get('label')|trans({}, 'MsiAdminBundle')|capitalize }}</th>
         {% endfor %}
     </tr>
     {# Body #}

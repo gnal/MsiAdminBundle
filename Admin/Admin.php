@@ -12,47 +12,47 @@ abstract class Admin
 {
     public $query;
 
-    private $code;
+    protected $code;
 
-    private $controller;
+    protected $controller;
 
-    private $locales = array();
+    protected $locales = array();
 
-    private $label = null;
+    protected $label = null;
 
-    private $form = null;
+    protected $form = null;
 
-    private $dataTable = null;
+    protected $dataTable = null;
 
-    private $templates;
+    protected $templates;
 
-    private $object;
+    protected $object;
 
-    private $parent = null;
+    protected $parent = null;
 
-    private $child = null;
+    protected $child = null;
 
-    private $router = null;
+    protected $router = null;
 
-    private $container = null;
+    protected $container = null;
 
-    private $formFactory = null;
+    protected $formFactory = null;
 
-    private $modelManager = null;
+    protected $modelManager = null;
 
-    private $request = null;
+    protected $request = null;
 
-    private $securityContext = null;
+    protected $securityContext = null;
 
-    private $templating = null;
+    protected $templating = null;
 
-    private $translator = null;
+    protected $translator = null;
 
-    private $bundleName = null;
+    protected $bundleName = null;
 
-    private $searchFields = null;
+    protected $searchFields = null;
 
-    private $action = null;
+    protected $action = null;
 
     public function __construct($id, $bundleName)
     {

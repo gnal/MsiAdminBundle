@@ -5,10 +5,13 @@ Delete: Supprimer
 Show: Afficher
 entries: entrées
 Showing %from% to %to% of %of% entries: Résultats %from% à %to% de %of% entrée|Résultats %from% à %to% de %of% entrées
-Enabled: Activé
-language: English
 Reset: Réinitialiser
 Search: Rechercher
 Profile: Profil
 Logout: Fermer la session
 Français: English
+enabled: activé
+createdAt: créé le
+updatedAt: modifié le
+title: titre
+slug: alias
