@@ -23,22 +23,13 @@
                 <li><a href="{{ path('msi_admin_main_dashboard') }}">Dashboard</a></li>
                 <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Modules <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ path('msi_admin_main_dashboard') }}">some_module</a></li>
+                        <li><a href="#">some_module</a></li>
                     </ul>
                 </li>
             {% endblock %}
             </ul>
             <ul class="nav pull-right">
             {% block right_nav %}
-                {% if app.user.id is defined %}
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ app.user }} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ path('msi_user_user_edit', {'id': app.user.id}) }}"><i class="icon-user"></i> {{ 'Profile'|trans({}, 'MsiAdminBundle') }}</a></li>
-                        <li><a href="{{ path('fos_user_security_logout') }}"><i class="icon-off"></i> {{ 'Logout'|trans({}, 'MsiAdminBundle') }}</a></li>
-                    </ul>
-                </li>
-                {% endif %}
-                <li class="divider-vertical"></li>
                 <li><a href="{{ path('msi_admin_change_locale') }}">{{ 'Français'|trans({}, 'MsiAdminBundle') }}</a></li>
             {% endblock %}
             </ul>
