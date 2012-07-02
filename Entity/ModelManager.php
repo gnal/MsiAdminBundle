@@ -9,35 +9,31 @@ class ModelManager
     protected $em;
     protected $repository;
     protected $class;
+    protected $session;
 
-    public function __construct(EntityManager $em, $class)
+    public function __construct(EntityManager $em, $class, $session)
     {
         $this->em = $em;
+        $this->session = $session;
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
     }
-    // Needs refactoring (removes the null for empty arrays)
-    public function findBy(array $criteria = null, array $join = null, array $orderBy = null, $limit = null, $offset = null)
+
+    public function findBy(array $criteria = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null, $translate = true)
     {
         $qb = $this->repository->createQueryBuilder('a');
 
-        if (null !== $criteria) {
-            foreach ($criteria as $k => $v) {
-                $token = 'a'.substr($k, strpos($k, '.') + 1);
-                $qb->andWhere($k.' = :'.$token)->setParameter($token, $v);
-            }
+        foreach ($criteria as $k => $v) {
+            $token = 'a'.substr($k, strpos($k, '.') + 1);
+            $qb->andWhere($k.' = :'.$token)->setParameter($token, $v);
         }
 
-        if (null !== $join) {
-            foreach ($join as $k => $v) {
-                $qb->leftJoin($k, $v);
-            }
+        foreach ($join as $k => $v) {
+            $qb->leftJoin($k, $v);
         }
 
-        if (null !== $orderBy) {
-            foreach ($orderBy as $k => $v) {
-                $qb->addOrderBy($k, $v);
-            }
+        foreach ($orderBy as $k => $v) {
+            $qb->addOrderBy($k, $v);
         }
 
         if (null !== $limit)
@@ -45,6 +41,14 @@ class ModelManager
 
         if (null !== $offset)
             $qb->setFirstResult($offset);
+
+        if (property_exists($this->class, 'translations') && $translate === true) {
+            $qb
+                ->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale())
+                ->leftJoin('a.translations', 't')
+                ->select(array('a', 't'))
+            ;
+        }
 
         return $qb;
     }

@@ -6,10 +6,7 @@ class BoolColumn extends Column
 {
     public function render()
     {
-        $getter = $this->getter;
-        $value = $this->object->$getter();
-
-        $content = $value ? $this->get('label_true') : $this->get('label_false');
+        $content = $this->value ? $this->get('label_true') : $this->get('label_false');
 
         $html = '<a href="#" class="action-change" data-url="'.$this->admin->genUrl('change', array('field' => $this->name,'id' => $this->object->getId())).'">'.$content.'</a>';
 

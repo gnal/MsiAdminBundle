@@ -6,9 +6,7 @@ class DateColumn extends Column
 {
     public function render()
     {
-        $getter = $this->getter;
-
-        $html = $this->object->$getter()->format($this->options['format']);
+        $html = $this->value->format($this->options['format']);
 
         return '<td>'.$html.'</td>';
     }

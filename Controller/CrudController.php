@@ -50,7 +50,6 @@ class CrudController extends ContainerAware
         $this->configureIndexQuery($qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
-        $dataTable = $this->admin->getTable();
 
         $paginator->setLimit($this->container->get('session')->get('limit', 10));
         $paginator->setPage($this->request->query->get('page', 1));
@@ -59,8 +58,9 @@ class CrudController extends ContainerAware
             $paginator->setParameters(array('parentId' => $this->parentId));
         }
 
-        $dataTable->setData($paginator->getResult());
-        $dataTable->setPaginator($paginator);
+        $table = $this->admin->getTable();
+        $table->setData($paginator->getResult());
+        $table->setPaginator($paginator);
 
         return $this->render($this->admin->getTemplate('index'), array());
     }
@@ -142,7 +142,7 @@ class CrudController extends ContainerAware
         $this->admin->query->set('parentId', $this->parentId);
 
         if ($this->id) {
-            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), null, null, 1);
+            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), array(), array(), 1, null, false);
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
             $this->admin->setObject($this->object);

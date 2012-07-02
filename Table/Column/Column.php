@@ -5,14 +5,10 @@ namespace Msi\Bundle\AdminBundle\Table\Column;
 abstract class Column
 {
     protected $name;
-
-    protected $admin;
-
-    protected $getter;
-
-    protected $options = array();
-
     protected $object;
+    protected $value;
+    protected $options = array();
+    protected $admin;
 
     public function __construct($name, $options, $admin)
     {
@@ -23,13 +19,21 @@ abstract class Column
         $this->set('attr', array());
 
         $this->options = array_merge($this->options, $this->getDefaultOptions(), $options);
-
-        $this->getter = 'get'.ucfirst($name);
     }
 
     public function setObject($object)
     {
         $this->object = $object;
+
+        if ($this->name) {
+            $getter = 'get'.ucfirst($this->name);
+
+            if (!method_exists($this->object, $getter)) {
+                $this->value = $this->object->getTranslation()->$getter();
+            } else {
+                $this->value = $this->object->$getter();
+            }
+        }
 
         return $this;
     }
