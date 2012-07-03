@@ -2,7 +2,7 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
-class BoolColumn extends Column
+class LogicalColumn extends BaseColumn
 {
     public function render()
     {

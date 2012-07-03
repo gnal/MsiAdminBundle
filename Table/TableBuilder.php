@@ -4,9 +4,8 @@ namespace Msi\Bundle\AdminBundle\Table;
 
 class TableBuilder
 {
-    private $fields = array();
-
-    private $admin;
+    protected $admin;
+    protected $fields = array();
 
     public function __construct($admin)
     {
@@ -38,8 +37,8 @@ class TableBuilder
     {
         $columns = $this->buildColumns();
 
-        $dt = new Table($columns, $this->admin);
+        $table = new Table($columns, $this->admin);
 
-        return $dt;
+        return $table;
     }
 }

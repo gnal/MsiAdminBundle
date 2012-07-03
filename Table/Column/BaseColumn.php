@@ -2,7 +2,7 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
-abstract class Column
+abstract class BaseColumn
 {
     protected $name;
     protected $object;

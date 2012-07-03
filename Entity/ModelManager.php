@@ -57,37 +57,6 @@ class ModelManager
         return $qb;
     }
 
-    public function findByFilter(array $criteria = null)
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-
-        if (null !== $criteria) {
-            $j = 1;
-            foreach ($criteria as $k => $v) {
-                if (is_array($v)) {
-                    $i = 1;
-                    $orX = $qb->expr()->orX();
-                    foreach ($v as $key => $value) {
-                        $orX->add('a.'.$k.' = :match'.$i.$j);
-                        $qb->setParameter('match'.$i.$j, $value);
-                        $i++;
-                    }
-
-                    $qb->andWhere($orX);
-                    $j++;
-                } else {
-                    if ($k !== '_token' && $v != null) {
-                        $qb->andWhere('a.'.$k.' = :match'.$j);
-                        $qb->setParameter('match'.$j, $v);
-                        $j++;
-                    }
-                }
-            }
-        }
-
-        return $qb;
-    }
-
     public function findByQ($q, array $likeFields, array $criteria = array())
     {
         $qb = $this->repository->createQueryBuilder('a');

@@ -157,7 +157,6 @@ class CrudController extends ContainerAware
         $this->admin = $this->container->get($matches[0].'_admin');
 
         $this->admin->setRequest($this->request);
-        $this->admin->setSecurityContext($this->container->get('security.context'));
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
         $this->admin->query->set('parentId', $this->parentId);

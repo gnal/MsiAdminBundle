@@ -22,7 +22,7 @@ abstract class Admin
 
     protected $form = null;
 
-    protected $dataTable = null;
+    protected $table = null;
 
     protected $templates;
 
@@ -41,8 +41,6 @@ abstract class Admin
     protected $modelManager = null;
 
     protected $request = null;
-
-    protected $securityContext = null;
 
     protected $templating = null;
 
@@ -79,6 +77,46 @@ abstract class Admin
     {
     }
 
+    public function buildTable($builder)
+    {
+    }
+
+    public function createTableBuilder()
+    {
+        return new TableBuilder($this);
+    }
+
+    public function getTable()
+    {
+        if (!$this->table) {
+            $builder = $this->createTableBuilder();
+            $this->buildTable($builder);
+            $this->table = $builder->getTable();
+        }
+
+        return $this->table;
+    }
+
+    public function buildForm($builder)
+    {
+    }
+
+    public function createFormBuilder($data = null, array $options = array())
+    {
+        return $this->formFactory->createBuilder('form', $data, $options);
+    }
+
+    public function getForm()
+    {
+        if (!$this->form) {
+            $builder = $this->createFormBuilder();
+            $this->buildForm($builder);
+            $this->form = $builder->getForm();
+        }
+
+        return $this->form;
+    }
+
     public function getContainer()
     {
         return $this->container;
@@ -98,52 +136,6 @@ abstract class Admin
         }
 
         return $this->getRouter()->generate($this->code.'_'.$route, $parameters, $absolute);
-    }
-
-    public function createTableBuilder()
-    {
-        return new TableBuilder($this, $this->securityContext);
-    }
-
-    abstract public function configureTable($builder);
-
-    public function buildTable()
-    {
-        $builder = $this->createTableBuilder();
-
-        $this->configureTable($builder);
-
-        $this->dataTable = $builder->getTable();
-    }
-
-    public function getTable()
-    {
-        if (!$this->dataTable) $this->buildTable();
-
-        return $this->dataTable;
-    }
-
-    public function createFormBuilder($data = null, array $options = array())
-    {
-        return $this->formFactory->createBuilder('form', $data, $options);
-    }
-
-    abstract public function configureForm($builder);
-
-    public function buildForm()
-    {
-        $builder = $this->createFormBuilder();
-
-        $this->configureForm($builder);
-
-        $this->form = $builder->getForm();
-    }
-
-    public function getForm()
-    {
-        if (!$this->form) $this->buildForm();
-
-        return $this->form;
     }
 
     public function setTemplate($name, $value)
@@ -351,16 +343,6 @@ abstract class Admin
     public function getTemplating()
     {
         return $this->templating;
-    }
-
-    public function setSecurityContext($securityContext)
-    {
-        $this->securityContext = $securityContext;
-    }
-
-    public function getSecurityContext()
-    {
-        return $this->securityContext;
     }
 
     public function getController()

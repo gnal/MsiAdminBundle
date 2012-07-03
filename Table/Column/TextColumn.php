@@ -2,7 +2,7 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
-class TextColumn extends Column
+class TextColumn extends BaseColumn
 {
     public function render()
     {

@@ -2,7 +2,7 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
-class ActionColumn extends Column
+class ActionColumn extends BaseColumn
 {
     public function render()
     {
@@ -22,11 +22,8 @@ class ActionColumn extends Column
     public function renderEdit()
     {
         $html = '';
-        $roles = $this->options['edit']['roles'];
 
-        if ($this->admin->getSecurityContext()->isGranted($roles)) {
-            $html .= '<a class="btn btn-mini" href="'.$this->admin->genUrl('edit', array('id' => $this->object->getId())).'">'.$this->options['edit']['label'].'</a> ';
-        }
+        $html .= '<a class="btn btn-mini" href="'.$this->admin->genUrl('edit', array('id' => $this->object->getId())).'">'.$this->options['edit']['label'].'</a> ';
 
         return $html;
     }
@@ -34,11 +31,8 @@ class ActionColumn extends Column
     public function renderDelete()
     {
         $html = '';
-        $roles = $this->options['delete']['roles'];
 
-        if ($this->admin->getSecurityContext()->isGranted($roles)) {
-            $html .= '<a class="action-delete btn btn-mini" href="#" data-url="'.$this->admin->genUrl('delete', array('id' => $this->object->getId())).'">'.$this->options['delete']['label'].'</a> ';
-        }
+        $html .= '<a class="action-delete btn btn-mini" href="#" data-url="'.$this->admin->genUrl('delete', array('id' => $this->object->getId())).'">'.$this->options['delete']['label'].'</a> ';
 
         return $html;
     }
@@ -48,15 +42,12 @@ class ActionColumn extends Column
         return array(
             'nested' => array(
                 'label' => $this->admin->getChild() ? $this->admin->getChild()->getLabel(2) : null,
-                'roles' => 'ROLE_ADMIN',
             ),
             'edit' => array(
                 'label' => 'Edit',
-                'roles' => 'ROLE_ADMIN',
             ),
             'delete' => array(
                 'label' => 'Delete',
-                'roles' => 'ROLE_ADMIN',
             ),
         );
     }
