@@ -40,8 +40,6 @@ abstract class Admin
 
     protected $searchFields = null;
 
-    protected $action = null;
-
     public function __construct($id, $bundleName)
     {
         $this->init($id, $bundleName);
@@ -163,7 +161,77 @@ abstract class Admin
 
     public function renderBreadcrumb()
     {
-        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
+        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->getBreadcrumb()));
+    }
+
+    public function getBreadcrumb()
+    {
+        $request = $this->container->get('request');
+        $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
+        $crumbs = array();
+        $back = 'Back';
+        $edit = $this->container->get('translator')->trans('Edit', array(), 'MsiAdminBundle');
+        $add = $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle');
+        $id = $request->query->get('id');
+
+        if ($this->hasParent()) {
+            $parent = $this->getParent();
+            $parentId = $request->query->get('parentId');
+            $parentObject = $parent->getModelManager()->findBy(array('a.id' => $parentId), array(), array(), 1)->getQuery()->getSingleResult();
+
+            $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
+            $crumbs[] = array('label' => ucfirst($parentObject), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
+        }
+
+        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
+
+        if ($action === 'edit') {
+            $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
+            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        if ($action === 'new') {
+            $crumbs[] = array('label' => $add.' '.$this->getLabel(), 'path' => '');
+            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        if ($this->hasParent() && 'index' === $action) {
+            $crumbs[] = array('label' => $back, 'path' => $this->getParent()->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        return $crumbs;
+    }
+
+    public function getChild()
+    {
+        return $this->child;
+    }
+
+    public function setChild(Admin $child)
+    {
+        $this->child = $child;
+        if (!$child->hasParent()) $child->setParent($this);
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent(Admin $parent)
+    {
+        $this->parent = $parent;
+        if (!$parent->hasChild()) $parent->setChild($this);
+    }
+
+    public function hasChild()
+    {
+        return $this->child instanceof Admin;
+    }
+
+    public function hasParent()
+    {
+        return $this->parent instanceof Admin;
     }
 
     public function getLocales()
@@ -190,76 +258,6 @@ abstract class Admin
         return $this;
     }
 
-    public function buildBreadcrumb()
-    {
-        $request = $this->container->get('request');
-        $this->action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
-        $crumbs = array();
-        $back = 'Back';
-        $edit = $this->container->get('translator')->trans('Edit', array(), 'MsiAdminBundle');
-        $add = $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle');
-        $id = $request->query->get('id');
-
-        if ($this->hasParent()) {
-            $parent = $this->getParent();
-            $parentId = $request->query->get('parentId');
-            $parentObject = $parent->getModelManager()->findBy(array('a.id' => $parentId), array(), array(), 1)->getQuery()->getSingleResult();
-
-            $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
-            $crumbs[] = array('label' => ucfirst($parentObject), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
-        }
-
-        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $this->action ? $this->genUrl('index') : '');
-
-        if ($this->action === 'edit') {
-            $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
-            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
-        }
-
-        if ($this->action === 'new') {
-            $crumbs[] = array('label' => $add.' '.$this->getLabel(), 'path' => '');
-            $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
-        }
-
-        if ($this->hasParent() && 'index' === $this->action) {
-            $crumbs[] = array('label' => $back, 'path' => $this->getParent()->genUrl('index'), 'class' => 'pull-right');
-        }
-
-        return $crumbs;
-    }
-
-    public function getChild()
-    {
-        return $this->child;
-    }
-
-    public function setChild(Admin $child)
-    {
-        $this->child = $child;
-        if (!$child->hasParent()) $child->setParent($this);
-    }
-
-    public function setParent(Admin $parent)
-    {
-        $this->parent = $parent;
-        if (!$parent->hasChild()) $parent->setChild($this);
-    }
-
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    public function hasChild()
-    {
-        return $this->child instanceof Admin;
-    }
-
-    public function hasParent()
-    {
-        return $this->parent instanceof Admin;
-    }
-
     public function setModelManager($modelManager)
     {
         $this->modelManager = $modelManager;
@@ -273,28 +271,6 @@ abstract class Admin
     public function getCode()
     {
         return $this->code;
-    }
-
-    public function setAction($action)
-    {
-        $this->action = $action;
-    }
-
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    public function getController()
-    {
-        return $this->controller;
-    }
-
-    public function setController($controller)
-    {
-        $this->controller = $controller;
-
-        return $this;
     }
 
     public function setSearchFields($searchFields)
