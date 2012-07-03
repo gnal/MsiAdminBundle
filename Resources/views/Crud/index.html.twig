@@ -23,9 +23,9 @@
             {{ 'entries'|trans({}, 'MsiAdminBundle') }}
         </form>
         <form class="pull-right form-search" method=GET action="{{ admin.genUrl('index') }}">
-            {% if admin.hasParent() %}<input type="hidden" value="{{ admin.getRequest().query.get('parentId') }}" name="parentId">{% endif %}
+            {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
             <div class="input-append">
-                <input value="{{ admin.getRequest().query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-small"><i class="icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn btn-small" href="{{ admin.genUrl('index', {'parentId': admin.getRequest().query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
+                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-small"><i class="icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn btn-small" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
             </div>
         </form>
         <div class="clearfix"></div>

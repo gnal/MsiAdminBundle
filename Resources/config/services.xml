@@ -24,18 +24,6 @@
         </service>
 
         <service id="msi_admin.admin" class="Msi\Bundle\AdminBundle\Admin\Admin">
-            <call method="setRouter">
-                <argument type="service" id="router" />
-            </call>
-            <call method="setFormFactory">
-                <argument type="service" id="form.factory" />
-            </call>
-            <call method="setTranslator">
-                <argument type="service" id="translator" />
-            </call>
-            <call method="setTemplating">
-                <argument type="service" id="templating" />
-            </call>
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>

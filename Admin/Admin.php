@@ -32,19 +32,9 @@ abstract class Admin
 
     protected $child = null;
 
-    protected $router = null;
-
     protected $container = null;
 
-    protected $formFactory = null;
-
     protected $modelManager = null;
-
-    protected $request = null;
-
-    protected $templating = null;
-
-    protected $translator = null;
 
     protected $bundleName = null;
 
@@ -103,7 +93,7 @@ abstract class Admin
 
     public function createFormBuilder($data = null, array $options = array())
     {
-        return $this->formFactory->createBuilder('form', $data, $options);
+        return $this->container->get('form.factory')->createBuilder('form', $data, $options);
     }
 
     public function getForm()
@@ -135,7 +125,7 @@ abstract class Admin
             $parameters = array_merge($this->query->all(), $parameters);
         }
 
-        return $this->getRouter()->generate($this->code.'_'.$route, $parameters, $absolute);
+        return $this->container->get('router')->generate($this->code.'_'.$route, $parameters, $absolute);
     }
 
     public function setTemplate($name, $value)
@@ -158,7 +148,7 @@ abstract class Admin
         if (!$this->label)
             $this->label = substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
 
-        return $this->translator->transChoice($this->label, $number, array(), $this->bundleName);
+        return $this->container->get('translator')->transChoice($this->label, $number, array(), $this->bundleName);
     }
 
     public function setLabel($label)
@@ -168,12 +158,12 @@ abstract class Admin
 
     public function renderTable()
     {
-        return $this->templating->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getTable()));
+        return $this->container->get('templating')->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getTable()));
     }
 
     public function renderBreadcrumb()
     {
-        return $this->templating->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
+        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
     }
 
     public function getLocales()
@@ -202,11 +192,12 @@ abstract class Admin
 
     public function buildBreadcrumb()
     {
-        $request = $this->getRequest();
+        $request = $this->container->get('request');
+        $this->action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
         $back = 'Back';
-        $edit = $this->translator->trans('Edit', array(), 'MsiAdminBundle');
-        $add = $this->translator->trans('New', array(), 'MsiAdminBundle');
+        $edit = $this->container->get('translator')->trans('Edit', array(), 'MsiAdminBundle');
+        $add = $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle');
         $id = $request->query->get('id');
 
         if ($this->hasParent()) {
@@ -279,26 +270,6 @@ abstract class Admin
         return $this->modelManager;
     }
 
-    public function setRouter($router)
-    {
-        $this->router = $router;
-    }
-
-    public function getRouter()
-    {
-        return $this->router;
-    }
-
-    public function setFormFactory($formFactory)
-    {
-        $this->formFactory = $formFactory;
-    }
-
-    public function getFormFactory()
-    {
-        return $this->formFactory;
-    }
-
     public function getCode()
     {
         return $this->code;
@@ -312,37 +283,6 @@ abstract class Admin
     public function getAction()
     {
         return $this->action;
-    }
-
-    public function setRequest($request)
-    {
-        $this->request = $request;
-        $this->action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
-    }
-
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    public function setTranslator($translator)
-    {
-        $this->translator = $translator;
-    }
-
-    public function getTranslator()
-    {
-        return $this->translator;
-    }
-
-    public function setTemplating($templating)
-    {
-        $this->templating = $templating;
-    }
-
-    public function getTemplating()
-    {
-        return $this->templating;
     }
 
     public function getController()
