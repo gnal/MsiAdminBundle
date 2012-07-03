@@ -38,7 +38,7 @@ class CrudFormHandler
 
     protected function onSuccess($object)
     {
-        if ($this->admin->hasParent()) {
+        if ($this->admin->hasParent() && !$this->admin->getObject()->getId()) {
             $parent = $this->admin->getParent()->getModelManager()->findBy(array('a.id' => $this->request->query->get('parentId')), array(), array(), 1)->getQuery()->getSingleResult();
             $setter = 'set'.ucfirst($this->admin->getParent()->getClassName());
             $object->$setter($parent);
