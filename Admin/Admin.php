@@ -11,33 +11,19 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 abstract class Admin
 {
     public $query;
-
     protected $code;
-
     protected $controller;
-
     protected $locales = array();
-
     protected $label = null;
-
     protected $form = null;
-
     protected $table = null;
-
     protected $templates;
-
     protected $object;
-
     protected $parent = null;
-
     protected $child = null;
-
     protected $container = null;
-
     protected $modelManager = null;
-
     protected $bundleName = null;
-
     protected $searchFields = null;
 
     public function __construct($id, $bundleName)

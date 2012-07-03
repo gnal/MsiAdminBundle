@@ -150,8 +150,8 @@ class CrudController extends ContainerAware
     protected function init()
     {
         $this->request = $this->container->get('request');
-        $this->parentId = $this->request->query->get('parentId', null);
-        $this->id = $this->request->query->get('id', null);
+        $this->parentId = $this->request->query->get('parentId');
+        $this->id = $this->request->query->get('id');
 
         preg_match('@msi_[a-z]+_[a-z]+@', $this->request->getPathInfo(), $matches);
         $this->admin = $this->container->get($matches[0].'_admin');
