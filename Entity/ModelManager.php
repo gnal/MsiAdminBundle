@@ -123,6 +123,18 @@ class ModelManager
         $this->save($object);
     }
 
+    public function moveUp($object)
+    {
+        $this->repository->moveUp($object, 1);
+        $this->save($object);
+    }
+
+    public function moveDown($object)
+    {
+        $this->repository->moveDown($object, 1);
+        $this->save($object);
+    }
+
     public function create()
     {
         return new $this->class;

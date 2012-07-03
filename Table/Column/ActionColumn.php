@@ -7,6 +7,11 @@ class ActionColumn extends BaseColumn
     public function render()
     {
         $html = '<td class="text-right">';
+        if (isset($this->options['actions'])) {
+            foreach ($this->options['actions'] as $k => $v) {
+                $html .= '<a class="btn btn-mini" href="'.$this->admin->genUrl($v, array('id' => $this->object->getId())).'">'.$k.'</a> ';
+            }
+        }
 
         if ($this->admin->hasChild())
             $html .= '<a class="btn btn-mini" href="'.$this->admin->getChild()->genUrl('index', array('parentId' => $this->object->getId())).'">'.$this->options['nested']['label'].'</a> ';
