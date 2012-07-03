@@ -29,9 +29,8 @@
             {% endblock %}
             </ul>
             <ul class="nav pull-right">
-            {% block right_nav %}
-                <li><a href="{{ path('msi_admin_main_locale') }}">{{ 'Français'|trans({}, 'MsiAdminBundle') }}</a></li>
-            {% endblock %}
+            {% block right_nav %}{% endblock %}
+            <li><a href="{{ path('msi_admin_main_locale') }}">{{ 'Français'|trans({}, 'MsiAdminBundle') }}</a></li>
             </ul>
         </div>
     </div>
