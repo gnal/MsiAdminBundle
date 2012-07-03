@@ -11,9 +11,11 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 abstract class Admin
 {
     public $query;
+    protected $serviceId;
     protected $code;
     protected $controller;
     protected $locales = array();
+    protected $adminServiceIds = array();
     protected $label = null;
     protected $form = null;
     protected $table = null;
@@ -36,6 +38,7 @@ abstract class Admin
     {
         $pieces = explode('_', $id);
 
+        $this->serviceId = $id;
         $this->code = preg_replace('@_admin$@', '', $id);
         $this->bundleName = $bundleName;
         $this->controller = 'MsiAdminBundle:Crud:';
@@ -257,6 +260,30 @@ abstract class Admin
     public function getCode()
     {
         return $this->code;
+    }
+
+    public function getServiceId()
+    {
+        return $this->serviceId;
+    }
+
+    public function setServiceId($serviceId)
+    {
+        $this->serviceId = $serviceId;
+
+        return $this;
+    }
+
+    public function getAdminServiceIds()
+    {
+        return $this->adminServiceIds;
+    }
+
+    public function setAdminServiceIds($adminServiceIds)
+    {
+        $this->adminServiceIds = $adminServiceIds;
+
+        return $this;
     }
 
     public function setSearchFields($searchFields)

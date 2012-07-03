@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -33,6 +34,10 @@ class CrudController extends ContainerAware
 
     public function indexAction()
     {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_LIST'))) {
+                throw new AccessDeniedException();
+        }
+
         $criteria = array();
         $orderBy = array();
         $table = $this->admin->getTable();
@@ -71,6 +76,10 @@ class CrudController extends ContainerAware
 
     public function newAction()
     {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_CREATE'))) {
+                throw new AccessDeniedException();
+        }
+
         $object = $this->admin->getModelManager()->create();
         $this->admin->setObject($object);
 
@@ -100,6 +109,10 @@ class CrudController extends ContainerAware
 
     public function editAction()
     {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_UPDATE'))) {
+                throw new AccessDeniedException();
+        }
+
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
 
@@ -117,6 +130,10 @@ class CrudController extends ContainerAware
 
     public function deleteAction()
     {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_DELETE'))) {
+                throw new AccessDeniedException();
+        }
+
         $this->admin->getModelManager()->delete($this->object);
 
         $this->container->get('session')->setFlash('success', 'The removal was performed successfully.');
