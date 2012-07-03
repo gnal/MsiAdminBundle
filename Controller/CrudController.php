@@ -34,7 +34,7 @@ class CrudController extends ContainerAware
 
     public function indexAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_LIST'))) {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('list')) {
                 throw new AccessDeniedException();
         }
 
@@ -76,7 +76,7 @@ class CrudController extends ContainerAware
 
     public function newAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_CREATE'))) {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('create')) {
                 throw new AccessDeniedException();
         }
 
@@ -109,7 +109,7 @@ class CrudController extends ContainerAware
 
     public function editAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_UPDATE'))) {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('update')) {
                 throw new AccessDeniedException();
         }
 
@@ -130,7 +130,7 @@ class CrudController extends ContainerAware
 
     public function deleteAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted('ROLE_'.strtoupper($this->admin->getServiceId().'_DELETE'))) {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('delete')) {
                 throw new AccessDeniedException();
         }
 

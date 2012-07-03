@@ -106,6 +106,11 @@ abstract class Admin
         return $this;
     }
 
+    public function isGranted($role)
+    {
+        return $this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->serviceId.'_'.$role));
+    }
+
     public function genUrl($route, $parameters = array(), $mergeQuery = true, $absolute = false)
     {
         if (true === $mergeQuery) {
