@@ -171,7 +171,7 @@ abstract class Admin
         if ($this->hasParent()) {
             $parent = $this->getParent();
             $parentId = $request->query->get('parentId');
-            $parentObject = $parent->getModelManager()->findBy(array('a.id' => $parentId), array(), array(), 1)->getQuery()->getSingleResult();
+            $parentObject = $parent->getModelManager()->findBy(array('a.id' => $parentId))->getQuery()->getSingleResult();
 
             $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
             $crumbs[] = array('label' => ucfirst($parentObject), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
