@@ -24,9 +24,11 @@ class ModelManager
         $select = array('a');
         $qb = $this->repository->createQueryBuilder('a');
 
+        $i = 1;
         foreach ($criteria as $k => $v) {
-            $token = 'a'.substr($k, strpos($k, '.') + 1);
+            $token = 'eqMatch'.$i;
             $qb->andWhere($k.' = :'.$token)->setParameter($token, $v);
+            $i++;
         }
 
         foreach ($join as $k => $v) {
