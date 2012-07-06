@@ -84,7 +84,7 @@ class CrudController extends ContainerAware
         $this->admin->setObject($object);
 
         if (property_exists($object, 'translations')) {
-            foreach ($this->admin->getLocales() ?: array('fr', 'en') as $locale) {
+            foreach ($this->admin->getLocales() ?: array('en', 'fr') as $locale) {
                 $translationClassName = get_class($object).'Translation';
                 $translation = new $translationClassName();
                 $translation->setLocale($locale);
