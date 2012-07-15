@@ -62,14 +62,20 @@ class ModelManager
     public function findByQ($q, array $likeFields, array $criteria = array())
     {
         $qb = $this->repository->createQueryBuilder('a');
+        $select = array('a');
 
         $strings = explode(' ', $q);
 
         $orX = $qb->expr()->orX();
         foreach ($likeFields as $field) {
             $i = 1;
+            if ($i === 1 && $isTranslationField = property_exists($this->class, $field) === false) {
+                $qb->leftJoin('a.translations', 't');
+                $select[] = 't';
+            }
             foreach ($strings as $str) {
-                $orX->add($qb->expr()->like('a.'.$field, ':likeMatch'.$i));
+                $alias = $isTranslationField ? 't' : 'a';
+                $orX->add($qb->expr()->like($alias.'.'.$field, ':likeMatch'.$i));
                 $qb->setParameter('likeMatch'.$i, '%'.$str.'%');
                 $i++;
             }
@@ -83,6 +89,8 @@ class ModelManager
             $qb->setParameter('match'.$i, $val);
             $i++;
         }
+
+        $qb->select($select);
 
         return $qb;
     }

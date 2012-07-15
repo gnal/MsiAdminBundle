@@ -298,13 +298,9 @@ abstract class Admin
 
     public function getSearchFields()
     {
-        if (null === $this->searchFields) {
-            if (method_exists($this->getModelManager()->getClass(), 'getName')) {
-                $this->searchFields[] = 'name';
-            } else if (method_exists($this->getModelManager()->getClass(), 'getTitle')) {
-                $this->searchFields[] = 'title';
-            } else {
-                die('Please specify one or more search fields in your Admin class.');
+        if (!$this->searchFields) {
+            if (property_exists($this->getModelManager()->getClass(), 'id')) {
+                $this->searchFields[] = 'id';
             }
         }
 
@@ -323,22 +319,22 @@ abstract class Admin
         $prefix = '/admin/'.$this->code.'/';
         $suffix = '.html';
 
-        $routes = array(
-            'index' => 'index',
-            'new' => 'new',
-            'edit' => 'edit',
-            'delete' => 'delete',
-            'change' => 'change',
-            'sort' => 'sort',
+        $names = array(
+            'index',
+            'new',
+            'edit',
+            'delete',
+            'change',
+            'sort',
         );
 
-        foreach ($routes as $key => $val) {
+        foreach ($names as $name) {
             $collection->add(
-                $this->code.'_'.$key,
+                $this->code.'_'.$name,
                 new Route(
-                    $prefix.$val.$suffix,
+                    $prefix.$name.$suffix,
                     array(
-                        '_controller' => $this->controller.$key,
+                        '_controller' => $this->controller.$name,
                     )
                 )
             );
