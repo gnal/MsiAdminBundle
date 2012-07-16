@@ -316,7 +316,7 @@ abstract class Admin
     {
         $collection = new RouteCollection();
 
-        $prefix = '/admin/'.$this->code.'/';
+        $prefix = '/{_locale}/admin/'.$this->code.'/';
         $suffix = '.html';
 
         $names = array(
