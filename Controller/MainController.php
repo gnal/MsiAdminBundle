@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class MainController extends ContainerAware
 {
     /**
-     * @Route("/admin/")
+     * @Route("/{_locale}/admin/")
      * @Template()
      */
     public function dashboardAction()
