@@ -117,7 +117,7 @@ abstract class Admin
             $parameters = array_merge($this->query->all(), $parameters);
         }
 
-        return $this->container->get('router')->generate($this->code.'_'.$route, $parameters, $absolute);
+        return $this->container->get('router')->generate('admin_'.$this->code.'_'.$route, $parameters, $absolute);
     }
 
     public function setTemplate($name, $value)
@@ -330,7 +330,7 @@ abstract class Admin
 
         foreach ($names as $name) {
             $collection->add(
-                $this->code.'_'.$name,
+                'admin_'.$this->code.'_'.$name,
                 new Route(
                     $prefix.$name.$suffix,
                     array(
