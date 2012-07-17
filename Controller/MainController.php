@@ -21,19 +21,17 @@ class MainController extends ContainerAware
     }
 
     /**
-     * @Route("/admin/locale")
+     * @Route("/{_locale}/admin/change-language.html")
      */
     public function localeAction()
     {
-        $request = $this->container->get('request');
-
-        if ($request->getLocale() === 'fr') {
-            $request->setLocale('en');
+        if ($this->container->get('request')->getLocale() === 'fr') {
+            $locale = 'en';
         } else {
-            $request->setLocale('fr');
+            $locale = 'fr';
         }
 
-        $url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : $this->container->get('router')->generate('msi_admin_main_dashboard');
+        $url = $this->container->get('router')->generate('msi_admin_main_dashboard', array('_locale' => $locale));
 
         return new RedirectResponse($url);
     }
