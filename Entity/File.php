@@ -38,22 +38,6 @@ abstract class File
         $this->updatedAt = new \DateTime();
     }
 
-    /**
-     * @ORM\PreUpdate()
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime();
-    }
-
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removeUpload()
-    {
-        $this->removeFile();
-    }
-
     public function getCreatedAt()
     {
         return $this->createdAt;
