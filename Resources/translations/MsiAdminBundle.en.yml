@@ -11,6 +11,7 @@ Profile: Profile
 Logout: Logout
 Français: Français
 enabled: enabled
+published: published
 createdAt: created
 updatedAt: modified
 title: title
