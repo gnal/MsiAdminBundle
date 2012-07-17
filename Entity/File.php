@@ -46,6 +46,14 @@ abstract class File
         $this->updatedAt = new \DateTime();
     }
 
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        $this->removeFile();
+    }
+
     public function getCreatedAt()
     {
         return $this->createdAt;
@@ -90,9 +98,20 @@ abstract class File
     public function setFile($file)
     {
         $this->file = $file;
+        $this->updatedAt = new \DateTime();
 
         return $this;
     }
 
+    public function removeFile()
+    {
+        $file = $this->getUploadDir().$this->name;
+
+        if (is_file($file)) {
+            unlink($file);
+        }
+    }
+
     abstract public function getUploadDir();
+    // return __DIR__.'/../../../../../web/uploads/dadada/';
 }
