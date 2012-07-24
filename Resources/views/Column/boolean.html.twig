@@ -1,9 +1,9 @@
 <td class="text-center">
     <a href="#" class="action-change" data-url="{{ admin.genUrl('change', {'id': object.id, 'field': name}) }}">
         {% if value %}
-            {{ options.label_true }}
+            {{ options.label_true|raw }}
         {% else %}
-            {{ options.label_false }}
+            {{ options.label_false|raw }}
         {% endif %}
     </a>
 </td>
