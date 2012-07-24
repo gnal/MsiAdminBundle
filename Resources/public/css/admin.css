@@ -109,3 +109,7 @@ td, th {
 .bold {
     font-weight: bold;
 }
+select[multiple] {
+    height: 225px;
+    width: 250px;
+}
