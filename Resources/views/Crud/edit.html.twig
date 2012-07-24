@@ -1,7 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block page_title %}
-    {{ 'Edit'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel() }}
+    {{ 'Edit'|trans({}, 'MsiAdminBundle') }} {{ admin.object }}
 {% endblock %}
 
 {% block content %}
