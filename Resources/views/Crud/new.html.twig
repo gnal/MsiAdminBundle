@@ -16,5 +16,5 @@
 
 {% block js %}
 {{ parent() }}
-{% include 'MsiAdminBundle:Crud:tiny_mce.html.twig' %}
+{% include admin.container.getParameter('msi_admin.tiny_mce') %}
 {% endblock js %}
