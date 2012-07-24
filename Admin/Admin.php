@@ -164,27 +164,26 @@ abstract class Admin
         $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
         $back = 'Back';
-        $edit = $this->container->get('translator')->trans('Edit', array(), 'MsiAdminBundle');
-        $add = $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle');
-        $id = $request->query->get('id');
 
         if ($this->hasParent()) {
             $parentAdmin = $this->getParent();
             $parent = $parentAdmin->getModelManager()->findBy(array('a.id' => $request->query->get('parentId')))->getQuery()->getSingleResult();
 
             $crumbs[] = array('label' => $parentAdmin->getLabel(2), 'path' => $parentAdmin->genUrl('index'));
-            $crumbs[] = array('label' => ucfirst($parent), 'path' => $parentAdmin->genUrl('edit', array('id' => $parent->getId())));
+            $crumbs[] = array('label' => $parent, 'path' => $parentAdmin->genUrl('edit', array('id' => $parent->getId())));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
 
         if ($action === 'edit') {
-            $crumbs[] = array('label' => $edit.' '.$this->getLabel(), 'path' => '');
+            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
+
+            $crumbs[] = array('label' => $object, 'path' => '');
             $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
         if ($action === 'new') {
-            $crumbs[] = array('label' => $add.' '.$this->getLabel(), 'path' => '');
+            $crumbs[] = array('label' => $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle'), 'path' => '');
             $crumbs[] = array('label' => $back, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
