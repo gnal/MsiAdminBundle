@@ -6,7 +6,7 @@ class ImageColumn extends BaseColumn
 {
     public function render()
     {
-        $html = '<img class="pull-left" src="'.$this->options['path'].$this->value'" alt="0">';
+        $html = '<img class="pull-left" src="'.$this->options['path'].$this->value.'" alt="0">';
 
         return '<td>'.$html.'</td>';
     }
