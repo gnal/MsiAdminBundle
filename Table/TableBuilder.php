@@ -27,7 +27,7 @@ class TableBuilder
 
         foreach ($this->fields as $name => $builder) {
             $class = 'Msi\Bundle\AdminBundle\Table\Column\\'.ucfirst($builder['type']).'Column';
-            $columns[$name] = new $class($name, $builder['options'], $this->admin);
+            $columns[$name] = new $class($name, $builder, $this->admin);
         }
 
         return $columns;
