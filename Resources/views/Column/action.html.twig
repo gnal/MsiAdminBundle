@@ -1,0 +1,10 @@
+<td class="text-right">
+    {% for key, val in options.actions %}
+        <a class="btn btn-mini" href="{{ admin.genUrl(val, {'id': object.id}) }}">{{ key }}</a>
+    {% endfor %}
+    {% if admin.hasChild %}
+        <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ options.nested.label }}</a>
+    {% endif %}
+    <a class="btn btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ 'Edit'|trans({}, 'MsiAdminBundle') }}</a>
+    <a class="action-delete btn btn-mini" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}">{{ 'Delete'|trans({}, 'MsiAdminBundle') }}</a>
+</td>

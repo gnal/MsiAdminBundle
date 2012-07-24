@@ -7,9 +7,10 @@ abstract class BaseColumn
     protected $name;
     protected $object;
     protected $value;
-    protected $options = array();
-    protected $admin;
     protected $type;
+    protected $options = array();
+
+    protected $admin;
 
     public function __construct($name, $builder, $admin)
     {
