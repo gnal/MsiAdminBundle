@@ -6,5 +6,5 @@
         <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ options.nested.label }}</a>
     {% endif %}
     <a class="btn btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ 'Edit'|trans({}, 'MsiAdminBundle') }}</a>
-    <a class="action-delete btn btn-mini" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}">{{ 'Delete'|trans({}, 'MsiAdminBundle') }}</a>
+    <a class="action-delete btn btn-mini" {% if options.delete.ajax %}href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}>{{ 'Delete'|trans({}, 'MsiAdminBundle') }}</a>
 </td>
