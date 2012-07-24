@@ -1,0 +1,7 @@
+<td>
+    {% if options.edit %}
+        <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ value }}</a>
+    {% else %}
+        {{ value }}
+    {% endif %}
+</td>
