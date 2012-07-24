@@ -4,15 +4,6 @@ namespace Msi\Bundle\AdminBundle\Table\Column;
 
 class BooleanColumn extends BaseColumn
 {
-    public function render()
-    {
-        $content = $this->value ? $this->get('label_true') : $this->get('label_false');
-
-        $html = '<a href="#" class="action-change" data-url="'.$this->admin->genUrl('change', array('field' => $this->name,'id' => $this->object->getId())).'">'.$content.'</a>';
-
-        return '<td class="text-center">'.$html.'</td>';
-    }
-
     public function getDefaultOptions()
     {
         return array(

@@ -26,7 +26,7 @@ abstract class BaseColumn
 
     public function render()
     {
-        return $this->admin->getContainer()->get('templating')->render('MsiAdminBundle:Column:'.$this->type.'.html.twig', array('admin' => $this->admin, 'object' => $this->object, 'value' => $this->value, 'options' => $this->options));
+        return $this->admin->getContainer()->get('templating')->render('MsiAdminBundle:Column:'.$this->type.'.html.twig', array('admin' => $this->admin, 'object' => $this->object, 'value' => $this->value, 'name' => $this->name, 'options' => $this->options));
     }
 
     public function setObject($object)
