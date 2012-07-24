@@ -161,7 +161,7 @@ abstract class Admin
     public function getBreadcrumb()
     {
         $request = $this->container->get('request');
-        $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
+        $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
         $back = 'Back';
         $edit = $this->container->get('translator')->trans('Edit', array(), 'MsiAdminBundle');
@@ -169,12 +169,11 @@ abstract class Admin
         $id = $request->query->get('id');
 
         if ($this->hasParent()) {
-            $parent = $this->getParent();
-            $parentId = $request->query->get('parentId');
-            $parentObject = $parent->getModelManager()->findBy(array('a.id' => $parentId))->getQuery()->getSingleResult();
+            $parentAdmin = $this->getParent();
+            $parent = $parentAdmin->getModelManager()->findBy(array('a.id' => $request->query->get('parentId')))->getQuery()->getSingleResult();
 
-            $crumbs[] = array('label' => $parent->getLabel(2), 'path' => $parent->genUrl('index'));
-            $crumbs[] = array('label' => ucfirst($parentObject), 'path' => $parent->genUrl('edit', array('id' => $parentId)));
+            $crumbs[] = array('label' => $parentAdmin->getLabel(2), 'path' => $parentAdmin->genUrl('index'));
+            $crumbs[] = array('label' => ucfirst($parent), 'path' => $parentAdmin->genUrl('edit', array('id' => $parent->getId())));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
