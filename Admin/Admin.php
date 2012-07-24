@@ -163,7 +163,7 @@ abstract class Admin
         $request = $this->container->get('request');
         $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
-        $backLabel = $this->container->get('translator')->trans('Back', array(), 'MsiAdminBundle')
+        $backLabel = $this->container->get('translator')->trans('Back', array(), 'MsiAdminBundle');
 
         if ($this->hasParent()) {
             $parentAdmin = $this->getParent();
