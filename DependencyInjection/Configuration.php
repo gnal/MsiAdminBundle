@@ -24,8 +24,6 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('tiny_mce')
                 ->defaultValue('MsiAdminBundle:Crud:tiny_mce.html.twig')
-                ->isRequired()
-                ->cannotBeEmpty()
             ->end()
         ;
 
