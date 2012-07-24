@@ -183,7 +183,7 @@ abstract class Admin
         }
 
         if ($action === 'new') {
-            $crumbs[] = array('label' => $this->container->get('translator')->trans('New', array(), 'MsiAdminBundle'), 'path' => '');
+            $crumbs[] = array('label' => $this->container->get('translator')->trans('Add', array(), 'MsiAdminBundle'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
