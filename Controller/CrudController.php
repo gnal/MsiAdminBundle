@@ -18,6 +18,7 @@ class CrudController extends ContainerAware
     protected $id;
     protected $parentId;
     protected $object;
+    protected $manager;
 
     public function setContainer(ContainerInterface $container = null)
     {
@@ -40,7 +41,7 @@ class CrudController extends ContainerAware
         $orderBy = array();
         $table = $this->admin->getTable();
 
-        if (property_exists($this->admin->getModelManager()->getClass(), 'position')) {
+        if (property_exists($this->manager->getClass(), 'position')) {
             $orderBy['a.position'] = 'ASC';
             $table->setSortable(true);
         }
@@ -50,9 +51,9 @@ class CrudController extends ContainerAware
         }
 
         if (!$this->request->query->get('q')) {
-            $qb = $this->admin->getModelManager()->findBy($criteria, array(), $orderBy);
+            $qb = $this->manager->findBy($criteria, array(), $orderBy);
         } else {
-            $qb = $this->admin->getModelManager()->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
+            $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
         }
 
         $this->configureIndexQuery($qb);
@@ -76,7 +77,7 @@ class CrudController extends ContainerAware
     {
         $this->check('create');
 
-        $object = $this->admin->getModelManager()->create();
+        $object = $this->manager->create();
         $this->admin->setObject($object);
 
         if (property_exists($object, 'translations')) {
@@ -126,7 +127,7 @@ class CrudController extends ContainerAware
     {
         $this->check('delete');
 
-        $this->admin->getModelManager()->delete($this->object);
+        $this->manager->delete($this->object);
 
         $this->container->get('session')->setFlash('success', 'The removal was performed successfully.');
 
@@ -135,7 +136,7 @@ class CrudController extends ContainerAware
 
     public function changeAction()
     {
-        $this->admin->getModelManager()->change($this->object, $this->request->query->get('field'));
+        $this->manager->change($this->object, $this->request->query->get('field'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
     }
@@ -149,9 +150,9 @@ class CrudController extends ContainerAware
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
         $orderBy['a.position'] = 'ASC';
-        $objects = $this->admin->getModelManager()->findBy($criteria, array(), $orderBy)->getQuery()->execute();
+        $objects = $this->manager->findBy($criteria, array(), $orderBy)->getQuery()->execute();
 
-        $this->admin->getModelManager()->savePosition($objects, $disposition);
+        $this->manager->savePosition($objects, $disposition);
 
         return new Response();
     }
@@ -164,13 +165,14 @@ class CrudController extends ContainerAware
 
         preg_match('@msi_[a-z]+_[a-z]+@', $this->request->getPathInfo(), $matches);
         $this->admin = $this->container->get($matches[0].'_admin');
+        $this->manager = $this->admin->getModelManager();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
         $this->admin->query->set('parentId', $this->parentId);
 
         if ($this->id) {
-            $qb = $this->admin->getModelManager()->findBy(array('a.id' => $this->id), array(), array(), null, null, false);
+            $qb = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false);
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
             $this->admin->setObject($this->object);
