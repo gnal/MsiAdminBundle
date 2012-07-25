@@ -1,9 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block actions %}
-{% if is_granted('ROLE_ADMIN') %}
     <a class="btn btn-primary btn-small" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel(1) }}</a>
-{% endif %}
 {% endblock %}
 
 {% block page_title %}
