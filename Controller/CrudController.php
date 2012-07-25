@@ -34,9 +34,7 @@ class CrudController extends ContainerAware
 
     public function indexAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('list')) {
-                throw new AccessDeniedException();
-        }
+        $this->check('read');
 
         $criteria = array();
         $orderBy = array();
@@ -76,9 +74,7 @@ class CrudController extends ContainerAware
 
     public function newAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('create')) {
-                throw new AccessDeniedException();
-        }
+        $this->check('create');
 
         $object = $this->admin->getModelManager()->create();
         $this->admin->setObject($object);
@@ -109,9 +105,7 @@ class CrudController extends ContainerAware
 
     public function editAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('update')) {
-                throw new AccessDeniedException();
-        }
+        $this->check('update');
 
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
@@ -130,9 +124,7 @@ class CrudController extends ContainerAware
 
     public function deleteAction()
     {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted('delete')) {
-                throw new AccessDeniedException();
-        }
+        $this->check('delete');
 
         $this->admin->getModelManager()->delete($this->object);
 
@@ -182,6 +174,13 @@ class CrudController extends ContainerAware
             $this->configureShowQuery($qb);
             $this->object = $qb->getQuery()->getSingleResult();
             $this->admin->setObject($this->object);
+        }
+    }
+
+    protected function check($role)
+    {
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted($role)) {
+            throw new AccessDeniedException();
         }
     }
 
