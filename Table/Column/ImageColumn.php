@@ -7,7 +7,7 @@ class ImageColumn extends BaseColumn
     public function getDefaultOptions()
     {
         return array(
-            'path' => '/uploads/',
+            'path' => '',
         );
     }
 }
