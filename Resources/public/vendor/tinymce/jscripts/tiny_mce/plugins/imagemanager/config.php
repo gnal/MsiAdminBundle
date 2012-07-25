@@ -94,7 +94,7 @@
 	$mcImageManagerConfig['edit.format'] = "";
 
 	// Authenication
-	$mcImageManagerConfig['authenticator'] = "SessionAuthenticator";
+	$mcImageManagerConfig['authenticator'] = "SymfonyAuthenticator";
 	$mcImageManagerConfig['authenticator.login_page'] = "login_session_auth.php";
 	$mcImageManagerConfig['authenticator.allow_override'] = "*";
 
