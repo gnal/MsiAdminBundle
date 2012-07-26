@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 class MainController extends ContainerAware
 {
     /**
-     * @Route("/{_locale}/admin/")
+     * @Route("/{_locale}/admin/", requirements={"_locale" = "en|fr"})
      * @Template()
      */
     public function dashboardAction()
@@ -21,7 +21,7 @@ class MainController extends ContainerAware
     }
 
     /**
-     * @Route("/{_locale}/admin/change-language.html")
+     * @Route("/{_locale}/admin/change-language.html", requirements={"_locale" = "en|fr"})
      */
     public function localeAction()
     {
@@ -37,7 +37,7 @@ class MainController extends ContainerAware
     }
 
     /**
-     * @Route("/admin/limit.html")
+     * @Route("/admin/limit.html", requirements={"_locale" = "en|fr"})
      */
     public function limitAction()
     {
