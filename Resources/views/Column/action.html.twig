@@ -1,6 +1,6 @@
 <td class="text-right">
     {% for key, val in options.actions %}
-        <a class="btn btn-mini" href="{{ admin.genUrl(val, {'id': object.id}) }}">{{ key|raw }}</a>
+        <a class="btn btn-mini" href="{{ path(val, {'id': object.id}) }}">{{ key|raw }}</a>
     {% endfor %}
     {% if admin.hasChild %}
         <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ options.nested.label }}</a>
