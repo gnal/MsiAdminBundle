@@ -163,7 +163,7 @@ class CrudController extends ContainerAware
         $this->parentId = $this->request->query->get('parentId');
         $this->id = $this->request->query->get('id');
 
-        preg_match('@msi_[a-z]+_[a-z]+@', $this->request->getPathInfo(), $matches);
+        preg_match('@[a-z]+_[a-z]+_[a-z]+@', $this->request->getPathInfo(), $matches);
         $this->admin = $this->container->get($matches[0].'_admin');
         $this->manager = $this->admin->getModelManager();
 
