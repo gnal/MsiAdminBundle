@@ -7,6 +7,7 @@ class ActionColumn extends BaseColumn
     public function getDefaultOptions()
     {
         return array(
+            'tree' => false,
             'nested' => array(
                 'label' => $this->admin->getChild() ? $this->admin->getChild()->getLabel(2) : null,
             ),

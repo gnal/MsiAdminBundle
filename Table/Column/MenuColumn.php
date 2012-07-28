@@ -9,7 +9,7 @@ class MenuColumn extends BaseColumn
         $prefix = '';
         $i = $this->object->getLvl() - 1;
 
-        for ($i=$this->object->getLvl() - 1; $i > 0; $i--) {
+        for ($i=$this->object->getLvl() - 1; $i >= 0; $i--) {
             $prefix .= '<i class="icon-arrow-right"></i> ';
         }
 
