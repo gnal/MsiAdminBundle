@@ -14,7 +14,6 @@ abstract class Admin
     protected $serviceId;
     protected $code;
     protected $controller;
-    protected $locales = array();
     protected $adminServiceIds = array();
     protected $label = null;
     protected $form = null;
@@ -224,18 +223,6 @@ abstract class Admin
     public function hasParent()
     {
         return $this->parent instanceof Admin;
-    }
-
-    public function getLocales()
-    {
-        return $this->locales;
-    }
-
-    public function setLocales($locales)
-    {
-        $this->locales = $locales;
-
-        return $this;
     }
 
     public function getObject()

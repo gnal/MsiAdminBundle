@@ -23,7 +23,14 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('tiny_mce')
-                ->defaultValue('MsiAdminBundle:Crud:tiny_mce.html.twig')
+                    ->defaultValue('MsiAdminBundle:Crud:tiny_mce.html.twig')
+                    ->cannotBeEmpty()
+                ->end()
+                ->arrayNode('translation_locales')
+                    ->prototype('scalar')->end()
+                    ->defaultValue(array('en', 'fr'))
+                    ->cannotBeEmpty()
+                ->end()
             ->end()
         ;
 

@@ -145,9 +145,15 @@ class ModelManager
         $this->save($object);
     }
 
-    public function create()
+    public function create($locales = null)
     {
-        return new $this->class;
+        if ($locales) {
+            $entity = new $this->class($locales);
+        } else {
+            $entity = new $this->class();
+        }
+
+        return $entity;
     }
 
     public function getClass()
