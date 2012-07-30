@@ -40,3 +40,33 @@
     {% endif %}
 {% endspaceless %}
 {% endblock choice_widget %}
+
+
+
+{% block collection_widget %}
+{% spaceless %}
+    {% if prototype is defined %}
+        {% set attr = attr|merge({'data-prototype': form_row(prototype) }) %}
+    {% endif %}
+    {{ block('form_collection_widget') }}
+{% endspaceless %}
+{% endblock collection_widget %}
+
+{% block form_collection_widget %}
+{% spaceless %}
+    <div {{ block('widget_container_attributes') }}>
+        {{ block('collection_field_rows') }}
+        {{ form_rest(form) }}
+    </div>
+{% endspaceless %}
+{% endblock form_collection_widget %}
+
+{% block collection_field_rows %}
+{% spaceless %}
+    {{ form_errors(form) }}
+    {% for child in form %}
+        <h6>{{ child.get('value').locale }}</h6>
+        {{ form_row(child) }}
+    {% endfor %}
+{% endspaceless %}
+{% endblock collection_field_rows %}
