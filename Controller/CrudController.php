@@ -79,14 +79,14 @@ class CrudController extends ContainerAware
         $object = $this->manager->create();
         $this->admin->setObject($object);
 
-        if (property_exists($object, 'translations')) {
-            foreach ($this->admin->getLocales() ?: array('en', 'fr') as $locale) {
-                $translationClassName = get_class($object).'Translation';
-                $translation = new $translationClassName();
-                $translation->setLocale($locale);
-                $object->addTranslation($translation);
-            }
-        }
+        // if (property_exists($object, 'translations')) {
+        //     foreach ($this->admin->getLocales() ?: array('en', 'fr') as $locale) {
+        //         $translationClassName = get_class($object).'Translation';
+        //         $translation = new $translationClassName();
+        //         $translation->setLocale($locale);
+        //         $object->addTranslation($translation);
+        //     }
+        // }
 
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
