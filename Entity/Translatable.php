@@ -6,15 +6,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 abstract class Translatable
 {
-    public function __construct(array $locales)
+    public function createTranslations(array $locales)
     {
-        $this->translations = new ArrayCollection();
-
         foreach ($locales as $locale) {
-            $class = get_class($this).'Translation';
-            $translation = new $class();
-            $translation->setLocale($locale)->setObject($this);
-            $this->getTranslations()->add($translation);
+            if (!$this->hasTranslationForLocale($locale)) {
+                $class = get_class($this).'Translation';
+                $translation = new $class();
+                $translation->setLocale($locale)->setObject($this);
+                $this->getTranslations()->add($translation);
+            }
         }
     }
 
@@ -33,5 +33,16 @@ abstract class Translatable
         $this->translations = $translations;
 
         return $this;
+    }
+
+    public function hasTranslationForLocale($locale)
+    {
+        foreach ($this->getTranslations() as $translation) {
+            if ($translation->getLocale() === $locale) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

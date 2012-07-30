@@ -76,7 +76,7 @@ class CrudController extends ContainerAware
     {
         $this->check('create');
 
-        if (property_exists($this->manager->getClass(), 'translations')) {
+        if (is_subclass_of($this->manager->getClass(), 'Msi\Bundle\AdminBundle\Entity\Translatable')) {
             $object = $this->manager->create($this->container->getParameter('msi_admin.translation_locales'));
         } else {
             $object = $this->manager->create();
@@ -101,6 +101,8 @@ class CrudController extends ContainerAware
     public function editAction()
     {
         $this->check('update');
+
+        $this->object->createTranslations($this->container->getParameter('msi_admin.translation_locales'));
 
         $form = $this->admin->getForm();
         $formHandler = $this->container->get('msi_admin.crud.form.handler');
