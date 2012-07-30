@@ -7,9 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CrudController extends ContainerAware
 {
@@ -23,6 +21,7 @@ class CrudController extends ContainerAware
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
+        $this->request = $this->container->get('request');
         $this->init();
     }
 
@@ -56,7 +55,7 @@ class CrudController extends ContainerAware
             $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
         }
 
-        $this->configureIndexQuery($qb);
+        $this->configureListQuery($qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
 
@@ -159,11 +158,10 @@ class CrudController extends ContainerAware
 
     protected function init()
     {
-        $this->request = $this->container->get('request');
         $this->parentId = $this->request->query->get('parentId');
         $this->id = $this->request->query->get('id');
 
-        preg_match('@[a-z]+_[a-z]+_[a-z]+@', $this->request->getPathInfo(), $matches);
+        preg_match('@[a-z]+_([a-z]+_){1,2}[a-z]+@', $this->request->getPathInfo(), $matches);
         $this->admin = $this->container->get($matches[0].'_admin');
         $this->manager = $this->admin->getModelManager();
 
@@ -174,7 +172,10 @@ class CrudController extends ContainerAware
         if ($this->id) {
             $qb = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false);
             $this->configureShowQuery($qb);
-            $this->object = $qb->getQuery()->getSingleResult();
+            $this->object = $qb->getQuery()->getOneOrNullResult();
+            if (!$this->object) {
+                throw new NotFoundHttpException();
+            }
             $this->admin->setObject($this->object);
         }
     }
@@ -186,7 +187,7 @@ class CrudController extends ContainerAware
         }
     }
 
-    protected function configureIndexQuery($qb)
+    protected function configureListQuery($qb)
     {
     }
 
