@@ -46,7 +46,7 @@ class ModelManager
         if (null !== $offset)
             $qb->setFirstResult($offset);
 
-        if (property_exists($this->class, 'translations') && $translate === true) {
+        if ($this->isTranslatable() && $translate === true) {
             $qb
                 ->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale())
                 ->leftJoin('a.translations', 't')
@@ -159,5 +159,10 @@ class ModelManager
     public function getClass()
     {
         return $this->class;
+    }
+
+    public function isTranslatable()
+    {
+        return is_subclass_of($this->class, 'Msi\Bundle\AdminBundle\Entity\Translatable');
     }
 }
