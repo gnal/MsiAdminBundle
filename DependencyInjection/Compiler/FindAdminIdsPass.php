@@ -21,6 +21,6 @@ class FindAdminIdsPass implements CompilerPassInterface
         $adminLoader->replaceArgument(0, $adminIds);
 
         $admin = $container->getDefinition('msi_admin.admin');
-        $admin->addMethodCall('setAdminServiceIds', array($adminIds));
+        $admin->addMethodCall('setAdminIds', array($adminIds));
     }
 }

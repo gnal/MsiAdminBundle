@@ -8,57 +8,134 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-abstract class Admin
+abstract class Admin implements AdminInterface
 {
     public $query;
-    protected $serviceId;
-    protected $code;
+
+    protected $adminId;
+    protected $adminIdParts;
+    protected $adminIds;
+    protected $child;
+    protected $parent;
+    protected $object;
+    protected $label;
+    protected $searchFields;
+
     protected $controller;
-    protected $adminServiceIds = array();
-    protected $label = null;
     protected $form = null;
     protected $table = null;
     protected $templates;
-    protected $object;
-    protected $parent = null;
-    protected $child = null;
-    protected $container = null;
-    protected $modelManager = null;
-    protected $bundleName = null;
-    protected $searchFields = null;
+    protected $container;
+    protected $modelManager;
 
-    public function __construct($id, $bundleName)
+    public function __construct($id)
     {
-        $this->serviceId = $id;
-        $this->bundleName = $bundleName;
+        $this->adminId = $id;
 
         $this->init();
         $this->configure();
     }
 
-    public function init()
+    public function getAdminIds()
     {
-        $this->code = preg_replace('@_admin$@', '', $this->serviceId);
-        $this->controller = 'MsiAdminBundle:Crud:';
-        $this->templates = array(
-            'index' => 'MsiAdminBundle:Crud:index.html.twig',
-            'new'   => 'MsiAdminBundle:Crud:new.html.twig',
-            'edit'  => 'MsiAdminBundle:Crud:edit.html.twig',
-        );
-        $this->query = new ParameterBag();
+        return $this->adminIds;
     }
 
-    public function configure()
+    public function getBundleName()
     {
+        return ucfirst($this->adminIdParts[0]).ucfirst($this->adminIdParts[1]).'Bundle';
     }
 
-    public function buildTable($builder)
+    public function getContainer()
     {
+        return $this->container;
+    }
+
+    public function getModelManager()
+    {
+        return $this->modelManager;
+    }
+
+    public function getObject()
+    {
+        return $this->object;
+    }
+
+    public function getTemplate($name)
+    {
+        return (isset($this->templates[$name])) ? $this->templates[$name]: null;
+    }
+
+    public function setAdminIds(array $adminIds)
+    {
+        $this->adminIds = $adminIds;
+
+        return $this;
+    }
+
+    public function setContainer($container)
+    {
+        $this->container = $container;
+
+        return $this;
+    }
+
+    public function setModelManager($modelManager)
+    {
+        $this->modelManager = $modelManager;
+    }
+
+    public function setObject($object)
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
+    public function setTemplate($name, $value)
+    {
+        $this->templates[$name] = $value;
+    }
+
+    public function getChild()
+    {
+        return $this->child;
+    }
+
+    public function setChild(AdminInterface $child)
+    {
+        $this->child = $child;
+        if (!$child->hasParent()) $child->setParent($this);
+    }
+
+    public function hasChild()
+    {
+        return $this->child instanceof AdminInterface;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function setParent(AdminInterface $parent)
+    {
+        $this->parent = $parent;
+        if (!$parent->hasChild()) $parent->setChild($this);
+    }
+
+    public function hasParent()
+    {
+        return $this->parent instanceof AdminInterface;
     }
 
     public function createTableBuilder()
     {
         return new TableBuilder($this);
+    }
+
+    public function buildTable($builder)
+    {
     }
 
     public function getTable()
@@ -72,13 +149,13 @@ abstract class Admin
         return $this->table;
     }
 
-    public function buildForm($builder)
-    {
-    }
-
     public function createFormBuilder($data = null, array $options = array())
     {
         return $this->container->get('form.factory')->createBuilder('form', $data, $options);
+    }
+
+    public function buildForm($builder)
+    {
     }
 
     public function getForm()
@@ -92,21 +169,9 @@ abstract class Admin
         return $this->form;
     }
 
-    public function getContainer()
-    {
-        return $this->container;
-    }
-
-    public function setContainer($container)
-    {
-        $this->container = $container;
-
-        return $this;
-    }
-
     public function isGranted($role)
     {
-        return $this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->serviceId.'_'.$role));
+        return $this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role));
     }
 
     public function genUrl($route, $parameters = array(), $mergeQuery = true, $absolute = false)
@@ -115,17 +180,7 @@ abstract class Admin
             $parameters = array_merge($this->query->all(), $parameters);
         }
 
-        return $this->container->get('router')->generate('admin_'.$this->code.'_'.$route, $parameters, $absolute);
-    }
-
-    public function setTemplate($name, $value)
-    {
-        $this->templates[$name] = $value;
-    }
-
-    public function getTemplate($name)
-    {
-        return (isset($this->templates[$name])) ? $this->templates[$name]: null;
+        return $this->container->get('router')->generate($this->adminId.'_'.$route, $parameters, $absolute);
     }
 
     public function getClassName()
@@ -135,15 +190,11 @@ abstract class Admin
 
     public function getLabel($number = 1)
     {
-        if (!$this->label)
+        if (!$this->label) {
             $this->label = substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
+        }
 
-        return $this->container->get('translator')->transChoice($this->label, $number, array(), $this->bundleName);
-    }
-
-    public function setLabel($label)
-    {
-        $this->label = $label;
+        return $this->container->get('translator')->transChoice($this->label, $number, array(), $this->getBundleName());
     }
 
     public function renderTable()
@@ -192,89 +243,6 @@ abstract class Admin
         return $crumbs;
     }
 
-    public function getChild()
-    {
-        return $this->child;
-    }
-
-    public function setChild(Admin $child)
-    {
-        $this->child = $child;
-        if (!$child->hasParent()) $child->setParent($this);
-    }
-
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    public function setParent(Admin $parent)
-    {
-        $this->parent = $parent;
-        if (!$parent->hasChild()) $parent->setChild($this);
-    }
-
-    public function hasChild()
-    {
-        return $this->child instanceof Admin;
-    }
-
-    public function hasParent()
-    {
-        return $this->parent instanceof Admin;
-    }
-
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    public function setObject($object)
-    {
-        $this->object = $object;
-
-        return $this;
-    }
-
-    public function setModelManager($modelManager)
-    {
-        $this->modelManager = $modelManager;
-    }
-
-    public function getModelManager()
-    {
-        return $this->modelManager;
-    }
-
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    public function getServiceId()
-    {
-        return $this->serviceId;
-    }
-
-    public function setServiceId($serviceId)
-    {
-        $this->serviceId = $serviceId;
-
-        return $this;
-    }
-
-    public function getAdminServiceIds()
-    {
-        return $this->adminServiceIds;
-    }
-
-    public function setAdminServiceIds($adminServiceIds)
-    {
-        $this->adminServiceIds = $adminServiceIds;
-
-        return $this;
-    }
-
     public function setSearchFields($searchFields)
     {
         $this->searchFields = $searchFields;
@@ -300,7 +268,7 @@ abstract class Admin
     {
         $collection = new RouteCollection();
 
-        $prefix = '/{_locale}/admin/'.preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $this->serviceId).'/';
+        $prefix = '/{_locale}/admin/'.preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $this->adminId).'/';
         $suffix = '';
 
         $names = array(
@@ -314,17 +282,33 @@ abstract class Admin
 
         foreach ($names as $name) {
             $collection->add(
-                'admin_'.$this->code.'_'.$name,
+                $this->adminId.'_'.$name,
                 new Route(
                     $prefix.$name.$suffix,
                     array(
                         '_controller' => $this->controller.$name,
-                        '_admin' => $this->serviceId,
+                        '_admin' => $this->adminId,
                     )
                 )
             );
         }
 
         return $collection;
+    }
+
+    protected function configure()
+    {
+    }
+
+    private function init()
+    {
+        $this->query = new ParameterBag();
+        $this->adminIdParts = explode('_', $this->adminId);
+        $this->controller = 'MsiAdminBundle:Crud:';
+        $this->templates = array(
+            'index' => 'MsiAdminBundle:Crud:index.html.twig',
+            'new'   => 'MsiAdminBundle:Crud:new.html.twig',
+            'edit'  => 'MsiAdminBundle:Crud:edit.html.twig',
+        );
     }
 }
