@@ -29,17 +29,16 @@ abstract class Admin
 
     public function __construct($id, $bundleName)
     {
-        $this->init($id, $bundleName);
+        $this->serviceId = $id;
+        $this->bundleName = $bundleName;
+
+        $this->init();
         $this->configure();
     }
 
-    public function init($id, $bundleName)
+    public function init()
     {
-        $pieces = explode('_', $id);
-
-        $this->serviceId = $id;
-        $this->code = preg_replace('@_admin$@', '', $id);
-        $this->bundleName = $bundleName;
+        $this->code = preg_replace('@_admin$@', '', $this->serviceId);
         $this->controller = 'MsiAdminBundle:Crud:';
         $this->templates = array(
             'index' => 'MsiAdminBundle:Crud:index.html.twig',
@@ -301,7 +300,7 @@ abstract class Admin
     {
         $collection = new RouteCollection();
 
-        $prefix = '/{_locale}/admin/'.$this->code.'/';
+        $prefix = '/{_locale}/admin/'.preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $this->serviceId).'/';
         $suffix = '';
 
         $names = array(
@@ -320,6 +319,7 @@ abstract class Admin
                     $prefix.$name.$suffix,
                     array(
                         '_controller' => $this->controller.$name,
+                        '_admin' => $this->serviceId,
                     )
                 )
             );

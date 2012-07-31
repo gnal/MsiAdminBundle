@@ -22,6 +22,9 @@ class CrudController extends ContainerAware
     {
         $this->container = $container;
         $this->request = $this->container->get('request');
+        $this->id = $this->request->query->get('id');
+        $this->parentId = $this->request->query->get('parentId');
+
         $this->init();
     }
 
@@ -45,7 +48,7 @@ class CrudController extends ContainerAware
             $table->setSortable(true);
         }
 
-        if ($this->parentId) {
+        if ($this->admin->hasParent() && $this->parentId) {
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
@@ -54,7 +57,6 @@ class CrudController extends ContainerAware
         } else {
             $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
         }
-
         $this->configureListQuery($qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
@@ -62,7 +64,7 @@ class CrudController extends ContainerAware
         $paginator->setLimit($this->container->get('session')->get('limit', 10));
         $paginator->setPage($this->request->query->get('page', 1));
         $paginator->setData($qb);
-        if ($this->parentId) {
+        if ($this->admin->hasParent() && $this->parentId) {
             $paginator->setParameters(array('parentId' => $this->parentId));
         }
 
@@ -88,7 +90,6 @@ class CrudController extends ContainerAware
 
         $formHandler->setAdmin($this->admin);
         $process = $formHandler->process($form, $object);
-
         if ($process) {
             $this->container->get('session')->setFlash('success', 'The '.strtolower($this->admin->getLabel()).' has been added successfully.');
 
@@ -111,7 +112,6 @@ class CrudController extends ContainerAware
 
         $formHandler->setAdmin($this->admin);
         $process = $formHandler->process($form, $this->object);
-
         if ($process) {
             $this->container->get('session')->setFlash('success', 'The changes have been saved successfully.');
 
@@ -157,11 +157,12 @@ class CrudController extends ContainerAware
 
     protected function init()
     {
-        $this->parentId = $this->request->query->get('parentId');
-        $this->id = $this->request->query->get('id');
+        $adminId = $this->request->attributes->get('_admin');
+        if (!$this->container->has($adminId)) {
+            throw new NotFoundHttpException('The service "'.$adminId.'" does not exist.');
+        }
 
-        preg_match('@[a-z]+_([a-z]+_){1,2}[a-z]+@', $this->request->getPathInfo(), $matches);
-        $this->admin = $this->container->get($matches[0].'_admin');
+        $this->admin = $this->container->get($adminId);
         $this->manager = $this->admin->getModelManager();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
@@ -169,9 +170,7 @@ class CrudController extends ContainerAware
         $this->admin->query->set('parentId', $this->parentId);
 
         if ($this->id) {
-            $qb = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false);
-            $this->configureShowQuery($qb);
-            $this->object = $qb->getQuery()->getOneOrNullResult();
+            $this->object = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false)->getQuery()->getOneOrNullResult();
             if (!$this->object) {
                 throw new NotFoundHttpException();
             }
@@ -187,10 +186,6 @@ class CrudController extends ContainerAware
     }
 
     protected function configureListQuery($qb)
-    {
-    }
-
-    protected function configureShowQuery($qb)
     {
     }
 }
