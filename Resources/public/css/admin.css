@@ -1,3 +1,6 @@
+html {
+    overflow-y: scroll;
+}
 body {
     background: #D0D0CF;
 }
@@ -78,7 +81,10 @@ td, th {
     padding-left: 20px;
     padding-right: 20px;
 }
-.cool-box {
+.marginless-in * {
+    margin: 0 !important;
+}
+/*.cool-box {
     padding: 9px;
     margin-bottom: 18px;
 
@@ -90,9 +96,9 @@ td, th {
     background: -ms-linear-gradient(left,  #fff 0%,#d9edf7 100%);
     background: linear-gradient(left,  #fff 0%,#d9edf7 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff', endColorstr='#d9edf7',GradientType=1 );
-}
-.cool-box * {
-    margin-bottom: 0;
+}*/
+.marginless {
+    margin: 0 !important;
 }
 .form-vertical textarea {
     width: 460px;
@@ -109,7 +115,9 @@ td, th {
 .bold {
     font-weight: bold;
 }
-select[multiple] {
-    height: 225px;
-    width: 250px;
+.input-append input, .input-append select, .input-append .uneditable-input {
+    border-radius: 0;
+}
+textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
+    border-radius: 0;
 }

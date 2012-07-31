@@ -19,7 +19,7 @@ class ModelManager
         $this->class = $em->getClassMetadata($class)->name;
     }
 
-    public function findBy(array $criteria = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null, $translate = true)
+    public function findBy(array $criteria = array(), array $joins = array(), array $orderBy = array(), $limit = null, $offset = null, $translate = true)
     {
         $select = array('a');
         $qb = $this->repository->createQueryBuilder('a');
@@ -31,7 +31,7 @@ class ModelManager
             $i++;
         }
 
-        foreach ($join as $k => $v) {
+        foreach ($joins as $k => $v) {
             $qb->leftJoin($k, $v);
             $select[] = $v;
         }
@@ -67,14 +67,10 @@ class ModelManager
         $strings = explode(' ', $q);
 
         $orX = $qb->expr()->orX();
+        $i = 1;
         foreach ($likeFields as $field) {
-            $i = 1;
-            if ($i === 1 && $isTranslationField = property_exists($this->class, $field) === false) {
-                $qb->leftJoin('a.translations', 't');
-                $select[] = 't';
-            }
             foreach ($strings as $str) {
-                $alias = $isTranslationField ? 't' : 'a';
+                $alias = property_exists($this->class, $field) ? 'a': 't';
                 $orX->add($qb->expr()->like($alias.'.'.$field, ':likeMatch'.$i));
                 $qb->setParameter('likeMatch'.$i, '%'.$str.'%');
                 $i++;
@@ -82,6 +78,11 @@ class ModelManager
         }
 
         $qb->andWhere($orX);
+
+        if ($this->isTranslatable()) {
+            $qb->leftJoin('a.translations', 't');
+            $select[] = 't';
+        }
 
         $i = 1;
         foreach ($criteria as $key => $val) {

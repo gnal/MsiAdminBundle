@@ -9,6 +9,10 @@
             <argument type="service" id="request" />
         </service>
 
+        <service id="msi_admin.filter.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\FilterFormHandler" scope="request">
+            <argument type="service" id="request" />
+        </service>
+
         <service id="msi_admin.admin_loader" class="Msi\Bundle\AdminBundle\Routing\AdminLoader">
             <argument />
             <argument type="service" id="service_container" />

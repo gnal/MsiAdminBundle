@@ -13,6 +13,8 @@ abstract class Admin implements AdminInterface
 {
     public $query;
 
+    protected $controller;
+    protected $templates;
     protected $adminId;
     protected $adminIdParts;
     protected $adminIds;
@@ -20,14 +22,13 @@ abstract class Admin implements AdminInterface
     protected $parent;
     protected $object;
     protected $label;
-    protected $searchFields;
-
-    protected $controller;
-    protected $form = null;
-    protected $table = null;
-    protected $templates;
+    protected $likeFields;
     protected $container;
     protected $modelManager;
+
+    protected $form;
+    protected $filterForm;
+    protected $table;
 
     public function __construct($id, ModelManager $modelManager)
     {
@@ -51,6 +52,11 @@ abstract class Admin implements AdminInterface
     public function getContainer()
     {
         return $this->container;
+    }
+
+    public function getLikeFields()
+    {
+        return $this->likeFields;
     }
 
     public function getModelManager()
@@ -131,10 +137,6 @@ abstract class Admin implements AdminInterface
         return new TableBuilder($this);
     }
 
-    public function buildTable($builder)
-    {
-    }
-
     public function getTable()
     {
         if (!$this->table) {
@@ -146,24 +148,35 @@ abstract class Admin implements AdminInterface
         return $this->table;
     }
 
-    public function createFormBuilder($data = null, array $options = array())
+    public function createFormBuilder($name, $data = null, array $options = array())
     {
-        return $this->container->get('form.factory')->createBuilder('form', $data, $options);
-    }
-
-    public function buildForm($builder)
-    {
+        return $this->container->get('form.factory')->createNamedBuilder('form', $name, $data, $options);
     }
 
     public function getForm()
     {
         if (!$this->form) {
-            $builder = $this->createFormBuilder();
+            $builder = $this->createFormBuilder($this->adminId);
             $this->buildForm($builder);
             $this->form = $builder->getForm();
         }
 
         return $this->form;
+    }
+
+    public function buildFilterForm($builder)
+    {
+    }
+
+    public function getFilterForm()
+    {
+        if (!$this->filterForm) {
+            $builder = $this->createFormBuilder('filter');
+            $this->buildFilterForm($builder);
+            $this->filterForm = $builder->getForm();
+        }
+
+        return $this->filterForm;
     }
 
     public function isGranted($role)
@@ -201,10 +214,10 @@ abstract class Admin implements AdminInterface
 
     public function renderBreadcrumb()
     {
-        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->getBreadcrumb()));
+        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
     }
 
-    public function getBreadcrumb()
+    public function buildBreadcrumb()
     {
         $request = $this->container->get('request');
         $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
@@ -238,27 +251,6 @@ abstract class Admin implements AdminInterface
         }
 
         return $crumbs;
-    }
-
-    public function setSearchFields($searchFields)
-    {
-        $this->searchFields = $searchFields;
-    }
-
-    public function getSearchFields()
-    {
-        if (!$this->searchFields) {
-            if (property_exists($this->getModelManager()->getClass(), 'id')) {
-                $this->searchFields[] = 'id';
-            }
-        }
-
-        return $this->searchFields;
-    }
-
-    public function getRoutes()
-    {
-        return $this->buildRoutes();
     }
 
     public function buildRoutes()
@@ -299,6 +291,10 @@ abstract class Admin implements AdminInterface
 
     private function init()
     {
+        $this->form = null;
+        $this->filterForm = null;
+        $this->table = null;
+        $this->likeFields = array();
         $this->query = new ParameterBag();
         $this->adminIdParts = explode('_', $this->adminId);
         $this->controller = 'MsiAdminBundle:Crud:';

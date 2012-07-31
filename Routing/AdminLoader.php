@@ -28,7 +28,7 @@ class AdminLoader implements LoaderInterface
 
         foreach ($this->adminIds as $id) {
             $admin = $this->container->get($id);
-            $collection->addCollection($admin->getRoutes());
+            $collection->addCollection($admin->buildRoutes());
         }
 
         return $collection;

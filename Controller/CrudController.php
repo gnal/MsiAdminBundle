@@ -39,15 +39,17 @@ class CrudController extends ContainerAware
     {
         $this->check('read');
 
-        $criteria = array();
-        $orderBy = array();
         $table = $this->admin->getTable();
-
+        $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
+        $filterForm = $this->admin->getFilterForm();
+        // if sortable
+        $orderBy = array();
         if (property_exists($this->manager->getClass(), 'position')) {
             $orderBy['a.position'] = 'ASC';
             $table->setSortable(true);
         }
-
+        // if has parent
+        $criteria = array();
         if ($this->admin->hasParent() && $this->parentId) {
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
@@ -55,23 +57,23 @@ class CrudController extends ContainerAware
         if (!$this->request->query->get('q')) {
             $qb = $this->manager->findBy($criteria, array(), $orderBy);
         } else {
-            $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getSearchFields(), $criteria);
+            $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getLikeFields(), $criteria);
         }
         $this->configureListQuery($qb);
+        $filterFormHandler->process($filterForm, $qb);
 
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
-
         $paginator->setLimit($this->container->get('session')->get('limit', 10));
         $paginator->setPage($this->request->query->get('page', 1));
         $paginator->setData($qb);
-        if ($this->admin->hasParent() && $this->parentId) {
-            $paginator->setParameters(array('parentId' => $this->parentId));
-        }
+        $paginator->query->set('parentId', $this->parentId);
+        $paginator->query->set('filter', $this->request->query->get('filter'));
+        $paginator->query->set('q', $this->request->query->get('q'));
 
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
-        return $this->render($this->admin->getTemplate('index'), array());
+        return $this->render($this->admin->getTemplate('index'), array('filterForm' => $filterForm->createView()));
     }
 
     public function newAction()
@@ -168,6 +170,7 @@ class CrudController extends ContainerAware
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
         $this->admin->query->set('parentId', $this->parentId);
+        $this->admin->query->set('filter', $this->request->query->get('filter'));
 
         if ($this->id) {
             $this->object = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false)->getQuery()->getOneOrNullResult();

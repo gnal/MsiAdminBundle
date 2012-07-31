@@ -8,6 +8,8 @@ interface AdminInterface
 
     function getBundleName();
 
+    function getLikeFields();
+
     function getObject();
 
     function setAdminIds(array $adminIds);
@@ -32,9 +34,15 @@ interface AdminInterface
 
     function getTable();
 
-    function createFormBuilder();
+    function createFormBuilder($name);
 
     function buildForm($builder);
 
     function getForm();
+
+    function buildFilterForm($builder);
+
+    function getFilterForm();
+
+    function buildRoutes();
 }

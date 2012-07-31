@@ -1,7 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block actions %}
-    <a class="btn btn-primary btn-small" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel(1) }}</a>
+    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel(1) }}</a>
 {% endblock %}
 
 {% block page_title %}
@@ -9,8 +9,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="cool-box">
-        <form class="pull-left form-limit" method=POST action="{{ path('msi_admin_main_limit') }}">
+    {% if filterForm.count > 1 %}
+        <form novalidate class="well well-small" method="GET" action="{{ admin.genUrl('index') }}">
+            {{ form_widget(filterForm) }}
+            <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans({}, 'MsiAdminBundle') }}</button>
+        </form>
+    {% endif %}
+    <div class="well well-small marginless-in">
+        <form class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
             {{ 'Show'|trans({}, 'MsiAdminBundle') }}
             <select class="span1" name="limit">
                 <option {% if app.session.get('limit') == '10' %}selected=selected{% endif %} value="10">10</option>
@@ -20,10 +26,10 @@
             </select>
             {{ 'entries'|trans({}, 'MsiAdminBundle') }}
         </form>
-        <form class="pull-right form-search" method=GET action="{{ admin.genUrl('index') }}">
+        <form class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
             {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
             <div class="input-append">
-                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-small"><i class="icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn btn-small" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
+                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
             </div>
         </form>
         <div class="clearfix"></div>
