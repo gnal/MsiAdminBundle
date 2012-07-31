@@ -7,6 +7,7 @@ use Msi\Bundle\AdminBundle\Table\TableBuilder;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Msi\Bundle\AdminBundle\Entity\ModelManager;
 
 abstract class Admin implements AdminInterface
 {
@@ -28,9 +29,10 @@ abstract class Admin implements AdminInterface
     protected $container;
     protected $modelManager;
 
-    public function __construct($id)
+    public function __construct($id, ModelManager $modelManager)
     {
         $this->adminId = $id;
+        $this->modelManager = $modelManager;
 
         $this->init();
         $this->configure();
@@ -78,11 +80,6 @@ abstract class Admin implements AdminInterface
         $this->container = $container;
 
         return $this;
-    }
-
-    public function setModelManager($modelManager)
-    {
-        $this->modelManager = $modelManager;
     }
 
     public function setObject($object)
