@@ -47,10 +47,22 @@
         {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
     {% endif %}
     {% if label != ' ' %}
-        <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
+        <label class="control-label"{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
     {% endif %}
 {% endspaceless %}
 {% endblock %}
+
+{% block field_row %}
+{% spaceless %}
+    <div class="control-group{% if form.get('errors')|length > 0 %} error{% endif %}">
+        {{ form_label(form, label|default(null)) }}
+        <div class="controls">
+            {{ form_widget(form) }}
+            {{ form_errors(form) }}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock field_row %}
 
 
 

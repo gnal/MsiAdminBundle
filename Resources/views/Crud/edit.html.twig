@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <form novalidate action="{{ admin.genUrl('edit', {'id': id}) }}" method=POST {{ form_enctype(form) }}>
+    <form novalidate class="form-horizontal" action="{{ admin.genUrl('edit', {'id': id}) }}" method="POST" {{ form_enctype(form) }}>
         {% include 'MsiAdminBundle:Crud:form.html.twig' with {'form': form, 'admin': admin} %}
         <div class="form-actions">
-            <button class="btn btn-primary btn-small" type="submit">{{ 'Save Changes'|trans({}, 'MsiAdminBundle') }}</button>
-            <a class="btn btn-small" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans({}, 'MsiAdminBundle') }}</a>
+            <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans({}, 'MsiAdminBundle') }}</button>
+            <a class="btn" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans({}, 'MsiAdminBundle') }}</a>
         </div>
     </form>
 {% endblock %}
