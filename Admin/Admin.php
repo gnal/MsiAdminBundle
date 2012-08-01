@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Msi\Bundle\AdminBundle\Entity\ModelManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 abstract class Admin implements AdminInterface
 {
@@ -24,6 +25,7 @@ abstract class Admin implements AdminInterface
     protected $likeFields;
     protected $container;
     protected $modelManager;
+    protected $translator;
 
     protected $form;
     protected $filterForm;
@@ -91,9 +93,10 @@ abstract class Admin implements AdminInterface
         return $this;
     }
 
-    public function setContainer($container)
+    public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
+        $this->translator = $this->container->get('translator');
 
         return $this;
     }
@@ -214,7 +217,7 @@ abstract class Admin implements AdminInterface
             $this->label = substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
         }
 
-        return $this->container->get('translator')->transChoice($this->label, $number);
+        return $this->translator->transChoice($this->label, $number);
     }
 
     public function renderTable()
@@ -230,9 +233,9 @@ abstract class Admin implements AdminInterface
     public function buildBreadcrumb()
     {
         $request = $this->container->get('request');
-        $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
+        $action = preg_replace(array('#^[a-z]+_([a-z]+_){1,2}[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
-        $backLabel = $this->container->get('translator')->trans('Back');
+        $backLabel = $this->translator->trans('Back');
 
         if ($this->hasParent()) {
             $parentAdmin = $this->getParent();
@@ -252,7 +255,7 @@ abstract class Admin implements AdminInterface
         }
 
         if ($action === 'new') {
-            $crumbs[] = array('label' => $this->container->get('translator')->trans('Add'), 'path' => '');
+            $crumbs[] = array('label' => $this->translator->trans('Add'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 

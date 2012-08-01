@@ -54,12 +54,19 @@
 
 {% block field_row %}
 {% spaceless %}
-    <div class="control-group{% if form.get('errors')|length > 0 %} error{% endif %}">
-        {{ form_label(form, label|default(null)) }}
-        <div class="controls">
+    <div class="{% if form.get('name') != 'settings' %}control-group{% endif %}{% if form.get('errors')|length > 0 %} error{% endif %}">
+        {% if form.get('name') != 'settings' %}
+            {{ form_label(form, label|default(null)) }}
+        {% endif %}
+        {% if form.hasChildren == false %}
+            <div class="controls">
+                {{ form_widget(form) }}
+                {{ form_errors(form) }}
+            </div>
+        {% else %}
             {{ form_widget(form) }}
             {{ form_errors(form) }}
-        </div>
+        {% endif %}
     </div>
 {% endspaceless %}
 {% endblock field_row %}
