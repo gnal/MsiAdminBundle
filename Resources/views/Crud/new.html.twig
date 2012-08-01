@@ -1,15 +1,15 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block page_title %}
-    {{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel() }}
+    {{ 'Add'|trans }} {{ admin.getLabel() }}
 {% endblock %}
 
 {% block content %}
     <form novalidate class="form-horizontal" style="margin-bottom: 0;" action="{{ admin.genUrl('new') }}" method="POST" {{ form_enctype(form) }}>
         {% include 'MsiAdminBundle:Crud:form.html.twig' with {'form': form, 'admin': admin} %}
         <div class="form-actions" style="margin-bottom: 0;">
-            <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans({}, 'MsiAdminBundle') }}</button>
-            <a class="btn" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans({}, 'MsiAdminBundle') }}</a>
+            <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans }}</button>
+            <a class="btn" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
         </div>
     </form>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block actions %}
-    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans({}, 'MsiAdminBundle') }} {{ admin.getLabel(1) }}</a>
+    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans }} {{ admin.getLabel(1) }}</a>
 {% endblock %}
 
 {% block page_title %}
@@ -13,25 +13,25 @@
         <form novalidate class="marginless marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;" method="GET" action="{{ admin.genUrl('index') }}">
             {% form_theme filterForm 'MsiAdminBundle::form.html.twig' %}
             {{ form_widget(filterForm) }}
-            <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans({}, 'MsiAdminBundle') }}</button>
+            <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans }}</button>
             <div class="clearfix"></div>
         </form>
     {% endif %}
     <div class="marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;">
         <form class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
-            {{ 'Show'|trans({}, 'MsiAdminBundle') }}
+            {{ 'Show'|trans }}
             <select class="span1" name="limit">
                 <option {% if app.session.get('limit') == '10' %}selected=selected{% endif %} value="10">10</option>
                 <option {% if app.session.get('limit') == '25' %}selected=selected{% endif %} value="25">25</option>
                 <option {% if app.session.get('limit') == '50' %}selected=selected{% endif %} value="50">50</option>
                 <option {% if app.session.get('limit') == '100' %}selected=selected{% endif %} value="100">100</option>
             </select>
-            {{ 'entries'|trans({}, 'MsiAdminBundle') }}
+            {{ 'entries'|trans }}
         </form>
         <form class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
             {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
             <div class="input-append">
-                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans({}, 'MsiAdminBundle') }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans({}, 'MsiAdminBundle') }}</a>
+                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
             </div>
         </form>
         <div class="clearfix"></div>

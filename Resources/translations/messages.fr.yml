@@ -5,7 +5,8 @@ Delete: Supprimer
 Show: Afficher
 Cancel: Annuler
 Back: Retour
-
+Save Changes: Sauvegarder les changements
+View site: Voir le site
 entries: entrées
 Showing %from% to %to% of %of% entries: Résultats %from% à %to% de %of% entrée|Résultats %from% à %to% de %of% entrées
 Reset: Réinitialiser
@@ -13,11 +14,4 @@ Search: Rechercher
 Profile: Profil
 Logout: Fermer la session
 Français: English
-enabled: activé
-published: publié
-createdAt: créé le
-updatedAt: modifié le
-title: titre
-slug: alias
-name: nom
-View site: Voir le site
+Filter: Filtrer
