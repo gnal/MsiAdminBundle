@@ -204,7 +204,7 @@ abstract class Admin implements AdminInterface
             $this->label = substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
         }
 
-        return $this->container->get('translator')->transChoice($this->label, $number, array(), $this->getBundleName());
+        return $this->container->get('translator')->transChoice($this->label, $number);
     }
 
     public function renderTable()
@@ -222,7 +222,7 @@ abstract class Admin implements AdminInterface
         $request = $this->container->get('request');
         $action = preg_replace(array('#^[a-z]+_[a-z]+_[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
         $crumbs = array();
-        $backLabel = $this->container->get('translator')->trans('Back', array(), 'MsiAdminBundle');
+        $backLabel = $this->container->get('translator')->trans('Back');
 
         if ($this->hasParent()) {
             $parentAdmin = $this->getParent();
@@ -242,7 +242,7 @@ abstract class Admin implements AdminInterface
         }
 
         if ($action === 'new') {
-            $crumbs[] = array('label' => $this->container->get('translator')->trans('Add', array(), 'MsiAdminBundle'), 'path' => '');
+            $crumbs[] = array('label' => $this->container->get('translator')->trans('Add'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
