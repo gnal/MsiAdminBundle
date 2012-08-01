@@ -10,12 +10,14 @@
 
 {% block content %}
     {% if filterForm.count > 1 %}
-        <form novalidate class="well well-small" method="GET" action="{{ admin.genUrl('index') }}">
+        <form novalidate class="marginless marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;" method="GET" action="{{ admin.genUrl('index') }}">
+            {% form_theme filterForm 'MsiAdminBundle::form.html.twig' %}
             {{ form_widget(filterForm) }}
             <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans({}, 'MsiAdminBundle') }}</button>
+            <div class="clearfix"></div>
         </form>
     {% endif %}
-    <div class="well well-small marginless-in">
+    <div class="marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;">
         <form class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
             {{ 'Show'|trans({}, 'MsiAdminBundle') }}
             <select class="span1" name="limit">

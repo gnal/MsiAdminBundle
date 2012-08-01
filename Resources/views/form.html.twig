@@ -41,6 +41,17 @@
 {% endspaceless %}
 {% endblock choice_widget %}
 
+{% block generic_label %}
+{% spaceless %}
+    {% if required %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
+    {% endif %}
+    {% if label != ' ' %}
+        <label{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
+    {% endif %}
+{% endspaceless %}
+{% endblock %}
+
 
 
 {% block collection_widget %}

@@ -63,7 +63,8 @@ td, th {
     border-radius: 0 !important;
 }
 .table {
-    border: 0;
+    border: 1px solid #ccc;
+    border-top: 0;
     border-radius: 0 !important;
 }
 .table td:first-child, .table th:first-child {
@@ -71,6 +72,14 @@ td, th {
 }
 .table tfoot td {
     border-top: 0 !important;
+    background: #f9f9f9 !important;
+}
+.pagination {
+    background: #fff;
+}
+.pagination a:hover, .pagination .active a {
+    /*background-color: #0074CC;*/
+    color: #333;
 }
 .breadcrumb {
     margin: -18px -20px 18px;
@@ -82,7 +91,11 @@ td, th {
     padding-right: 20px;
 }
 .marginless-in * {
-    margin: 0 !important;
+    margin-bottom: 0 !important;
+}
+div#filter > div {
+    float: left;
+    margin: 0 10px;
 }
 /*.cool-box {
     padding: 9px;
