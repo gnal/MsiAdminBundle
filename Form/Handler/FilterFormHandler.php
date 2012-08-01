@@ -24,12 +24,14 @@ class FilterFormHandler
                 if (is_array($value)) {
                     $orX = $qb->expr()->orX();
                     foreach ($value as $id) {
-                        $orX->add($qb->expr()->eq('a.'.$field, ':filter'.$i));
-                        $qb->setParameter('filter'.$i, $id);
-                        $i++;
+                        if ($id) {
+                            $orX->add($qb->expr()->eq('a.'.$field, ':filter'.$i));
+                            $qb->setParameter('filter'.$i, $id);
+                            $i++;
+                        }
                     }
                     $qb->andWhere($orX);
-                } else if ($field !== '_token') {
+                } else if ($field !== '_token' && $value) {
                     $qb->andWhere('a.'.$field.' = :filter'.$i)->setParameter('filter'.$i, $value);
                     $i++;
                 }

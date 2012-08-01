@@ -17,11 +17,13 @@ class CrudController extends ContainerAware
     protected $parentId;
     protected $object;
     protected $manager;
+    protected $translator;
 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
         $this->request = $this->container->get('request');
+        $this->translator = $this->container->get('translator');
         $this->id = $this->request->query->get('id');
         $this->parentId = $this->request->query->get('parentId');
 
@@ -93,7 +95,7 @@ class CrudController extends ContainerAware
         $formHandler->setAdmin($this->admin);
         $process = $formHandler->process($form, $object);
         if ($process) {
-            $this->container->get('session')->setFlash('success', 'The '.strtolower($this->admin->getLabel()).' has been added successfully.');
+            $this->container->get('session')->setFlash('success', $this->translator->trans('The changes have been saved successfully'));
 
             return new RedirectResponse($this->admin->genUrl('index'));
         }
@@ -115,7 +117,7 @@ class CrudController extends ContainerAware
         $formHandler->setAdmin($this->admin);
         $process = $formHandler->process($form, $this->object);
         if ($process) {
-            $this->container->get('session')->setFlash('success', 'The changes have been saved successfully.');
+            $this->container->get('session')->setFlash('success', $this->translator->trans('The changes have been saved successfully'));
 
             return new RedirectResponse($this->admin->genUrl('index'));
         }
@@ -129,7 +131,7 @@ class CrudController extends ContainerAware
 
         $this->manager->delete($this->object);
 
-        $this->container->get('session')->setFlash('success', 'The removal was performed successfully.');
+        $this->container->get('session')->setFlash('success', $this->translator->trans('The removal was performed successfully'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
     }

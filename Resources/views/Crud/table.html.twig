@@ -3,7 +3,7 @@
     <thead>
     <tr>
         {% for column in table.columns %}
-            <th>{{ column.get('label')|trans }}</th>
+            <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
     </tr>
     </thead>

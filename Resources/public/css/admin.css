@@ -49,7 +49,7 @@ h1,h2,h3 {
 .alert {
     position: absolute;
     left: 45%;
-    top: 23px;
+    top: 27px;
     z-index: 12000;
 }
 .chzn-container {
@@ -95,7 +95,7 @@ td, th {
 }
 div#filter > div {
     float: left;
-    margin: 0 10px;
+    margin-right: 10px;
 }
 /*.cool-box {
     padding: 9px;
