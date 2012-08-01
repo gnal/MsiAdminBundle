@@ -17,7 +17,7 @@
 {% block choice_widget %}
 {% spaceless %}
     {% if expanded %}
-        <div {{ block('widget_container_attributes') }}>
+        <div {{ block('widget_container_attributes') }} class="controls">
         {% for child in form %}
             {{ form_widget(child) }}
         {% endfor %}
