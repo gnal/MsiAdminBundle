@@ -1,5 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
+{% block title %}{{ admin.getLabel(2) }}{{ parent() }}{% endblock title %}
+
 {% block actions %}
     <a class="btn btn-primary" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans }} {{ admin.getLabel(1) }}</a>
 {% endblock %}

@@ -1,5 +1,7 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
+{% block title %}{{ 'Add'|trans }} {{ admin.getLabel() }}{{ parent() }}{% endblock title %}
+
 {% block page_title %}
     {{ 'Add'|trans }} {{ admin.getLabel() }}
 {% endblock %}
