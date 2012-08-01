@@ -14,7 +14,8 @@ class FindAdminIdsPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('msi.admin') as $id => $tags) {
             $adminIds[] = $id;
             $admin = $container->getDefinition($id);
-            $admin->replaceArgument(0, $id);
+            // $admin->replaceArgument(0, $id);
+            $admin->addMethodCall('setAdminId', array($id));
         }
 
         $adminLoader = $container->getDefinition('msi_admin.admin_loader');

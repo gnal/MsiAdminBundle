@@ -16,7 +16,6 @@ abstract class Admin implements AdminInterface
     protected $controller;
     protected $templates;
     protected $adminId;
-    protected $adminIdParts;
     protected $adminIds;
     protected $child;
     protected $parent;
@@ -30,13 +29,17 @@ abstract class Admin implements AdminInterface
     protected $filterForm;
     protected $table;
 
-    public function __construct($id, ModelManager $modelManager)
+    public function __construct(ModelManager $modelManager)
     {
-        $this->adminId = $id;
         $this->modelManager = $modelManager;
 
         $this->init();
         $this->configure();
+    }
+
+    public function getAdminId()
+    {
+        return $this->adminId;
     }
 
     public function getAdminIds()
@@ -72,6 +75,13 @@ abstract class Admin implements AdminInterface
     public function getTemplate($name)
     {
         return (isset($this->templates[$name])) ? $this->templates[$name]: null;
+    }
+
+    public function setAdminId($adminId)
+    {
+        $this->adminId = $adminId;
+
+        return $this;
     }
 
     public function setAdminIds(array $adminIds)
@@ -296,7 +306,6 @@ abstract class Admin implements AdminInterface
         $this->table = null;
         $this->likeFields = array();
         $this->query = new ParameterBag();
-        $this->adminIdParts = explode('_', $this->adminId);
         $this->controller = 'MsiAdminBundle:Crud:';
         $this->templates = array(
             'index' => 'MsiAdminBundle:Crud:index.html.twig',
