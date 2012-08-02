@@ -209,7 +209,7 @@ abstract class Admin implements AdminInterface
     public function getLabel($number = 1)
     {
         if (!$this->label) {
-            $this->label = substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
+            $this->label = $this->getClassName();
         }
 
         return $this->translator->transChoice($this->label, $number);

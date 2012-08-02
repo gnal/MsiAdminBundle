@@ -42,29 +42,39 @@ class CrudController extends ContainerAware
     {
         $this->check('read');
 
-        $table = $this->admin->getTable('index');
-        $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
-        $filterForm = $this->admin->getForm('filter');
-        // if sortable
         $orderBy = array();
+        $criteria = array();
+        $table = $this->admin->getTable('index');
+
+        // Sortable
         if (property_exists($this->manager->getClass(), 'position')) {
             $orderBy['a.position'] = 'ASC';
             $table->setSortable(true);
         }
-        // if has parent
-        $criteria = array();
+
+        // Nested
         if ($this->admin->hasParent() && $this->parentId) {
+            // gonna break when parent has more than 2 words
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
+        // Query
         if (!$this->request->query->get('q')) {
             $qb = $this->manager->findBy($criteria, array(), $orderBy);
         } else {
             $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getLikeFields(), $criteria);
         }
         $this->configureListQuery($qb);
-        $filterFormHandler->process($filterForm, $qb);
 
+        // Filters
+        $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
+        $filterForm = $this->admin->getForm('filter');
+        if ($filterForm) {
+            $filterFormHandler->process($filterForm, $qb);
+            $filterForm = $filterForm->createView();
+        }
+
+        // Pagination
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
         $paginator->setLimit($this->container->get('session')->get('limit', 10));
         $paginator->setPage($this->request->query->get('page', 1));
@@ -73,10 +83,11 @@ class CrudController extends ContainerAware
         $paginator->query->set('filter', $this->request->query->get('filter'));
         $paginator->query->set('q', $this->request->query->get('q'));
 
+        // Table
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
-        return $this->render($this->admin->getTemplate('index'), array('filterForm' => $filterForm->createView()));
+        return $this->render($this->admin->getTemplate('index'), array('filterForm' => $filterForm));
     }
 
     public function showAction()

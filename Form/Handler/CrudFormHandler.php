@@ -45,7 +45,7 @@ class CrudFormHandler
             if (!$this->parent) {
                 throw new NotFoundHttpException();
             }
-            $setter = 'set'.ucfirst($this->admin->getParent()->getClassName());
+            $setter = 'set'.$this->admin->getParent()->getClassName();
             $object->$setter($parent);
         }
 

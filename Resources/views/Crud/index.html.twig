@@ -3,7 +3,7 @@
 {% block title %}{{ admin.getLabel(2) }}{{ parent() }}{% endblock title %}
 
 {% block actions %}
-    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}">{{ 'Add'|trans }} {{ admin.getLabel(1) }}</a>
+    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>
 {% endblock %}
 
 {% block page_title %}
@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block content %}
-    {% if filterForm.count > 1 %}
+    {% if filterForm %}
         <form novalidate class="marginless marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;" method="GET" action="{{ admin.genUrl('index') }}">
             {% form_theme filterForm 'MsiAdminBundle::form.html.twig' %}
             {{ form_widget(filterForm) }}
@@ -31,12 +31,14 @@
             </select>
             {{ 'entries'|trans }}
         </form>
-        <form class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
-            {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-            <div class="input-append">
-                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-            </div>
-        </form>
+        {% if admin.likeFields|length > 0 %}
+            <form class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
+                {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
+                <div class="input-append">
+                    <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+                </div>
+            </form>
+        {% endif %}
         <div class="clearfix"></div>
     </div>
     <div class="clearfix"></div>
