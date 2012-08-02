@@ -6,20 +6,14 @@ use Doctrine\Common\Collections\Collection;
 
 class Table
 {
-    private $columns = array();
-
+    private $columns;
     private $paginator;
-
-    private $admin;
-
     private $data;
-
     private $sortable = false;
 
-    public function __construct($columns, $admin)
+    public function __construct($columns)
     {
         $this->columns = $columns;
-        $this->admin = $admin;
     }
 
     public function getSortable()
@@ -44,19 +38,16 @@ class Table
         return $this->data;
     }
 
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-    }
-
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
     public function getColumns()
     {
         return $this->columns;
+    }
+
+    public function setColumns($columns)
+    {
+        $this->columns = $columns;
+
+        return $this;
     }
 
     public function setPaginator($paginator)

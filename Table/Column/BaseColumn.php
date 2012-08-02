@@ -10,23 +10,15 @@ abstract class BaseColumn
     protected $type;
     protected $options = array();
 
-    protected $admin;
-
-    public function __construct($name, $builder, $admin)
+    public function __construct($name, $builder)
     {
         $this->name = $name;
-        $this->admin = $admin;
         $this->type = $builder['type'];
 
         $this->set('label', $name);
         $this->set('attr', array());
 
         $this->options = array_merge($this->options, $this->getDefaultOptions(), $builder['options']);
-    }
-
-    public function render()
-    {
-        return $this->admin->getContainer()->get('templating')->render('MsiAdminBundle:Column:'.$this->type.'.html.twig', array('admin' => $this->admin, 'object' => $this->object, 'value' => $this->value, 'name' => $this->name, 'options' => $this->options));
     }
 
     public function setObject($object)

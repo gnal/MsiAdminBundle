@@ -148,7 +148,7 @@ abstract class Admin implements AdminInterface
 
     public function createTableBuilder()
     {
-        return new TableBuilder($this);
+        return new TableBuilder();
     }
 
     public function getTable($name)
@@ -223,11 +223,6 @@ abstract class Admin implements AdminInterface
         }
 
         return $this->translator->transChoice($this->label, $number);
-    }
-
-    public function renderBreadcrumb()
-    {
-        return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
     }
 
     public function buildBreadcrumb()

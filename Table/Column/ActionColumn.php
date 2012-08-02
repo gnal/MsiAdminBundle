@@ -8,9 +8,6 @@ class ActionColumn extends BaseColumn
     {
         return array(
             'tree' => false,
-            'nested' => array(
-                'label' => $this->admin->getChild() ? $this->admin->getChild()->getLabel(2) : null,
-            ),
             'delete' => array(
                 'ajax' => true,
             ),

@@ -60,7 +60,7 @@ $("select.chosenify").chosen();
                     {% endif %}
                     {% block breadcrumb %}
                     {% if admin is defined %}
-                        {{ admin.renderBreadcrumb|raw }}
+                        {% include 'MsiAdminBundle:Crud:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
                     {% endif %}
                     {% endblock breadcrumb %}
                 </div>

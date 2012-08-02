@@ -1,5 +1,5 @@
 <ul class="breadcrumb">
-{% for crumb in breadcrumbs %}
+{% for crumb in crumbs %}
     <li {% if crumb.class is defined %}class="{{ crumb.class }}"{% endif %}>
         {% if loop.index != 1 %}
             {% if crumb.class is not defined or crumb.class != 'pull-right' %}

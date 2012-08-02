@@ -4,13 +4,7 @@ namespace Msi\Bundle\AdminBundle\Table;
 
 class TableBuilder
 {
-    protected $admin;
     protected $fields = array();
-
-    public function __construct($admin)
-    {
-        $this->admin = $admin;
-    }
 
     public function add($name, $type = null, array $options = array())
     {
@@ -27,7 +21,7 @@ class TableBuilder
 
         foreach ($this->fields as $name => $builder) {
             $class = 'Msi\Bundle\AdminBundle\Table\Column\\'.ucfirst($builder['type']).'Column';
-            $columns[$name] = new $class($name, $builder, $this->admin);
+            $columns[$name] = new $class($name, $builder);
         }
 
         return $columns;
@@ -36,8 +30,7 @@ class TableBuilder
     public function getTable()
     {
         $columns = $this->buildColumns();
-
-        $table = new Table($columns, $this->admin);
+        $table = new Table($columns);
 
         return $table;
     }
