@@ -28,8 +28,7 @@ abstract class Admin implements AdminInterface
     protected $modelManager;
     protected $translator;
 
-    protected $form;
-    protected $filterForm;
+    protected $forms;
     protected $tables;
 
     public function __construct(ModelManager $modelManager)
@@ -151,7 +150,7 @@ abstract class Admin implements AdminInterface
         return new TableBuilder();
     }
 
-    public function getTable($name)
+    public function getTable($name = '')
     {
         if (!isset($this->dataTables[$name])) {
             $method = 'build'.ucfirst($name).'Table';
@@ -168,33 +167,24 @@ abstract class Admin implements AdminInterface
 
     public function createFormBuilder($name, $data = null, array $options = array())
     {
+        if (!$name) $name = $this->adminId;
+
         return $this->container->get('form.factory')->createNamedBuilder('form', $name, $data, $options);
     }
 
-    public function getForm()
+    public function getForm($name = '')
     {
-        if (!$this->form) {
-            $builder = $this->createFormBuilder($this->adminId);
-            $this->buildForm($builder);
-            $this->form = $builder->getForm();
+        if (!isset($this->forms[$name])) {
+            $method = 'build'.ucfirst($name).'Form';
+
+            if (!method_exists($this, $method)) return false;
+
+            $builder = $this->createFormBuilder($name);
+            $this->$method($builder);
+            $this->forms[$name] = $builder->getForm();
         }
 
-        return $this->form;
-    }
-
-    public function buildFilterForm($builder)
-    {
-    }
-
-    public function getFilterForm()
-    {
-        if (!$this->filterForm) {
-            $builder = $this->createFormBuilder('filter');
-            $this->buildFilterForm($builder);
-            $this->filterForm = $builder->getForm();
-        }
-
-        return $this->filterForm;
+        return $this->forms[$name];
     }
 
     public function isGranted($role)
@@ -306,8 +296,7 @@ abstract class Admin implements AdminInterface
 
     private function init()
     {
-        $this->form = null;
-        $this->filterForm = null;
+        $this->forms = array();
         $this->tables = array();
         $this->likeFields = array();
         $this->query = new ParameterBag();

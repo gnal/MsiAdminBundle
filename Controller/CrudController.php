@@ -44,7 +44,7 @@ class CrudController extends ContainerAware
 
         $table = $this->admin->getTable('index');
         $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
-        $filterForm = $this->admin->getFilterForm();
+        $filterForm = $this->admin->getForm('filter');
         // if sortable
         $orderBy = array();
         if (property_exists($this->manager->getClass(), 'position')) {

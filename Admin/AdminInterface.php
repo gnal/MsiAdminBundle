@@ -38,11 +38,7 @@ interface AdminInterface
 
     function buildForm($builder);
 
-    function getForm();
-
-    function buildFilterForm($builder);
-
-    function getFilterForm();
+    function getForm($name);
 
     function buildRoutes();
 }
