@@ -6,6 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -13,6 +14,7 @@ class CrudController extends ContainerAware
 {
     protected $admin;
     protected $request;
+    protected $id;
     protected $parentId;
     protected $entity;
     protected $manager;
@@ -178,6 +180,7 @@ class CrudController extends ContainerAware
 
     protected function init()
     {
+        $this->id = $this->request->query->get('id');
         $this->parentId = $this->request->query->get('parentId');
         $this->admin = $this->container->get($this->request->attributes->get('_admin'));
         $this->manager = $this->admin->getModelManager();
