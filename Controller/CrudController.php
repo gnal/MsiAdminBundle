@@ -108,6 +108,9 @@ class CrudController extends ContainerAware
     {
         $this->check('create');
 
+        $form = $this->admin->getForm();
+        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+
         if ($this->manager->isTranslatable()) {
             $object = $this->manager->create($this->container->getParameter('msi_admin.translation_locales'));
         } else {
@@ -115,16 +118,9 @@ class CrudController extends ContainerAware
         }
         $this->admin->setObject($object);
 
-        $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+        $process = $formHandler->setAdmin($this->admin)->process($form, $object);
 
-        $formHandler->setAdmin($this->admin);
-        $process = $formHandler->process($form, $object);
-        if ($process) {
-            $this->container->get('session')->setFlash('success', $this->translator->trans('The changes have been saved successfully'));
-
-            return new RedirectResponse($this->admin->genUrl('index'));
-        }
+        if ($process) return $this->onSuccess();
 
         return $this->render($this->admin->getTemplate('new'), array('form' => $form->createView()));
     }
@@ -133,20 +129,16 @@ class CrudController extends ContainerAware
     {
         $this->check('update');
 
+        $form = $this->admin->getForm();
+        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+
         if ($this->manager->isTranslatable()) {
             $this->object->createTranslations($this->container->getParameter('msi_admin.translation_locales'));
         }
 
-        $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+        $process = $formHandler->setAdmin($this->admin)->process($form, $this->object);
 
-        $formHandler->setAdmin($this->admin);
-        $process = $formHandler->process($form, $this->object);
-        if ($process) {
-            $this->container->get('session')->setFlash('success', $this->translator->trans('The changes have been saved successfully'));
-
-            return new RedirectResponse($this->admin->genUrl('index'));
-        }
+        if ($process) return $this->onSuccess();
 
         return $this->render($this->admin->getTemplate('edit'), array('form' => $form->createView(), 'id' => $this->id));
     }
@@ -157,20 +149,22 @@ class CrudController extends ContainerAware
 
         $this->manager->delete($this->object);
 
-        $this->container->get('session')->setFlash('success', $this->translator->trans('The removal was performed successfully'));
-
-        return new RedirectResponse($this->admin->genUrl('index'));
+        return $this->onSuccess();
     }
 
     public function changeAction()
     {
+        $this->check('edit');
+
         $this->manager->change($this->object, $this->request->query->get('field'));
 
-        return new RedirectResponse($this->admin->genUrl('index'));
+        return $this->onSuccess();
     }
 
     public function sortAction()
     {
+        $this->check('edit');
+
         $disposition = $this->request->query->get('disposition');
         $criteria = array();
 
@@ -183,6 +177,13 @@ class CrudController extends ContainerAware
         $this->manager->savePosition($objects, $disposition);
 
         return new Response();
+    }
+
+    public function onSuccess()
+    {
+        $this->container->get('session')->setFlash('success', $this->translator->trans('The action was executed successfully!'));
+
+        return new RedirectResponse($this->admin->genUrl('index'));
     }
 
     protected function init()
