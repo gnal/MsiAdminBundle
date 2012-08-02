@@ -2,7 +2,7 @@
 {% spaceless %}
     {% if errors|length > 0 %}
         {% for error in errors %}
-            <span class="help-inline">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span>
+            <span class="help-inline" style="color: #b94a48;">{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</span>
         {% endfor %}
     {% endif %}
 {% endspaceless %}
@@ -70,6 +70,17 @@
     </div>
 {% endspaceless %}
 {% endblock field_row %}
+
+{% block field_rows %}
+{% spaceless %}
+    <div class="control-group">
+        <div class="controls" style="margin-left: 155px;">{{ form_errors(form) }}</div>
+    </div>
+    {% for child in form %}
+        {{ form_row(child) }}
+    {% endfor %}
+{% endspaceless %}
+{% endblock field_rows %}
 
 
 
