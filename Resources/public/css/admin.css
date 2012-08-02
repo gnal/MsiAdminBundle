@@ -55,20 +55,20 @@ h1,h2,h3 {
 textarea {
     height: 100px;
 }
-td, th {
-    line-height: 22px !important;
+.table td, .table th {
+    line-height: 23px !important;
     border-radius: 0 !important;
 }
 .table {
     border: 1px solid #ccc;
-    border-top: 0;
+    /*border-top: 0;*/
     border-radius: 0 !important;
 }
 .table td:first-child, .table th:first-child {
     border-left: 0;
 }
 .table tfoot td {
-    border-top: 0 !important;
+    /*border-top: 0 !important;*/
     background: #f9f9f9 !important;
 }
 .pagination {
@@ -92,7 +92,7 @@ td, th {
 }
 div#filter > div {
     float: left;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 .marginless {
     margin: 0 !important;
@@ -103,13 +103,37 @@ div#filter > div {
 .text-center {
     text-align: center !important;
 }
+.btn-mini i {
+    margin-top: -1px;
+}
+/*Bootstrap*/
 .input-append input, .input-append select, .input-append .uneditable-input {
     border-radius: 0;
 }
 textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    border-radius: 0;
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
 }
 input,
 textarea {
   width: 290px;
+}
+.btn:hover {
+    background-position: 0;
+    -webkit-transition: none;
+       -moz-transition: none;
+        -ms-transition: none;
+         -o-transition: none;
+            transition: none;}
+.btn {
+    -webkit-box-shadow: 0 0 1px #333;
+       -moz-box-shadow: 0 0 1px #333;
+            box-shadow: 0 0 1px #333;
+    -webkit-border-radius: 2px;
+       -moz-border-radius: 2px;
+            border-radius: 2px;
+}
+.btn-mini {
+    line-height: 16px;
 }

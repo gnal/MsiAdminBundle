@@ -3,7 +3,9 @@
 {% block title %}{{ admin.getLabel(2) }}{{ parent() }}{% endblock title %}
 
 {% block actions %}
-    <a class="btn btn-primary" href="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>
+    {% if admin.isGranted('create') %}
+        <a class="btn btn-primary" href="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>
+    {% endif %}
 {% endblock %}
 
 {% block page_title %}
@@ -16,12 +18,12 @@
             {% form_theme filterForm 'MsiAdminBundle::form.html.twig' %}
             {{ form_widget(filterForm) }}
             <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans }}</button>
-            <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+            <a class="btn btn-inverse" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
             <div class="clearfix"></div>
         </form>
     {% endif %}
     <div class="marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ccc; border-bottom: 0;">
-        <form class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
+        <form novalidate class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
             {{ 'Show'|trans }}
             <select class="span1" name="limit">
                 <option {% if app.session.get('limit') == '10' %}selected=selected{% endif %} value="10">10</option>
@@ -32,11 +34,11 @@
             {{ 'entries'|trans }}
         </form>
         {% if admin.likeFields|length > 0 %}
-            <form class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
+            <form novalidate class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
                 {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-                <div class="input-append">
-                    <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3 search-query"><button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans }}</button><a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-                </div>
+                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4 search-query">
+                <button type="submit" class="btn btn-primary"><i class="icon-white icon-search"></i> {{ 'Search'|trans }}</button>
+                <a class="btn btn-inverse" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
             </form>
         {% endif %}
         <div class="clearfix"></div>

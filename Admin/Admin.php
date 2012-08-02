@@ -21,7 +21,8 @@ abstract class Admin implements AdminInterface
     protected $adminIds;
     protected $child;
     protected $parent;
-    protected $object;
+    protected $entity;
+    protected $parentEntity;
     protected $label;
     protected $likeFields;
     protected $container;
@@ -69,9 +70,26 @@ abstract class Admin implements AdminInterface
         return $this->modelManager;
     }
 
-    public function getObject()
+    public function getEntity()
     {
-        return $this->object;
+        if (!$this->entity) {
+            $this->entity = $this->container->get('msi_admin.entity_provider')
+                ->setModelManager($this->getModelManager())
+                ->get($this->container->get('request')->query->get('id'));
+        }
+
+        return $this->entity;
+    }
+
+    public function getParentEntity()
+    {
+        if (!$this->parentEntity) {
+            $this->parentEntity = $this->container->get('msi_admin.entity_provider')
+                ->setModelManager($this->getParent()->getModelManager())
+                ->get($this->container->get('request')->query->get('parentId'));
+        }
+
+        return $this->parentEntity;
     }
 
     public function getTemplate($name)
@@ -97,13 +115,6 @@ abstract class Admin implements AdminInterface
     {
         $this->container = $container;
         $this->translator = $this->container->get('translator');
-
-        return $this;
-    }
-
-    public function setObject($object)
-    {
-        $this->object = $object;
 
         return $this;
     }
@@ -189,7 +200,11 @@ abstract class Admin implements AdminInterface
 
     public function isGranted($role)
     {
-        return $this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role));
+        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role))) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public function genUrl($route, $parameters = array(), $mergeQuery = true, $absolute = false)
@@ -223,11 +238,8 @@ abstract class Admin implements AdminInterface
         $backLabel = $this->translator->trans('Back');
 
         if ($this->hasParent()) {
-            $parentAdmin = $this->getParent();
-            $parent = $parentAdmin->getModelManager()->findBy(array('a.id' => $request->query->get('parentId')))->getQuery()->getSingleResult();
-
-            $crumbs[] = array('label' => $parentAdmin->getLabel(2), 'path' => $parentAdmin->genUrl('index'));
-            $crumbs[] = array('label' => $parent, 'path' => $parentAdmin->genUrl('show', array('id' => $parent->getId())));
+            $crumbs[] = array('label' => $this->getParent()->getLabel(2), 'path' => $this->getParent()->genUrl('index'));
+            $crumbs[] = array('label' => $this->getParentEntity(), 'path' => $this->getParent()->genUrl('show', array('id' => $this->getParentEntity()->getId())));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
@@ -239,7 +251,7 @@ abstract class Admin implements AdminInterface
 
         if ($action === 'edit') {
             $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
-            $crumbs[] = array('label' => $object, 'path' => $this->genUrl('show', array('id' => $this->object->getId())));
+            $crumbs[] = array('label' => $object, 'path' => $this->genUrl('show', array('id' => $this->getEntity()->getId())));
             $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
@@ -296,6 +308,8 @@ abstract class Admin implements AdminInterface
 
     private function init()
     {
+        $this->entity = null;
+        $this->parentEntity = null;
         $this->forms = array();
         $this->tables = array();
         $this->likeFields = array();

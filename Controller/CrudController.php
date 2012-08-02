@@ -7,27 +7,20 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class CrudController extends ContainerAware
 {
     protected $admin;
     protected $request;
-    protected $id;
     protected $parentId;
-    protected $object;
+    protected $entity;
     protected $manager;
-    protected $translator;
 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
         $this->request = $this->container->get('request');
-        $this->translator = $this->container->get('translator');
-        $this->id = $this->request->query->get('id');
-        $this->parentId = $this->request->query->get('parentId');
-
         $this->init();
     }
 
@@ -62,7 +55,7 @@ class CrudController extends ContainerAware
         if (!$this->request->query->get('q')) {
             $qb = $this->manager->findBy($criteria, array(), $orderBy);
         } else {
-            $qb = $this->manager->findByQ($this->request->query->get('q'), $this->admin->getLikeFields(), $criteria);
+            $qb = $this->manager->findByQ(trim($this->request->query->get('q')), $this->admin->getLikeFields(), $criteria);
         }
         $this->configureListQuery($qb);
 
@@ -95,11 +88,11 @@ class CrudController extends ContainerAware
         $this->check('read');
 
         $table = $this->admin->getTable('show');
-        if ($table) {
-            $table->setData(new ArrayCollection(array($this->object)));
-        } else {
-            return new RedirectResponse($this->admin->genUrl('edit', array('id' => $this->object->getId())));
+        if (!$table) {
+            return new RedirectResponse($this->admin->genUrl('edit', array('id' => $this->entity->getId())));
         }
+
+        $table->setData(new ArrayCollection(array($this->entity)));
 
         return $this->render($this->admin->getTemplate('show'));
     }
@@ -108,62 +101,43 @@ class CrudController extends ContainerAware
     {
         $this->check('create');
 
-        $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.crud.form.handler');
-
-        if ($this->manager->isTranslatable()) {
-            $object = $this->manager->create($this->container->getParameter('msi_admin.translation_locales'));
-        } else {
-            $object = $this->manager->create();
-        }
-        $this->admin->setObject($object);
-
-        $process = $formHandler->setAdmin($this->admin)->process($form, $object);
-
+        $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render($this->admin->getTemplate('new'), array('form' => $form->createView()));
+        return $this->render($this->admin->getTemplate('new'), array('form' => $this->admin->getForm()->createView()));
     }
 
     public function editAction()
     {
         $this->check('update');
 
-        $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.crud.form.handler');
-
-        if ($this->manager->isTranslatable()) {
-            $this->object->createTranslations($this->container->getParameter('msi_admin.translation_locales'));
-        }
-
-        $process = $formHandler->setAdmin($this->admin)->process($form, $this->object);
-
+        $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render($this->admin->getTemplate('edit'), array('form' => $form->createView(), 'id' => $this->id));
+        return $this->render($this->admin->getTemplate('edit'), array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
     }
 
     public function deleteAction()
     {
         $this->check('delete');
 
-        $this->manager->delete($this->object);
+        $this->manager->delete($this->entity);
 
         return $this->onSuccess();
     }
 
     public function changeAction()
     {
-        $this->check('edit');
+        $this->check('update');
 
-        $this->manager->change($this->object, $this->request->query->get('field'));
+        $this->manager->change($this->entity, $this->request->query->get('field'));
 
         return $this->onSuccess();
     }
 
     public function sortAction()
     {
-        $this->check('edit');
+        $this->check('update');
 
         $disposition = $this->request->query->get('disposition');
         $criteria = array();
@@ -179,42 +153,40 @@ class CrudController extends ContainerAware
         return new Response();
     }
 
-    public function onSuccess()
+    protected function processForm()
     {
-        $this->container->get('session')->setFlash('success', $this->translator->trans('The action was executed successfully!'));
+        $form = $this->admin->getForm();
+        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+        $process = $formHandler->setAdmin($this->admin)->process($form, $this->entity);
+
+        return $process;
+    }
+
+    protected function onSuccess()
+    {
+        $this->container->get('session')->setFlash('success', $this->container->get('translator')->trans('The action was executed successfully!'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
     }
 
+    protected function check($role)
+    {
+        if (!$this->admin->isGranted($role)) {
+            throw new AccessDeniedException();
+        }
+    }
+
     protected function init()
     {
-        $adminId = $this->request->attributes->get('_admin');
-        if (!$this->container->has($adminId)) {
-            throw new NotFoundHttpException('The service "'.$adminId.'" does not exist.');
-        }
-
-        $this->admin = $this->container->get($adminId);
+        $this->parentId = $this->request->query->get('parentId');
+        $this->admin = $this->container->get($this->request->attributes->get('_admin'));
         $this->manager = $this->admin->getModelManager();
+        $this->entity = $this->admin->getEntity();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
         $this->admin->query->set('parentId', $this->parentId);
         $this->admin->query->set('filter', $this->request->query->get('filter'));
-
-        if ($this->id) {
-            $this->object = $this->manager->findBy(array('a.id' => $this->id), array(), array(), null, null, false)->getQuery()->getOneOrNullResult();
-            if (!$this->object) {
-                throw new NotFoundHttpException();
-            }
-            $this->admin->setObject($this->object);
-        }
-    }
-
-    protected function check($role)
-    {
-        if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->admin->isGranted($role)) {
-            throw new AccessDeniedException();
-        }
     }
 
     protected function configureListQuery($qb)

@@ -8,13 +8,11 @@ interface AdminInterface
 
     function getBundleName();
 
+    function getEntity();
+
     function getLikeFields();
 
-    function getObject();
-
     function setAdminIds(array $adminIds);
-
-    function setObject($object);
 
     function getChild();
 

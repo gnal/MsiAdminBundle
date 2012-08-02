@@ -40,15 +40,10 @@ class CrudFormHandler
 
     protected function onSuccess($object)
     {
-        if ($this->admin->hasParent() && !$this->admin->getObject()->getId()) {
-            $parent = $this->admin->getParent()->getModelManager()->findBy(array('a.id' => $this->request->query->get('parentId')))->getQuery()->getOneOrNullResult();
-            if (!$this->parent) {
-                throw new NotFoundHttpException();
-            }
+        if ($this->admin->hasParent() && !$object->getId()) {
             $setter = 'set'.$this->admin->getParent()->getClassName();
-            $object->$setter($parent);
+            $object->$setter($this->admin->getParentEntity());
         }
-
         $this->admin->getModelManager()->save($object);
     }
 }

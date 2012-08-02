@@ -1,9 +1,9 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ 'Edit'|trans }} {{ admin.label }}: {{ admin.object }} - {{ parent() }}{% endblock title %}
+{% block title %}{{ 'Edit'|trans }} {{ admin.label }}: {{ admin.entity }} - {{ parent() }}{% endblock title %}
 
 {% block page_title %}
-    {{ 'Edit'|trans }} {{ admin.label }}: {{ admin.object }}
+    {{ 'Edit'|trans }} {{ admin.label }}: {{ admin.entity }}
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@
         {% include 'MsiAdminBundle:Crud:form.html.twig' with {'form': form, 'admin': admin} %}
         <div class="form-actions" style="margin-bottom: 0;">
             <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans }}</button>
-            <a class="btn" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
+            <a class="btn btn-inverse" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
         </div>
     </form>
 {% endblock %}
