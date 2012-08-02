@@ -1,7 +1,7 @@
 <td>
-    {% if options.edit %}
-        <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ value }}</a>
+    {% if column.options.edit %}
+        <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ column.value }}</a>
     {% else %}
-        {{ value }}
+        {{ column.value }}
     {% endif %}
 </td>

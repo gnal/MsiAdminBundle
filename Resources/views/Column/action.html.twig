@@ -1,14 +1,14 @@
 <td class="text-right">
-    {% if options.tree and object.lvl != 0 and object.parent.children.count > 1 %}
+    {% if column.options.tree and object.lvl != 0 and object.parent.children.count > 1 %}
         <a class="btn btn-mini" href="{{ admin.genUrl('demote', {'id': object.id}) }}"><i class="icon-arrow-down"></i></a>
         <a class="btn btn-mini" href="{{ admin.genUrl('promote', {'id': object.id}) }}"><i class="icon-arrow-up"></i></a>
     {% endif %}
-    {% for key, val in options.actions %}
+    {% for key, val in column.options.actions %}
         <a class="btn btn-mini" href="{{ path(val, {'id': object.id}) }}">{{ key|raw }}</a>
     {% endfor %}
     {% if admin.hasChild %}
-        <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ options.nested.label }}</a>
+        <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ column.options.nested.label }}</a>
     {% endif %}
     <a class="btn btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ 'Edit'|trans }}</a>
-    <a class="btn btn-mini{% if options.delete.ajax %} action-delete" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}>{{ 'Delete'|trans }}</a>
+    <a class="btn btn-mini{% if column.options.delete.ajax %} action-delete" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}>{{ 'Delete'|trans }}</a>
 </td>

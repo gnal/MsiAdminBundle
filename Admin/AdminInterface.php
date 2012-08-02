@@ -30,9 +30,9 @@ interface AdminInterface
 
     function createTableBuilder();
 
-    function buildTable($builder);
+    function buildIndexTable($builder);
 
-    function getTable();
+    function getTable($name);
 
     function createFormBuilder($name);
 

@@ -40,7 +40,7 @@
         <div class="clearfix"></div>
     </div>
     <div class="clearfix"></div>
-    {{ admin.renderTable|raw }}
+    {% include 'MsiAdminBundle:Crud:table_horizontal.html.twig' with {'table': admin.table('index')} %}
 {% endblock %}
 
 {% block js %}

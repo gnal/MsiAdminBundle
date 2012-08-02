@@ -8,14 +8,9 @@
         e.preventDefault();
         $.ajax($this.data('url'), {
             success: function(response) {
-                $this.closest('tr').html($(response).find('tr#el'+$this.closest('tr').data('id')).html());
+                $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());
             },
         });
-        // if ($this.children().hasClass('badge-success')) {
-        //     $this.children().removeClass('badge-success');
-        // } else {
-        //     $this.children().addClass('badge-success');
-        // }
     });
 
     $form.on('click', 'a.action-delete', function(e) {

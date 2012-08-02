@@ -1,0 +1,8 @@
+<table class="table marginless">
+    {% for column in table.columns %}
+    <tr>
+        <th>{{ column.get('label')|capitalize|trans }}</th>
+        {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(table.data.first)} %}
+    </tr>
+    {% endfor %}
+</table>

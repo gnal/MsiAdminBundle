@@ -2,6 +2,8 @@
 
 namespace Msi\Bundle\AdminBundle\Form\Handler;
 
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
 class CrudFormHandler
 {
     protected $request;
@@ -39,7 +41,10 @@ class CrudFormHandler
     protected function onSuccess($object)
     {
         if ($this->admin->hasParent() && !$this->admin->getObject()->getId()) {
-            $parent = $this->admin->getParent()->getModelManager()->findBy(array('a.id' => $this->request->query->get('parentId')))->getQuery()->getSingleResult();
+            $parent = $this->admin->getParent()->getModelManager()->findBy(array('a.id' => $this->request->query->get('parentId')))->getQuery()->getOneOrNullResult();
+            if (!$this->parent) {
+                throw new NotFoundHttpException();
+            }
             $setter = 'set'.ucfirst($this->admin->getParent()->getClassName());
             $object->$setter($parent);
         }

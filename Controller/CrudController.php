@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class CrudController extends ContainerAware
 {
@@ -41,7 +42,7 @@ class CrudController extends ContainerAware
     {
         $this->check('read');
 
-        $table = $this->admin->getTable();
+        $table = $this->admin->getTable('index');
         $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
         $filterForm = $this->admin->getFilterForm();
         // if sortable
@@ -76,6 +77,20 @@ class CrudController extends ContainerAware
         $table->setPaginator($paginator);
 
         return $this->render($this->admin->getTemplate('index'), array('filterForm' => $filterForm->createView()));
+    }
+
+    public function showAction()
+    {
+        $this->check('read');
+
+        $table = $this->admin->getTable('show');
+        if ($table) {
+            $table->setData(new ArrayCollection(array($this->object)));
+        } else {
+            return new RedirectResponse($this->admin->genUrl('edit', array('id' => $this->object->getId())));
+        }
+
+        return $this->render($this->admin->getTemplate('show'));
     }
 
     public function newAction()

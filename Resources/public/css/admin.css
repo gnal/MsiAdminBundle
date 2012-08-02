@@ -7,9 +7,6 @@ body {
 a:hover {
     text-decoration: none;
 }
-#body {
-    position: relative;
-}
 .navbar {
     position: relative;
 }

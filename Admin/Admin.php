@@ -9,6 +9,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Msi\Bundle\AdminBundle\Entity\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class Admin implements AdminInterface
 {
@@ -29,7 +30,7 @@ abstract class Admin implements AdminInterface
 
     protected $form;
     protected $filterForm;
-    protected $table;
+    protected $tables;
 
     public function __construct(ModelManager $modelManager)
     {
@@ -150,15 +151,19 @@ abstract class Admin implements AdminInterface
         return new TableBuilder($this);
     }
 
-    public function getTable()
+    public function getTable($name)
     {
-        if (!$this->table) {
+        if (!isset($this->dataTables[$name])) {
+            $method = 'build'.ucfirst($name).'Table';
+
+            if (!method_exists($this, $method)) return false;
+
             $builder = $this->createTableBuilder();
-            $this->buildTable($builder);
-            $this->table = $builder->getTable();
+            $this->$method($builder);
+            $this->dataTables[$name] = $builder->getTable();
         }
 
-        return $this->table;
+        return $this->dataTables[$name];
     }
 
     public function createFormBuilder($name, $data = null, array $options = array())
@@ -220,11 +225,6 @@ abstract class Admin implements AdminInterface
         return $this->translator->transChoice($this->label, $number);
     }
 
-    public function renderTable()
-    {
-        return $this->container->get('templating')->render('MsiAdminBundle:Crud:table.html.twig', array('table' => $this->getTable()));
-    }
-
     public function renderBreadcrumb()
     {
         return $this->container->get('templating')->render('MsiAdminBundle:Crud:breadcrumb.html.twig', array('breadcrumbs' => $this->buildBreadcrumb()));
@@ -242,20 +242,26 @@ abstract class Admin implements AdminInterface
             $parent = $parentAdmin->getModelManager()->findBy(array('a.id' => $request->query->get('parentId')))->getQuery()->getSingleResult();
 
             $crumbs[] = array('label' => $parentAdmin->getLabel(2), 'path' => $parentAdmin->genUrl('index'));
-            $crumbs[] = array('label' => $parent, 'path' => $parentAdmin->genUrl('edit', array('id' => $parent->getId())));
+            $crumbs[] = array('label' => $parent, 'path' => $parentAdmin->genUrl('show', array('id' => $parent->getId())));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
 
-        if ($action === 'edit') {
-            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
-
-            $crumbs[] = array('label' => $object, 'path' => '');
+        if ($action === 'new') {
+            $crumbs[] = array('label' => $this->translator->trans('Add'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
-        if ($action === 'new') {
-            $crumbs[] = array('label' => $this->translator->trans('Add'), 'path' => '');
+        if ($action === 'edit') {
+            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
+            $crumbs[] = array('label' => $object, 'path' => $this->genUrl('show', array('id' => $this->object->getId())));
+            $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
+            $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
+        }
+
+        if ($action === 'show') {
+            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
+            $crumbs[] = array('label' => $object, 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
@@ -275,6 +281,7 @@ abstract class Admin implements AdminInterface
 
         $names = array(
             'index',
+            'show',
             'new',
             'edit',
             'delete',
@@ -306,12 +313,13 @@ abstract class Admin implements AdminInterface
     {
         $this->form = null;
         $this->filterForm = null;
-        $this->table = null;
+        $this->tables = array();
         $this->likeFields = array();
         $this->query = new ParameterBag();
         $this->controller = 'MsiAdminBundle:Crud:';
         $this->templates = array(
             'index' => 'MsiAdminBundle:Crud:index.html.twig',
+            'show' => 'MsiAdminBundle:Crud:show.html.twig',
             'new'   => 'MsiAdminBundle:Crud:new.html.twig',
             'edit'  => 'MsiAdminBundle:Crud:edit.html.twig',
         );

@@ -63,6 +63,21 @@ abstract class BaseColumn
         return $this->name;
     }
 
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function getValue()
+    {
+        return $this->value;
+    }
+
     public function get($name)
     {
         return $this->options[$name];

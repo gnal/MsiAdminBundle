@@ -1,0 +1,15 @@
+{% extends 'MsiAdminBundle::layout.html.twig' %}
+
+{% block title %}{{ admin.label }}: {{ admin.object }} - {{ parent() }}{% endblock title %}
+
+{% block page_title %}
+    {{ admin.label }}: {{ admin.object }}
+{% endblock %}
+
+{% block actions %}
+    <a class="btn btn-primary" href="{{ admin.genUrl('edit', {'id': admin.object.id}) }}">{{ 'Edit'|trans }}</a>
+{% endblock %}
+
+{% block content %}
+    {% include 'MsiAdminBundle:Crud:table_vertical.html.twig' with {'table': admin.table('show')} %}
+{% endblock %}

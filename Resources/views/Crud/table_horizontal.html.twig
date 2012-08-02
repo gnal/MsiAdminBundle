@@ -10,9 +10,9 @@
     {# Body #}
     <tbody>
     {% for object in table.data %}
-        <tr data-id="{{ object.id }}" id="el{{ object.id }}">
+        <tr id="tr{{ object.id }}">
             {% for column in table.columns %}
-                {{ column.setObject(object).render|raw }}
+                {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
             {% endfor %}
         </tr>
     {% endfor %}
