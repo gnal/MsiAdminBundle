@@ -9,9 +9,8 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Msi\Bundle\AdminBundle\Entity\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-abstract class Admin implements AdminInterface
+abstract class Admin
 {
     public $query;
 
@@ -112,7 +111,7 @@ abstract class Admin implements AdminInterface
         return $this->child;
     }
 
-    public function setChild(AdminInterface $child)
+    public function setChild(Admin $child)
     {
         $this->child = $child;
         if (!$child->hasParent()) $child->setParent($this);
@@ -120,7 +119,7 @@ abstract class Admin implements AdminInterface
 
     public function hasChild()
     {
-        return $this->child instanceof AdminInterface;
+        return $this->child instanceof Admin;
     }
 
     public function getParent()
@@ -128,7 +127,7 @@ abstract class Admin implements AdminInterface
         return $this->parent;
     }
 
-    public function setParent(AdminInterface $parent)
+    public function setParent(Admin $parent)
     {
         $this->parent = $parent;
         if (!$parent->hasChild()) $parent->setChild($this);
@@ -136,7 +135,7 @@ abstract class Admin implements AdminInterface
 
     public function hasParent()
     {
-        return $this->parent instanceof AdminInterface;
+        return $this->parent instanceof Admin;
     }
 
     public function createTableBuilder()
@@ -210,7 +209,7 @@ abstract class Admin implements AdminInterface
             $this->label = $this->getClassName();
         }
 
-        return $this->translator->transChoice($this->label, $number);
+        return $this->translator->transChoice('entity.'.$this->label, $number);
     }
 
     public function buildBreadcrumb()

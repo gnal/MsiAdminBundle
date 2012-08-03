@@ -3,6 +3,7 @@
 namespace Msi\Bundle\AdminBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ModelManager
 {
@@ -103,15 +104,12 @@ class ModelManager
             if (!$entity) {
                 throw new NotFoundHttpException();
             }
-            if ($this->isTranslatable()) {
-                $entity->createTranslations($translationLocales);
-            }
         } else {
-            if ($this->isTranslatable()) {
-                $entity = $this->create($translationLocales);
-            } else {
-                $entity = $this->create();
-            }
+            $entity = $this->create();
+        }
+
+        if ($this->isTranslatable()) {
+            $entity->createTranslations($translationLocales);
         }
 
         return $entity;
@@ -167,15 +165,9 @@ class ModelManager
         $this->save($entity);
     }
 
-    public function create($locales = null)
+    public function create()
     {
-        if ($locales) {
-            $entity = new $this->class($locales);
-        } else {
-            $entity = new $this->class();
-        }
-
-        return $entity;
+        return new $this->class();
     }
 
     public function getClass()

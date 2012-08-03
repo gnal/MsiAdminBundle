@@ -40,6 +40,7 @@ class CrudController extends ContainerAware
         $orderBy = array();
         $criteria = array();
         $table = $this->admin->getTable('index');
+        $q = trim($this->request->query->get('q'));
 
         // Sortable
         if (property_exists($this->manager->getClass(), 'position')) {
@@ -49,15 +50,14 @@ class CrudController extends ContainerAware
 
         // Nested
         if ($this->admin->hasParent() && $this->parentId) {
-            // gonna break when parent has more than 2 words
-            $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
+            $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
-        // Query
-        if (!$this->request->query->get('q')) {
+        // Doctrine
+        if (!$q) {
             $qb = $this->manager->findBy($criteria, array(), $orderBy);
         } else {
-            $qb = $this->manager->findByQ(trim($this->request->query->get('q')), $this->admin->getLikeFields(), $criteria);
+            $qb = $this->manager->findByQ($q, $this->admin->getLikeFields(), $criteria);
         }
         $this->configureListQuery($qb);
 
@@ -145,7 +145,7 @@ class CrudController extends ContainerAware
         $criteria = array();
 
         if ($this->parentId) {
-            $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
+            $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->parentId;
         }
         $orderBy['a.position'] = 'ASC';
         $objects = $this->manager->findBy($criteria, array(), $orderBy)->getQuery()->execute();

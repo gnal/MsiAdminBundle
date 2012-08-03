@@ -20,6 +20,10 @@ abstract class Translatable
 
     public function getTranslation()
     {
+        if ($this->translations->count() === 0) {
+            die('Translatable entity '.get_class($this).' has no translation. Did you forget to create it/them?');
+        }
+
         return $this->translations->first();
     }
 
