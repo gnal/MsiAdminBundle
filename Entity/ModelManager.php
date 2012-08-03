@@ -109,7 +109,7 @@ class ModelManager
         }
 
         if ($this->isTranslatable()) {
-            $entity->createTranslations($translationLocales);
+            $entity->createTranslations($this->getClass().'Translation', $translationLocales);
         }
 
         return $entity;
@@ -167,7 +167,7 @@ class ModelManager
 
     public function create()
     {
-        return new $this->class();
+        return new $this->getClass();
     }
 
     public function getClass()
