@@ -27,5 +27,10 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
+
+        <service id="msi_admin.request_listener" class="Msi\Bundle\AdminBundle\EventListener\RequestListener" scope="request">
+            <argument>%msi_admin.translation_locales%</argument>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
     </services>
 </container>

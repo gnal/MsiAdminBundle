@@ -34,8 +34,9 @@ $("select.chosenify").chosen();
             {% endblock %}
             </ul>
             <ul class="nav pull-right">
-            {% block right_nav %}{% endblock %}
-            <li><a href="{{ path('msi_admin_main_locale') }}">{{ 'Français'|trans }}</a></li>
+            {% block right_nav %}
+                <li><a href="{{ path('msi_admin_main_locale') }}">{{ 'Français'|trans }}</a></li>
+            {% endblock %}
             </ul>
         </div>
     </div>
