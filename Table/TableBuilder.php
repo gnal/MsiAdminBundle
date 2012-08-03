@@ -29,9 +29,6 @@ class TableBuilder
 
     public function getTable()
     {
-        $columns = $this->buildColumns();
-        $table = new Table($columns);
-
-        return $table;
+        return new Table($this->buildColumns());
     }
 }
