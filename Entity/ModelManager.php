@@ -167,7 +167,7 @@ class ModelManager
 
     public function create()
     {
-        return new $this->getClass();
+        return new $this->class();
     }
 
     public function getClass()
