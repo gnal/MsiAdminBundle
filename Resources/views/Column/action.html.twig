@@ -6,7 +6,7 @@
     {% for key, val in column.options.actions %}
         <a class="btn btn-mini" href="{{ path(val, {'id': object.id}) }}">{{ key|raw }}</a>
     {% endfor %}
-    {% if admin.hasChild %}
+    {% if admin.hasChild and admin.child.isGranted('read') %}
         <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ admin.child.label(2) }}</a>
     {% endif %}
     {% if admin.isGranted('update') %}
