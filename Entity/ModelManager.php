@@ -48,10 +48,8 @@ class ModelManager
             $qb->setFirstResult($offset);
 
         if ($this->isTranslatable() && $translate === true) {
-            $qb
-                ->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale())
-                ->leftJoin('a.translations', 't')
-            ;
+            $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
+            $qb->leftJoin('a.translations', 't');
             $select[] = 't';
         }
 
@@ -81,6 +79,7 @@ class ModelManager
         $qb->andWhere($orX);
 
         if ($this->isTranslatable()) {
+            $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
             $qb->leftJoin('a.translations', 't');
             $select[] = 't';
         }
