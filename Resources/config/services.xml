@@ -19,10 +19,6 @@
             <tag name="routing.loader"></tag>
         </service>
 
-        <service id="msi_admin.entity_provider" class="Msi\Bundle\AdminBundle\Provider\EntityProvider">
-            <argument>%msi_admin.translation_locales%</argument>
-        </service>
-
         <service id="msi_admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
         </service>
 

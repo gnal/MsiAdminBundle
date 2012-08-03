@@ -7,7 +7,7 @@
         <a class="btn btn-mini" href="{{ path(val, {'id': object.id}) }}">{{ key|raw }}</a>
     {% endfor %}
     {% if admin.hasChild %}
-        <a class="btn btn-mini btn-info" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ admin.child.label(2) }}</a>
+        <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ admin.child.label(2) }}</a>
     {% endif %}
     {% if admin.isGranted('update') %}
         <a class="btn btn-primary btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}"><i class="icon-pencil icon-white"></i> {{ 'Edit'|trans }}</a>

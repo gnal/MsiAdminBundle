@@ -96,6 +96,27 @@ class ModelManager
         return $qb;
     }
 
+    public function getAdminEntity($id, $translationLocales)
+    {
+        if ($id) {
+            $entity = $this->findBy(array('a.id' => $id), array(), array(), null, null, false)->getQuery()->getOneOrNullResult();
+            if (!$entity) {
+                throw new NotFoundHttpException();
+            }
+            if ($this->isTranslatable()) {
+                $entity->createTranslations($translationLocales);
+            }
+        } else {
+            if ($this->isTranslatable()) {
+                $entity = $this->create($translationLocales);
+            } else {
+                $entity = $this->create();
+            }
+        }
+
+        return $entity;
+    }
+
     public function savePosition($objects, $disposition)
     {
         $i = 1;
@@ -112,38 +133,38 @@ class ModelManager
         }
     }
 
-    public function save($object)
+    public function save($entity)
     {
-        $this->em->persist($object);
+        $this->em->persist($entity);
         $this->em->flush();
     }
 
-    public function delete($object)
+    public function delete($entity)
     {
-        $this->em->remove($object);
+        $this->em->remove($entity);
         $this->em->flush();
     }
 
-    public function change($object, $field)
+    public function change($entity, $field)
     {
         $getter = 'get'.ucfirst($field);
         $setter = 'set'.ucfirst($field);
 
-        $object->$getter() ? $object->$setter(false) : $object->$setter(true);
+        $entity->$getter() ? $entity->$setter(false) : $entity->$setter(true);
 
-        $this->save($object);
+        $this->save($entity);
     }
 
-    public function moveUp($object)
+    public function moveUp($entity)
     {
-        $this->repository->moveUp($object, 1);
-        $this->save($object);
+        $this->repository->moveUp($entity, 1);
+        $this->save($entity);
     }
 
-    public function moveDown($object)
+    public function moveDown($entity)
     {
-        $this->repository->moveDown($object, 1);
-        $this->save($object);
+        $this->repository->moveDown($entity, 1);
+        $this->save($entity);
     }
 
     public function create($locales = null)

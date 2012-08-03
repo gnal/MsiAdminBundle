@@ -16,7 +16,6 @@ abstract class Admin implements AdminInterface
     public $query;
 
     protected $controller;
-    protected $templates;
     protected $adminId;
     protected $adminIds;
     protected $child;
@@ -27,8 +26,6 @@ abstract class Admin implements AdminInterface
     protected $likeFields;
     protected $container;
     protected $modelManager;
-    protected $translator;
-
     protected $forms;
     protected $tables;
 
@@ -73,9 +70,7 @@ abstract class Admin implements AdminInterface
     public function getEntity()
     {
         if (!$this->entity) {
-            $this->entity = $this->container->get('msi_admin.entity_provider')
-                ->setModelManager($this->getModelManager())
-                ->get($this->container->get('request')->query->get('id'));
+            $this->entity = $this->getModelManager()->getAdminEntity($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.translation_locales'));
         }
 
         return $this->entity;
@@ -84,17 +79,10 @@ abstract class Admin implements AdminInterface
     public function getParentEntity()
     {
         if (!$this->parentEntity) {
-            $this->parentEntity = $this->container->get('msi_admin.entity_provider')
-                ->setModelManager($this->getParent()->getModelManager())
-                ->get($this->container->get('request')->query->get('parentId'));
+            $this->parentEntity = $this->getParent()->getModelManager()->getAdminEntity($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.translation_locales'));
         }
 
         return $this->parentEntity;
-    }
-
-    public function getTemplate($name)
-    {
-        return (isset($this->templates[$name])) ? $this->templates[$name]: null;
     }
 
     public function setAdminId($adminId)
@@ -117,11 +105,6 @@ abstract class Admin implements AdminInterface
         $this->translator = $this->container->get('translator');
 
         return $this;
-    }
-
-    public function setTemplate($name, $value)
-    {
-        $this->templates[$name] = $value;
     }
 
     public function getChild()
@@ -315,11 +298,5 @@ abstract class Admin implements AdminInterface
         $this->likeFields = array();
         $this->query = new ParameterBag();
         $this->controller = 'MsiAdminBundle:Crud:';
-        $this->templates = array(
-            'index' => 'MsiAdminBundle:Crud:index.html.twig',
-            'show' => 'MsiAdminBundle:Crud:show.html.twig',
-            'new'   => 'MsiAdminBundle:Crud:new.html.twig',
-            'edit'  => 'MsiAdminBundle:Crud:edit.html.twig',
-        );
     }
 }

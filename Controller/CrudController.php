@@ -82,7 +82,7 @@ class CrudController extends ContainerAware
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
-        return $this->render($this->admin->getTemplate('index'), array('filterForm' => $filterForm));
+        return $this->render('MsiAdminBundle:Crud:index.html.twig', array('filterForm' => $filterForm));
     }
 
     public function showAction()
@@ -96,7 +96,7 @@ class CrudController extends ContainerAware
 
         $table->setData(new ArrayCollection(array($this->entity)));
 
-        return $this->render($this->admin->getTemplate('show'));
+        return $this->render('MsiAdminBundle:Crud:show.html.twig');
     }
 
     public function newAction()
@@ -106,7 +106,7 @@ class CrudController extends ContainerAware
         $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render($this->admin->getTemplate('new'), array('form' => $this->admin->getForm()->createView()));
+        return $this->render('MsiAdminBundle:Crud:new.html.twig', array('form' => $this->admin->getForm()->createView()));
     }
 
     public function editAction()
@@ -116,7 +116,7 @@ class CrudController extends ContainerAware
         $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render($this->admin->getTemplate('edit'), array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
+        return $this->render('MsiAdminBundle:Crud:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
     }
 
     public function deleteAction()
