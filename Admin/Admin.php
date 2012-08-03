@@ -232,15 +232,13 @@ abstract class Admin
         }
 
         if ($action === 'edit') {
-            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
-            $crumbs[] = array('label' => $object, 'path' => $this->genUrl('show', array('id' => $this->getEntity()->getId())));
+            $crumbs[] = array('label' => $this->getEntity(), 'path' => $this->genUrl('show', array('id' => $this->getEntity()->getId())));
             $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
         if ($action === 'show') {
-            $object = $this->getModelManager()->findBy(array('a.id' => $request->query->get('id')))->getQuery()->getSingleResult();
-            $crumbs[] = array('label' => $object, 'path' => '');
+            $crumbs[] = array('label' => $this->getEntity(), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
