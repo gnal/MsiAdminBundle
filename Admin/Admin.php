@@ -9,6 +9,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Msi\Bundle\AdminBundle\Entity\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use FOS\UserBundle\Model\UserInterface;
 
 abstract class Admin
 {
@@ -69,7 +70,7 @@ abstract class Admin
     public function getEntity()
     {
         if (!$this->entity) {
-            $this->entity = $this->getModelManager()->getAdminEntity($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.translation_locales'));
+            $this->entity = $this->getModelManager()->getAdminEntity($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.locales'));
         }
 
         return $this->entity;
@@ -78,7 +79,7 @@ abstract class Admin
     public function getParentEntity()
     {
         if (!$this->parentEntity) {
-            $this->parentEntity = $this->getParent()->getModelManager()->getAdminEntity($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.translation_locales'));
+            $this->parentEntity = $this->getParent()->getModelManager()->getAdminEntity($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.locales'));
         }
 
         return $this->parentEntity;
@@ -185,6 +186,22 @@ abstract class Admin
         if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role))) {
             return false;
         } else {
+            if (
+                is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface') &&
+                $this->getEntity()->isSuperAdmin() &&
+                !$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin()
+            ) {
+                return false;
+            }
+
+            if (
+                is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface') &&
+                $this->getEntity()->hasRole('ROLE_ADMIN') &&
+                $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getEntity()->getId()
+            ) {
+                return false;
+            }
+
             return true;
         }
     }

@@ -17,11 +17,11 @@ class RequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+        $locale = $request->getSession()->getLocale();
 
-        if (!in_array($request->getSession()->getLocale(), $this->translationLocales)) {
+        if (!in_array($locale, $this->translationLocales)) {
             $request->getSession()->setLocale(array_shift($this->translationLocales));
-
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('Locale "'.$locale.'" is not allowed');
         }
     }
 }

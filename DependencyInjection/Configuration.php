@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('MsiAdminBundle:Crud:tiny_mce.html.twig')
                     ->cannotBeEmpty()
                 ->end()
-                ->arrayNode('translation_locales')
+                ->arrayNode('locales')
                     ->prototype('scalar')->end()
                     ->defaultValue(array('en', 'fr'))
                     ->cannotBeEmpty()
