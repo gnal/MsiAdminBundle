@@ -184,22 +184,18 @@ abstract class Admin
     public function isGranted($role)
     {
         if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role))) {
+
             return false;
         } else {
-            if (
-                is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface') &&
-                $this->getEntity()->isSuperAdmin() &&
-                !$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin()
-            ) {
-                return false;
-            }
+            if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface')) {
+                if ($this->getEntity()->isSuperAdmin()) {
 
-            if (
-                is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface') &&
-                $this->getEntity()->hasRole('ROLE_ADMIN') &&
-                $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getEntity()->getId()
-            ) {
-                return false;
+                    return false;
+                }
+                if ($this->getEntity()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getEntity()->getId()) {
+
+                    return false;
+                }
             }
 
             return true;
