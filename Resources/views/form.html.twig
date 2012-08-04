@@ -46,7 +46,7 @@
     {% if required %}
         {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
     {% endif %}
-    {% if label != ' ' %}
+    {% if label != 'Translations' and label|length > 1 %}
         <label class="control-label"{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
     {% endif %}
 {% endspaceless %}
