@@ -1,5 +1,5 @@
 MsiAdminBundle
-===
+==============
 Add to deps:
 
     [MsiAdminBundle]
@@ -17,6 +17,9 @@ Register namespace:
 Configure routing:
 
     MsiAdminBundle:
-        resource: "@MsiAdminBundle/Controller/"
-        type:     annotation
-        prefix:   /
+        resource: "@MsiAdminBundle/Resources/config/routing/routing.xml"
+        defaults: { _locale: fr }
+
+    msi_admin_loader:
+        resource: .
+        type: msi_admin
