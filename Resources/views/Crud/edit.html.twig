@@ -1,6 +1,6 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ 'Edit'|trans }}: {{ admin.entity }} - {{ parent() }}{% endblock title %}
+{% block title %}{{ 'Edit'|trans }}: {{ admin.entity }}{{ parent() }}{% endblock title %}
 
 {% block page_title %}
     {{ 'Edit'|trans }}: {{ admin.entity }}
