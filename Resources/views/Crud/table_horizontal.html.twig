@@ -2,6 +2,9 @@
     {# Head #}
     <thead>
     <tr>
+        {% if table.sortable %}
+        <th>{{ 'Order'|trans }}</th>
+        {% endif %}
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
@@ -11,8 +14,15 @@
     <tbody>
     {% for object in table.data %}
         <tr id="tr{{ object.id }}">
+            {% if table.sortable %}
+                <td class="text-center">
+                    <a class="btn btn-mini" href="#"><i class="icon-move"></i></a>
+                </td>
+            {% endif %}
             {% for column in table.columns %}
+                <td {% for attrname,attrvalue in column.options.attr %}{{attrname}}="{{attrvalue}}" {% endfor %}id="td{{ loop.index~object.id }}">
                 {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
+                </td>
             {% endfor %}
         </tr>
     {% endfor %}
@@ -22,7 +32,7 @@
     <tfoot>
         {% set paginator = table.paginator %}
         <tr>
-            <td style="background: #fff;" colspan="{{ table.columns|length }}">
+            <td style="background: #fff;" colspan="{% if table.sortable %}{{ table.columns|length + 1 }}{% else %}{{ table.columns|length }}{% endif %}">
                 <div style="line-height: 36px;float: left;">{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length}) }}</div>
                 {{ paginator.render|raw }}
             </td>

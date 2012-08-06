@@ -10,7 +10,7 @@ class TableBuilder
     {
         if ($type === null) $type = 'text';
 
-        $this->fields[$name] = array('type' => $type, 'options' => $options);
+        $this->fields[] = array('name' => $name, 'type' => $type, 'options' => $options);
 
         return $this;
     }
@@ -21,7 +21,7 @@ class TableBuilder
 
         foreach ($this->fields as $name => $builder) {
             $class = 'Msi\Bundle\AdminBundle\Table\Column\\'.ucfirst($builder['type']).'Column';
-            $columns[$name] = new $class($name, $builder);
+            $columns[] = new $class($builder['name'], $builder);
         }
 
         return $columns;
