@@ -10,7 +10,7 @@
 
 {% block checkbox_widget %}
 {% spaceless %}
-    <label class="checkbox"><input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} /></label>
+    <label class="checkbox"><input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />{% if multiple is defined %}{{ label }}{% endif %}</label>
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
@@ -19,7 +19,7 @@
     {% if expanded %}
         <div {{ block('widget_container_attributes') }} class="controls">
         {% for child in form %}
-            <label class="checkbox"><input type="checkbox" {{ block('widget_attributes') }}{% if child.get('value') is defined %} value="{{ child.get('value') }}"{% endif %}{% if child.get('checked') %} checked="checked"{% endif %} />{{ child.get('label') }}</label>
+            {{ form_widget(child, {'multiple': 'multiple'}) }}
         {% endfor %}
         </div>
     {% else %}
