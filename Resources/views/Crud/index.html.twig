@@ -62,6 +62,7 @@
 
     $("table.sortable tbody").sortable({
         helper: fixHelper,
+        handle: $('table i.icon-move').closest('a'),
     }).disableSelection();
 })(jQuery);
 (function($) {
