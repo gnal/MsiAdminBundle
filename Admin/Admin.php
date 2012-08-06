@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Msi\Bundle\AdminBundle\Entity\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use FOS\UserBundle\Model\UserInterface;
+use Doctrine\Common\Collections\Collection;
 
 abstract class Admin
 {
@@ -157,6 +158,19 @@ abstract class Admin
     public function hasParent()
     {
         return $this->parent instanceof Admin;
+    }
+
+    public function hasManyParents()
+    {
+        if (!$this->hasParent()) return false;
+
+        $accessor = 'get'.ucfirst($this->getParentFieldName());
+        if ($this->getEntity()->$accessor() instanceof Collection) {
+
+            return true;
+        }
+
+        return false;
     }
 
     public function createTableBuilder()

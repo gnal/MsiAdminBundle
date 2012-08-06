@@ -23,9 +23,10 @@ class FilterFormHandler
             foreach ($filter as $field => $value) {
                 if (is_array($value)) {
                     $orX = $qb->expr()->orX();
+                    $qb->leftJoin('a.'.$field, $field);
                     foreach ($value as $id) {
                         if ($id) {
-                            $orX->add($qb->expr()->eq('a.'.$field, ':filter'.$i));
+                            $orX->add($qb->expr()->eq($field.'.id', ':filter'.$i));
                             $qb->setParameter('filter'.$i, $id);
                             $i++;
                         }

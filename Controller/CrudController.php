@@ -38,6 +38,7 @@ class CrudController extends ContainerAware
         $this->check('read');
 
         $orderBy = array();
+        $parameters = array();
         $joins = array();
         $criteria = array();
         $table = $this->admin->getTable('index');
@@ -68,7 +69,7 @@ class CrudController extends ContainerAware
         $filterForm = $this->admin->getForm('filter');
         if ($filterForm) {
             $filterFormHandler->process($filterForm, $qb);
-            $filterForm = $filterForm->createView();
+            $parameters['filterForm'] = $filterForm->createView();
         }
 
         // Pagination
@@ -84,7 +85,7 @@ class CrudController extends ContainerAware
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
-        return $this->render('MsiAdminBundle:Crud:index.html.twig', array('filterForm' => $filterForm));
+        return $this->render('MsiAdminBundle:Crud:index.html.twig', $parameters);
     }
 
     public function showAction()
