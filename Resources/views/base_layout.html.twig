@@ -24,49 +24,43 @@ $("select.chosenify").chosen();
     <div class="navbar-inner">
         <div class="container" style="width: 960px;">
             <ul class="nav">
-            {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Security'|trans }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                        <li><a href="{{ path('msi_user_user_admin_index', {'id': app.user.id}) }}">{{ 'entity.User'|transchoice(2) }}</a></li>
-                    {% endif %}
-                    {% if is_granted(['ROLE_MSI_USER_GROUP_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                        <li><a href="{{ path('msi_user_group_admin_index') }}">{{ 'entity.Group'|transchoice(2) }}</a></li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-
-            {% if is_granted(['ROLE_MSI_PAGE_PAGE_ADMIN_READ', 'ROLE_MSI_PAGE_PAGE_BLOCK_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-            <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Content'|trans }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    {% if is_granted(['ROLE_MSI_PAGE_PAGE_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                        <li><a href="{{ path('msi_page_page_admin_index') }}">{{ 'entity.Page'|transchoice(2) }}</a></li>
-                    {% endif %}
-                    {% if is_granted(['ROLE_MSI_PAGE_PAGE_BLOCK_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                        <li><a href="{{ path('msi_page_page_block_admin_index') }}">{{ 'entity.PageBlock'|transchoice(2) }}</a></li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-
-            {% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                <li><a href="{{ path('msi_menu_menu_root_admin_index') }}">{{ 'entity.Menu'|transchoice(2) }}</a></li>
-            {% endif %}
-            {% block nav %}
-                <li><a href="{{ path('msi_admin_main_dashboard') }}">Dashboard</a></li>
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Modules <b class="caret"></b></a>
+                {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Security'|trans }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">some_module</a></li>
+                        {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                            <li><a href="{{ path('msi_user_user_admin_index', {'id': app.user.id}) }}">{{ 'entity.User'|transchoice(2) }}</a></li>
+                        {% endif %}
+                        {% if is_granted(['ROLE_MSI_USER_GROUP_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                            <li><a href="{{ path('msi_user_group_admin_index') }}">{{ 'entity.Group'|transchoice(2) }}</a></li>
+                        {% endif %}
                     </ul>
                 </li>
-            {% endblock %}
+                {% endif %}
+
+                {% if is_granted(['ROLE_MSI_PAGE_PAGE_ADMIN_READ', 'ROLE_MSI_PAGE_PAGE_BLOCK_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Content'|trans }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% if is_granted(['ROLE_MSI_PAGE_PAGE_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                            <li><a href="{{ path('msi_page_page_admin_index') }}">{{ 'entity.Page'|transchoice(2) }}</a></li>
+                        {% endif %}
+                        {% if is_granted(['ROLE_MSI_PAGE_PAGE_BLOCK_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                            <li><a href="{{ path('msi_page_page_block_admin_index') }}">{{ 'entity.PageBlock'|transchoice(2) }}</a></li>
+                        {% endif %}
+                    </ul>
+                </li>
+                {% endif %}
+
+                {% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                    <li><a href="{{ path('msi_menu_menu_root_admin_index') }}">{{ 'entity.Menu'|transchoice(2) }}</a></li>
+                {% endif %}
+                {% block nav %}
+                {% endblock %}
             </ul>
             <ul class="nav pull-right">
-            {% block right_nav %}
                 <li><a target="_blank" href="{{ path('msi_page_page_show_home') }}">{{ 'View site'|trans }}</a></li>
-                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>g
-            {% endblock %}
+                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
+                {% block right_nav %}
+                {% endblock %}
             </ul>
         </div>
     </div>
