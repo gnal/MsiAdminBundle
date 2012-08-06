@@ -60,7 +60,7 @@ class CrudController extends ContainerAware
         if (!$q) {
             $qb = $this->manager->findBy($criteria, $joins, $orderBy);
         } else {
-            $qb = $this->manager->findByQ($q, $this->admin->getLikeFields(), $criteria);
+            $qb = $this->manager->findByQ($q, $this->admin->getSearchFields(), $criteria);
         }
         $this->configureListQuery($qb);
 

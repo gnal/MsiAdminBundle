@@ -33,7 +33,7 @@
             </select>
             {{ 'entries'|trans }}
         </form>
-        {% if admin.likeFields|length > 0 %}
+        {% if admin.searchFields|length > 0 %}
             <form novalidate class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
                 {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
                 <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4 search-query">
@@ -73,7 +73,7 @@
         var disposition = [];
 
         $table.find('tbody tr').each(function(i, e) {
-            disposition.push($(e).data('id'));
+            disposition.push($(e).attr('id').substr(2));
         });
 
         $.ajax("{{ admin.genUrl('sort') }}", {

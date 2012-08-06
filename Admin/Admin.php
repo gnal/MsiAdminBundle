@@ -24,7 +24,7 @@ abstract class Admin
     protected $entity;
     protected $parentEntity;
     protected $label;
-    protected $likeFields;
+    protected $searchFields;
     protected $container;
     protected $modelManager;
     protected $forms;
@@ -58,9 +58,9 @@ abstract class Admin
         return $this->container;
     }
 
-    public function getLikeFields()
+    public function getSearchFields()
     {
-        return $this->likeFields;
+        return $this->searchFields;
     }
 
     public function getModelManager()
@@ -339,7 +339,7 @@ abstract class Admin
         $this->parentEntity = null;
         $this->forms = array();
         $this->tables = array();
-        $this->likeFields = array();
+        $this->searchFields = array();
         $this->query = new ParameterBag();
         $this->controller = 'MsiAdminBundle:Crud:';
     }

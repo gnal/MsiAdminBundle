@@ -106,7 +106,7 @@
 {% spaceless %}
     {{ form_errors(form) }}
     {% for child in form %}
-        <h6>{{ child.get('value').locale }}</h6>
+        <h6 style="margin-left: 160px; border-bottom: 1px solid #eee;">{{ child.get('value').locale }}</h6>
         {{ form_row(child) }}
     {% endfor %}
 {% endspaceless %}

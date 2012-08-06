@@ -58,7 +58,7 @@ class ModelManager
         return $qb;
     }
 
-    public function findByQ($q, array $likeFields, array $criteria = array())
+    public function findByQ($q, array $searchFields, array $criteria = array())
     {
         $qb = $this->repository->createQueryBuilder('a');
         $select = array('a');
@@ -67,7 +67,7 @@ class ModelManager
 
         $orX = $qb->expr()->orX();
         $i = 1;
-        foreach ($likeFields as $field) {
+        foreach ($searchFields as $field) {
             foreach ($strings as $str) {
                 $alias = property_exists($this->class, $field) ? 'a': 't';
                 $orX->add($qb->expr()->like($alias.'.'.$field, ':likeMatch'.$i));
