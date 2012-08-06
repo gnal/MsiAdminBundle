@@ -38,12 +38,17 @@ class CrudFormHandler
         return $this;
     }
 
-    protected function onSuccess($object)
+    protected function onSuccess($entity)
     {
-        if ($this->admin->hasParent() && !$object->getId()) {
-            $setter = 'set'.$this->admin->getParent()->getClassName();
-            $object->$setter($this->admin->getParentEntity());
+        if ($this->admin->hasParent() && !$entity->getId()) {
+            $accessor = 'get'.ucfirst($this->admin->getParentFieldName());
+            $entity->$accessor()->add($this->admin->getParentEntity());
+            $accessor = 'get'.ucfirst($this->admin->getParent()->getChildFieldName());
+            $this->admin->getParentEntity()->$accessor()->add($entity);
+
+            $this->admin->getContainer()->get('doctrine')->getEntityManager()->flush();
+        } else {
+            $this->admin->getModelManager()->save($entity);
         }
-        $this->admin->getModelManager()->save($object);
     }
 }

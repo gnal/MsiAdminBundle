@@ -128,6 +128,26 @@ abstract class Admin
         return $this->parent;
     }
 
+    public function getParentFieldName()
+    {
+        $em = $this->container->get('doctrine')->getEntityManager();
+        foreach ($em->getClassMetadata($this->getModelManager()->getClass())->associationMappings as $association) {
+            if ($association['targetEntity'] === $this->getParent()->getModelManager()->getClass()) {
+                return $association['fieldName'];
+            }
+        }
+    }
+
+    public function getChildFieldName()
+    {
+        $em = $this->container->get('doctrine')->getEntityManager();
+        foreach ($em->getClassMetadata($this->getModelManager()->getClass())->associationMappings as $association) {
+            if ($association['targetEntity'] === $this->getChild()->getModelManager()->getClass()) {
+                return $association['fieldName'];
+            }
+        }
+    }
+
     public function setParent(Admin $parent)
     {
         $this->parent = $parent;

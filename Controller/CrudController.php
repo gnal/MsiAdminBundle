@@ -38,6 +38,7 @@ class CrudController extends ContainerAware
         $this->check('read');
 
         $orderBy = array();
+        $joins = array();
         $criteria = array();
         $table = $this->admin->getTable('index');
         $q = trim($this->request->query->get('q'));
@@ -50,12 +51,13 @@ class CrudController extends ContainerAware
 
         // Nested
         if ($this->admin->hasParent() && $this->parentId) {
-            $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->parentId;
+            $joins['a.'.$this->admin->getParentFieldName()] = 'parent';
+            $criteria['parent.id'] = $this->parentId;
         }
 
         // Doctrine
         if (!$q) {
-            $qb = $this->manager->findBy($criteria, array(), $orderBy);
+            $qb = $this->manager->findBy($criteria, $joins, $orderBy);
         } else {
             $qb = $this->manager->findByQ($q, $this->admin->getLikeFields(), $criteria);
         }
