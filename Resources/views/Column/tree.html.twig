@@ -1,6 +1,6 @@
 <td>
-    {% for i in 0..object.lvl - 1 %}
-        <i class="icon-arrow-right"></i>
+    {% for i in 0..object.lvl %}
+        {% if 0 != i %}<i class="icon-arrow-right"></i>{% endif %}
     {% endfor %}
     {% if column.options.edit %}
         <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ column.value }}</a>

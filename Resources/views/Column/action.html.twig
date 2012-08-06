@@ -4,7 +4,7 @@
         <a class="btn btn-mini" href="{{ admin.genUrl('promote', {'id': object.id}) }}"><i class="icon-arrow-up"></i></a>
     {% endif %}
     {% for key, val in column.options.actions %}
-        <a class="btn btn-mini" href="{{ path(val, {'id': object.id}) }}">{{ key|raw }}</a>
+        <a class="btn btn-mini" href="{% if val != '#' %}{{ path(val, {'id': object.id}) }}{% else %}{{ val }}{% endif %}">{{ key|raw }}</a>
     {% endfor %}
     {% if admin.hasChild and admin.child.isGranted('read') %}
         <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ admin.child.label(2) }}</a>
