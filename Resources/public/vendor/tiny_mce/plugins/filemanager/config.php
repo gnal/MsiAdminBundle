@@ -31,7 +31,7 @@
 	// General file system options
 	$mcFileManagerConfig['filesystem'] = "Moxiecode_LocalFileImpl";
 	$mcFileManagerConfig['filesystem.path'] = ''; // absolute or relative from this script path.
-	$mcFileManagerConfig['filesystem.rootpath'] = $_SERVER['DOCUMENT_ROOT'].'/uploads/files'; // absolute or relative from this script path.
+	$mcFileManagerConfig['filesystem.rootpath'] = $_SERVER['DOCUMENT_ROOT'].'/uploads/images'; // absolute or relative from this script path.
 	$mcFileManagerConfig['filesystem.datefmt'] = "Y-m-d H:i";
 	$mcFileManagerConfig['filesystem.include_directory_pattern'] = '';
 	$mcFileManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';
@@ -110,7 +110,7 @@
 	$mcFileManagerConfig['unzip.allow_override'] = "*";
 
 	// Authenication
-	$mcFileManagerConfig['authenticator'] = "SymfonyAuthenticator";
+	$mcFileManagerConfig['authenticator'] = "SessionAuthenticator";
 	$mcFileManagerConfig['authenticator.login_page'] = "login_session_auth.php";
 	$mcFileManagerConfig['authenticator.allow_override'] = "*";
 

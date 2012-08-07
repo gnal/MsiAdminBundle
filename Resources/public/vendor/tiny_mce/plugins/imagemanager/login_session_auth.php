@@ -1,5 +1,4 @@
 <?php
-	die();
 	// Some settings
 	$msg = "";
 	$username = "demo";
