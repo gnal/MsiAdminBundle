@@ -56,6 +56,7 @@ class CrudController extends ContainerAware
             $criteria['parent.id'] = $this->parentId;
         }
 
+        $this->configureJoins($joins);
         // Doctrine
         if (!$q) {
             $qb = $this->manager->findBy($criteria, $joins, $orderBy);
@@ -196,6 +197,10 @@ class CrudController extends ContainerAware
     }
 
     protected function configureListQuery($qb)
+    {
+    }
+
+    protected function configureJoins(&$joins)
     {
     }
 }
