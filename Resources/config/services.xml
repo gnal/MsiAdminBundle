@@ -11,6 +11,7 @@
 
         <service id="msi_admin.filter.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\FilterFormHandler" scope="request">
             <argument type="service" id="request" />
+            <argument type="service" id="msi_admin.entity_manager" />
         </service>
 
         <service id="msi_admin.admin_loader" class="Msi\Bundle\AdminBundle\Routing\AdminLoader">
@@ -33,8 +34,8 @@
             <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
-        <service id="acme_hello.twig.extension.debug" class="Twig_Extension_Debug">
+<!--         <service id="acme_hello.twig.extension.debug" class="Twig_Extension_Debug">
             <tag name="twig.extension" />
-        </service>
+        </service> -->
     </services>
 </container>

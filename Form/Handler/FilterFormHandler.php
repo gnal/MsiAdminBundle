@@ -7,14 +7,17 @@ use Symfony\Component\HttpFoundation\Request;
 class FilterFormHandler
 {
     protected $request;
+    protected $em;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, $em)
     {
         $this->request = $request;
+        $this->em = $em;
     }
 
-    public function process($form, $qb)
+    public function process($form, $entity, $qb)
     {
+        $mappings = $this->em->getClassMetadata(get_class($entity))->associationMappings;
         $filter = $this->request->query->get('filter');
         if ($filter) {
             $form->bindRequest($this->request);
@@ -33,7 +36,15 @@ class FilterFormHandler
                     }
                     $qb->andWhere($orX);
                 } else if ($field !== '_token' && $value) {
-                    $qb->andWhere('a.'.$field.' = :filter'.$i)->setParameter('filter'.$i, $value);
+                    if (isset($mappings[$field])) {
+                        switch ($mappings[$field]['type']) {
+                            case 8:
+                                $qb->leftJoin('a.'.$field, $field);
+                                $qb->andWhere($field.'.id = :filter'.$i)->setParameter('filter'.$i, $value);
+                        }
+                    } else {
+                        $qb->andWhere('a.'.$field.' = :filter'.$i)->setParameter('filter'.$i, $value);
+                    }
                     $i++;
                 }
             }

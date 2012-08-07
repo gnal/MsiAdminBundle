@@ -69,7 +69,7 @@ class CrudController extends ContainerAware
         $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
         $filterForm = $this->admin->getForm('filter');
         if ($filterForm) {
-            $filterFormHandler->process($filterForm, $qb);
+            $filterFormHandler->process($filterForm, $this->entity, $qb);
             $parameters['filterForm'] = $filterForm->createView();
         }
 
