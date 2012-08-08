@@ -23,7 +23,7 @@
         <service id="msi_admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
         </service>
 
-        <service id="msi_admin.admin" class="Msi\Bundle\AdminBundle\Admin\Admin">
+        <service id="msi_admin.admin" class="Msi\Bundle\AdminBundle\Admin\Admin" abstract="true">
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
