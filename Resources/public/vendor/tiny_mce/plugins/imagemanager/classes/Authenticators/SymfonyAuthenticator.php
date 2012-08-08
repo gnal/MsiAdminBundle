@@ -20,7 +20,7 @@ class Moxiecode_SymfonyAuthenticator extends Moxiecode_ManagerPlugin
         //$kernel = new AppCache($kernel);
         $kernel->handle(Request::createFromGlobals());
 
-        return $kernel->getContainer()->get('security.context')->isGranted('ROLE_ADMIN');
+        return $kernel->getContainer()->get('security.context')->isGranted('ROLEd_ADMIN');
     }
 }
 
