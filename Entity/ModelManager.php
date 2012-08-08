@@ -10,12 +10,10 @@ class ModelManager
     protected $em;
     protected $repository;
     protected $class;
-    protected $session;
 
-    public function __construct(EntityManager $em, $class, $session)
+    public function __construct(EntityManager $em, $class)
     {
         $this->em = $em;
-        $this->session = $session;
         $this->repository = $em->getRepository($class);
         $this->class = $em->getClassMetadata($class)->name;
     }
@@ -47,11 +45,11 @@ class ModelManager
         if (null !== $offset)
             $qb->setFirstResult($offset);
 
-        if ($this->isTranslatable() && $translate === true) {
-            $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
-            $qb->leftJoin('a.translations', 't');
-            $select[] = 't';
-        }
+        // if ($this->isTranslatable() && $translate === true) {
+        //     $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
+        //     $qb->leftJoin('a.translations', 't');
+        //     $select[] = 't';
+        // }
 
         $qb->select($select);
 
