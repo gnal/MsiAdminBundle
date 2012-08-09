@@ -18,7 +18,7 @@ class ModelManager
         $this->class = $em->getClassMetadata($class)->name;
     }
 
-    public function findBy(array $criteria = array(), array $joins = array(), array $orderBy = array(), $limit = null, $offset = null, $translate = true)
+    public function findBy(array $criteria = array(), array $joins = array(), array $orderBy = array(), $limit = null, $offset = null)
     {
         $select = array('a');
         $qb = $this->repository->createQueryBuilder('a');
@@ -45,11 +45,10 @@ class ModelManager
         if (null !== $offset)
             $qb->setFirstResult($offset);
 
-        // if ($this->isTranslatable() && $translate === true) {
-        //     $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
-        //     $qb->leftJoin('a.translations', 't');
-        //     $select[] = 't';
-        // }
+        if ($this->isTranslatable()) {
+            $qb->leftJoin('a.translations', 't');
+            $select[] = 't';
+        }
 
         $qb->select($select);
 
@@ -77,7 +76,6 @@ class ModelManager
         $qb->andWhere($orX);
 
         if ($this->isTranslatable()) {
-            $qb->andWhere('t.locale = :locale')->setParameter('locale', $this->session->getLocale());
             $qb->leftJoin('a.translations', 't');
             $select[] = 't';
         }
@@ -97,7 +95,7 @@ class ModelManager
     public function getAdminEntity($id, $translationLocales)
     {
         if ($id) {
-            $entity = $this->findBy(array('a.id' => $id), array(), array(), null, null, false)->getQuery()->getOneOrNullResult();
+            $entity = $this->findBy(array('a.id' => $id))->getQuery()->getOneOrNullResult();
             if (!$entity) {
                 throw new NotFoundHttpException();
             }

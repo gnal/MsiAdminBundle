@@ -5,6 +5,17 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- Event Listener -->
+        <service id="msi_admin.request_listener" class="Msi\Bundle\AdminBundle\EventListener\RequestListener" scope="request">
+            <argument>%msi_admin.locales%</argument>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        </service>
+
+        <service id="msi_admin.translatable_listener" class="Msi\Bundle\AdminBundle\EventListener\TranslatableListener">
+            <argument type="service" id="service_container" />
+            <tag name="doctrine.event_subscriber"></tag>
+        </service>
+        <!-- Form -->
         <service id="msi_admin.crud.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\CrudFormHandler" scope="request">
             <argument type="service" id="request" />
         </service>
@@ -27,11 +38,6 @@
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
-        </service>
-
-        <service id="msi_admin.request_listener" class="Msi\Bundle\AdminBundle\EventListener\RequestListener" scope="request">
-            <argument>%msi_admin.locales%</argument>
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
 <!--         <service id="acme_hello.twig.extension.debug" class="Twig_Extension_Debug">
