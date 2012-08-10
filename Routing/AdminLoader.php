@@ -3,7 +3,7 @@
 namespace Msi\Bundle\AdminBundle\Routing;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Symfony\Component\Config\Loader\LoaderResolver;
+use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\RouteCollection;
 
 class AdminLoader implements LoaderInterface
@@ -43,7 +43,7 @@ class AdminLoader implements LoaderInterface
     {
     }
 
-    public function setResolver(LoaderResolver $resolver)
+    public function setResolver(LoaderResolverInterface $resolver)
     {
     }
 }
