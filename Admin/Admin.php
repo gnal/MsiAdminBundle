@@ -3,14 +3,13 @@
 namespace Msi\Bundle\AdminBundle\Admin;
 
 use Symfony\Component\Form\FormBuilder;
-use Msi\Bundle\AdminBundle\Table\TableBuilder;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
-use Msi\Bundle\AdminBundle\Entity\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use FOS\UserBundle\Model\UserInterface;
-use Doctrine\Common\Collections\Collection;
+
+use Msi\Bundle\AdminBundle\Table\TableBuilder;
+use Msi\Bundle\AdminBundle\Entity\ObjectManager;
 
 abstract class Admin
 {
@@ -26,13 +25,13 @@ abstract class Admin
     protected $label;
     protected $searchFields;
     protected $container;
-    protected $modelManager;
+    protected $objectManager;
     protected $forms;
     protected $tables;
 
-    public function __construct(ModelManager $modelManager)
+    public function __construct(ObjectManager $objectManager)
     {
-        $this->modelManager = $modelManager;
+        $this->objectManager = $objectManager;
 
         $this->init();
         $this->configure();
@@ -63,27 +62,27 @@ abstract class Admin
         return $this->searchFields;
     }
 
-    public function getModelManager()
+    public function getObjectManager()
     {
-        return $this->modelManager;
+        return $this->objectManager;
     }
 
-    public function getEntity()
+    public function getObject()
     {
-        if (!$this->entity) {
-            $this->entity = $this->getModelManager()->getAdminEntity($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.locales'));
+        if (!$this->object) {
+            $this->object = $this->getObjectManager()->getAdminObject($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.locales'));
         }
 
-        return $this->entity;
+        return $this->object;
     }
 
-    public function getParentEntity()
+    public function getParentObject()
     {
-        if (!$this->parentEntity) {
-            $this->parentEntity = $this->getParent()->getModelManager()->getAdminEntity($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.locales'));
+        if (!$this->parentObject) {
+            $this->parentObject = $this->getParent()->getObjectManager()->getAdminObject($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.locales'));
         }
 
-        return $this->parentEntity;
+        return $this->parentObject;
     }
 
     public function setAdminId($adminId)
@@ -129,26 +128,6 @@ abstract class Admin
         return $this->parent;
     }
 
-    public function getParentFieldName()
-    {
-        $em = $this->container->get('doctrine')->getEntityManager();
-        foreach ($em->getClassMetadata($this->getModelManager()->getClass())->associationMappings as $association) {
-            if ($association['targetEntity'] === $this->getParent()->getModelManager()->getClass()) {
-                return $association['fieldName'];
-            }
-        }
-    }
-
-    public function getChildFieldName()
-    {
-        $em = $this->container->get('doctrine')->getEntityManager();
-        foreach ($em->getClassMetadata($this->getModelManager()->getClass())->associationMappings as $association) {
-            if ($association['targetEntity'] === $this->getChild()->getModelManager()->getClass()) {
-                return $association['fieldName'];
-            }
-        }
-    }
-
     public function setParent(Admin $parent)
     {
         $this->parent = $parent;
@@ -158,19 +137,6 @@ abstract class Admin
     public function hasParent()
     {
         return $this->parent instanceof Admin;
-    }
-
-    public function hasManyParents()
-    {
-        if (!$this->hasParent()) return false;
-
-        $accessor = 'get'.ucfirst($this->getParentFieldName());
-        if ($this->getEntity()->$accessor() instanceof Collection) {
-
-            return true;
-        }
-
-        return false;
     }
 
     public function createTableBuilder()
@@ -221,12 +187,12 @@ abstract class Admin
 
             return false;
         } else {
-            if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getEntity(), 'FOS\UserBundle\Model\UserInterface')) {
-                if ($this->getEntity()->isSuperAdmin()) {
+            if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getObject(), 'FOS\UserBundle\Model\UserInterface')) {
+                if ($this->getObject()->isSuperAdmin()) {
 
                     return false;
                 }
-                if ($this->getEntity()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getEntity()->getId()) {
+                if ($this->getObject()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getObject()->getId()) {
 
                     return false;
                 }
@@ -247,7 +213,7 @@ abstract class Admin
 
     public function getClassName()
     {
-        return substr($this->getModelManager()->getClass(), strrpos($this->getModelManager()->getClass(), '\\') + 1);
+        return substr($this->getObjectManager()->getClass(), strrpos($this->getObjectManager()->getClass(), '\\') + 1);
     }
 
     public function getLabel($number = 1)
@@ -268,7 +234,7 @@ abstract class Admin
 
         if ($this->hasParent()) {
             $crumbs[] = array('label' => $this->getParent()->getLabel(2), 'path' => $this->getParent()->genUrl('index'));
-            $crumbs[] = array('label' => $this->getParentEntity(), 'path' => $this->getParent()->genUrl('show', array('id' => $this->getParentEntity()->getId())));
+            $crumbs[] = array('label' => $this->getParentObject(), 'path' => $this->getParent()->genUrl('show', array('id' => $this->getParentObject()->getId())));
         }
 
         $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
@@ -279,13 +245,13 @@ abstract class Admin
         }
 
         if ($action === 'edit') {
-            $crumbs[] = array('label' => $this->getEntity(), 'path' => $this->genUrl('show', array('id' => $this->getEntity()->getId())));
+            $crumbs[] = array('label' => $this->getObject(), 'path' => $this->genUrl('show', array('id' => $this->getObject()->getId())));
             $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
         if ($action === 'show') {
-            $crumbs[] = array('label' => $this->getEntity(), 'path' => '');
+            $crumbs[] = array('label' => $this->getObject(), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
@@ -335,8 +301,8 @@ abstract class Admin
 
     private function init()
     {
-        $this->entity = null;
-        $this->parentEntity = null;
+        $this->object = null;
+        $this->parentObject = null;
         $this->forms = array();
         $this->tables = array();
         $this->searchFields = array();

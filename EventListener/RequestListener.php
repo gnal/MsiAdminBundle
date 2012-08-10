@@ -7,11 +7,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RequestListener
 {
-    protected $translationLocales;
+    protected $locales;
 
-    public function __construct($translationLocales)
+    public function __construct($locales)
     {
-        $this->translationLocales = $translationLocales;
+        $this->locales = $locales;
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -19,8 +19,8 @@ class RequestListener
         $request = $event->getRequest();
         $locale = $request->getLocale();
 
-        if (!in_array($locale, $this->translationLocales)) {
-            $request->setLocale(array_shift($this->translationLocales));
+        if (!in_array($locale, $this->locales)) {
+            $request->setLocale(array_shift($this->locales));
             throw new NotFoundHttpException('Locale "'.$locale.'" is not allowed');
         }
     }

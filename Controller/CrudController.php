@@ -187,8 +187,8 @@ class CrudController extends ContainerAware
         $this->id = $this->request->query->get('id');
         $this->parentId = $this->request->query->get('parentId');
         $this->admin = $this->container->get($this->request->attributes->get('_admin'));
-        $this->manager = $this->admin->getModelManager();
-        $this->entity = $this->admin->getEntity();
+        $this->manager = $this->admin->getObjectManager();
+        $this->entity = $this->admin->getObject();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));

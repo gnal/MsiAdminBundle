@@ -5,7 +5,7 @@ namespace Msi\Bundle\AdminBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ModelManager
+class ObjectManager
 {
     protected $em;
     protected $repository;
@@ -92,7 +92,7 @@ class ModelManager
         return $qb;
     }
 
-    public function getAdminEntity($id, $translationLocales)
+    public function getAdminObject($id, $translationLocales)
     {
         if ($id) {
             $entity = $this->findBy(array('a.id' => $id))->getQuery()->getOneOrNullResult();

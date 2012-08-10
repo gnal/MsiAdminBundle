@@ -43,8 +43,8 @@ class CrudFormHandler
     {
         if ($this->admin->hasParent() && !$entity->getId()) {
             $setter = 'set'.$this->admin->getParent()->getClassName();
-            $entity->$setter($this->admin->getParentEntity());
+            $entity->$setter($this->admin->getParentObject());
         }
-        $this->admin->getModelManager()->save($entity);
+        $this->admin->getObjectManager()->save($entity);
     }
 }
