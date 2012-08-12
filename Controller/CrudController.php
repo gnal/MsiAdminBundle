@@ -52,8 +52,7 @@ class CrudController extends ContainerAware
 
         // Nested
         if ($this->admin->hasParent() && $this->parentId) {
-            $joins['a.'.$this->admin->getParentFieldName()] = 'parent';
-            $criteria['parent.id'] = $this->parentId;
+            $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
         $this->configureJoins($joins);

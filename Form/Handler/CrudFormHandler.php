@@ -20,7 +20,7 @@ class CrudFormHandler
         $form->setData($entity);
 
         if ($this->request->getMethod() === 'POST') {
-            $form->bindRequest($this->request);
+            $form->bind($this->request);
 
             if ($form->isValid()) {
                 $this->onSuccess($entity);

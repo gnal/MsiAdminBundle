@@ -20,7 +20,7 @@ class FilterFormHandler
         $mappings = $this->em->getClassMetadata(get_class($entity))->associationMappings;
         $filter = $this->request->query->get('filter');
         if ($filter) {
-            $form->bindRequest($this->request);
+            $form->bind($this->request);
 
             $i = 1;
             foreach ($filter as $field => $value) {

@@ -163,7 +163,7 @@ abstract class Admin
     {
         if (!$name) $name = $this->adminId;
 
-        return $this->container->get('form.factory')->createNamedBuilder('form', $name, $data, $options);
+        return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $this->getObject(), $options);
     }
 
     public function getForm($name = '')

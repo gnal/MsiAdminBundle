@@ -1,3 +1,42 @@
+{# Rows #}
+
+{% block form_row %}
+{% spaceless %}
+        {% if form.hasChildren == false %}
+            <div class="{% if form.get('name') != 'settings' %}control-group{% endif %}{% if form.get('errors')|length > 0 %} error{% endif %}">
+                {{ form_label(form) }}
+                <div class="controls">
+                    {{ form_errors(form) }}
+                    {{ form_widget(form) }}
+                </div>
+            </div>
+        {% else %}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+        {% endif %}
+{% endspaceless %}
+{% endblock form_row %}
+
+{# Labels #}
+
+{% block form_label %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' control-label')|trim}) %}
+    {% if not compound %}
+        {% set label_attr = label_attr|merge({'for': id}) %}
+    {% endif %}
+    {% if required %}
+        {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+    {% endif %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+{% endspaceless %}
+{% endblock form_label %}
+
+{# Misc #}
+
 {% block field_errors %}
 {% spaceless %}
     {% if errors|length > 0 %}
@@ -7,6 +46,7 @@
     {% endif %}
 {% endspaceless %}
 {% endblock field_errors %}
+
 
 {% block checkbox_widget %}
 {% spaceless %}
@@ -40,36 +80,6 @@
     {% endif %}
 {% endspaceless %}
 {% endblock choice_widget %}
-
-{% block generic_label %}
-{% spaceless %}
-    {% if required %}
-        {% set attr = attr|merge({'class': attr.class|default('') ~ ' required'}) %}
-    {% endif %}
-    {% if label != 'Translations' and label|length > 1 %}
-        <label class="control-label"{% for attrname,attrvalue in attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>{{ label|trans }}</label>
-    {% endif %}
-{% endspaceless %}
-{% endblock %}
-
-{% block field_row %}
-{% spaceless %}
-    <div class="{% if form.get('name') != 'settings' %}control-group{% endif %}{% if form.get('errors')|length > 0 %} error{% endif %}">
-        {% if form.get('name') != 'settings' %}
-            {{ form_label(form, label|default(null)) }}
-        {% endif %}
-        {% if form.hasChildren == false %}
-            <div class="controls">
-                {{ form_widget(form) }}
-                {{ form_errors(form) }}
-            </div>
-        {% else %}
-            {{ form_widget(form) }}
-            {{ form_errors(form) }}
-        {% endif %}
-    </div>
-{% endspaceless %}
-{% endblock field_row %}
 
 {% block field_rows %}
 {% spaceless %}
@@ -106,7 +116,7 @@
 {% spaceless %}
     {{ form_errors(form) }}
     {% for child in form %}
-        <h6 style="margin-left: 160px; border-bottom: 1px solid #eee;">{{ child.get('value').locale }}</h6>
+        <h6 style="margin-bottom: 20px; margin-left: 160px; border-bottom: 1px solid #eee;">{{ child.get('value').locale }}</h6>
         {{ form_row(child) }}
     {% endfor %}
 {% endspaceless %}
