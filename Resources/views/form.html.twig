@@ -72,7 +72,7 @@
     {% if expanded %}
         <div {{ block('widget_container_attributes') }} class="controls">
         {% for child in form %}
-            {{ form_widget(child, {'errors': child.errors, 'multiple': 'multiple'}) }}
+            {{ form_widget(child, {'multiple': 'multiple'}) }}
         {% endfor %}
         </div>
     {% else %}
