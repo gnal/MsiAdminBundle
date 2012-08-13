@@ -6,8 +6,8 @@
             <div class="{% if form.get('name') != 'settings' %}control-group{% endif %}{% if form.get('errors')|length > 0 %} error{% endif %}">
                 {{ form_label(form) }}
                 <div class="controls">
-                    {{ form_errors(form) }}
                     {{ form_widget(form) }}
+                    {#{{ form_errors(form) }}#}
                 </div>
             </div>
         {% else %}
@@ -47,10 +47,23 @@
 {% endspaceless %}
 {% endblock field_errors %}
 
+{# Widgets #}
+
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {{ form_errors(form) }}
+{% endspaceless %}
+{% endblock form_widget_simple %}
 
 {% block checkbox_widget %}
 {% spaceless %}
-    <label class="checkbox"><input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />{% if multiple is defined %}{{ label }}{% endif %}</label>
+    <label class="checkbox">
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+        {% if multiple is defined %}{{ label }}{% endif %}
+        {{ form_errors(form) }}
+    </label>
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
@@ -59,7 +72,7 @@
     {% if expanded %}
         <div {{ block('widget_container_attributes') }} class="controls">
         {% for child in form %}
-            {{ form_widget(child, {'multiple': 'multiple'}) }}
+            {{ form_widget(child, {'errors': child.errors, 'multiple': 'multiple'}) }}
         {% endfor %}
         </div>
     {% else %}
