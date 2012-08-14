@@ -127,9 +127,6 @@ textarea {
          -o-transition: none;
             transition: none;}
 .btn {
-    -webkit-box-shadow: 0 0 1px #333;
-       -moz-box-shadow: 0 0 1px #333;
-            box-shadow: 0 0 1px #333;
     -webkit-border-radius: 2px;
        -moz-border-radius: 2px;
             border-radius: 2px;

@@ -55,7 +55,7 @@ class ObjectManager
         return $qb;
     }
 
-    public function findByQ($q, array $searchFields, array $criteria = array())
+    public function findByQ($q, array $searchFields, array $criteria = array(), array $joins = array())
     {
         $qb = $this->repository->createQueryBuilder('a');
         $select = array('a');
@@ -66,8 +66,7 @@ class ObjectManager
         $i = 1;
         foreach ($searchFields as $field) {
             foreach ($strings as $str) {
-                $alias = property_exists($this->class, $field) ? 'a': 't';
-                $orX->add($qb->expr()->like($alias.'.'.$field, ':likeMatch'.$i));
+                $orX->add($qb->expr()->like($field, ':likeMatch'.$i));
                 $qb->setParameter('likeMatch'.$i, '%'.$str.'%');
                 $i++;
             }
@@ -85,6 +84,11 @@ class ObjectManager
             $qb->andWhere($qb->expr()->eq($key, ':match'.$i));
             $qb->setParameter('match'.$i, $val);
             $i++;
+        }
+
+        foreach ($joins as $k => $v) {
+            $qb->leftJoin($k, $v);
+            $select[] = $v;
         }
 
         $qb->select($select);
