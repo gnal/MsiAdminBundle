@@ -163,7 +163,7 @@ abstract class Admin
     {
         if (!$name) $name = $this->adminId;
 
-        return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $this->getObject(), $options);
+        return $this->container->get('form.factory')->createNamedBuilder($name, 'form', $data, $options);
     }
 
     public function getForm($name = '')
@@ -173,7 +173,7 @@ abstract class Admin
 
             if (!method_exists($this, $method)) return false;
 
-            $builder = $this->createFormBuilder($name);
+            $builder = $this->createFormBuilder($name, $name ? null : $this->getObject());
             $this->$method($builder);
             $this->forms[$name] = $builder->getForm();
         }

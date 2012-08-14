@@ -35,10 +35,13 @@ class FilterFormHandler
                         }
                     }
                     $qb->andWhere($orX);
-                } else if ($field !== '_token' && $value) {
+                } else if ($field !== '_token' && $value !== null && $value !== '') {
                     if (isset($mappings[$field])) {
                         switch ($mappings[$field]['type']) {
                             case 8:
+                                $qb->leftJoin('a.'.$field, $field);
+                                $qb->andWhere($field.'.id = :filter'.$i)->setParameter('filter'.$i, $value);
+                            case 2:
                                 $qb->leftJoin('a.'.$field, $field);
                                 $qb->andWhere($field.'.id = :filter'.$i)->setParameter('filter'.$i, $value);
                         }
