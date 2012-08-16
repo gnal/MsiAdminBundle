@@ -56,7 +56,7 @@ $("select.chosenify").chosen();
                 {% block nav %}{% endblock nav %}
             </ul>
             <ul class="nav pull-right">
-                <li><a target="_blank" href="{{ path('msi_page_page_show_home') }}">{{ 'View site'|trans }}</a></li>
+                <li><a target="_blank" href="{{ path('msi_page_show') }}">{{ 'View site'|trans }}</a></li>
                 <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
                 {% block right_nav %}{% endblock right_nav %}
             </ul>
