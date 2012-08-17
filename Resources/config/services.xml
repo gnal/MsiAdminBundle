@@ -20,6 +20,10 @@
             <tag name="doctrine.event_subscriber"></tag>
         </service>
 
+        <service id="msi_admin.file_listener" class="Msi\Bundle\AdminBundle\EventListener\FileListener" public="false">
+            <tag name="doctrine.event_subscriber"></tag>
+        </service>
+
         <service id="msi_admin.admin.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\AdminFormHandler" scope="request">
             <argument type="service" id="request" />
         </service>
