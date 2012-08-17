@@ -39,7 +39,7 @@ class AdminController extends ContainerAware
 
         $orderBy = array();
         $parameters = array();
-        $joins = array();
+        $join = array();
         $criteria = array();
         $table = $this->admin->getTable('index');
         $q = trim($this->request->query->get('q'));
@@ -55,10 +55,10 @@ class AdminController extends ContainerAware
             $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
         }
 
-        $this->configureJoins($joins);
+        $this->configureJoins($join);
         // Doctrine
         if (!$q) {
-            $qb = $this->manager->findBy($criteria, $joins, $orderBy);
+            $qb = $this->manager->findBy($criteria, $join, $orderBy);
         } else {
             $qb = $this->manager->findByQ($q, $this->admin->getSearchFields(), $criteria);
         }
@@ -199,7 +199,7 @@ class AdminController extends ContainerAware
     {
     }
 
-    protected function configureJoins(&$joins)
+    protected function configureJoins(&$join)
     {
     }
 }

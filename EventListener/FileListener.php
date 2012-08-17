@@ -86,16 +86,16 @@ class FileListener implements EventSubscriber
 
         if ($file === null) return;
 
-        $file->move($entity->getWebDir().$entity->getUploadDir(), $entity->getFilename());
+        $file = $file->move($entity->getPath(), $entity->getFilename());
 
-        $entity->processFile();
+        $entity->processFile($file);
 
         unset($file);
     }
 
     protected function removeUpload($entity)
     {
-        $file = $entity->getWebDir().$entity->getUploadDir().$entity->getFilename();
+        $file = $entity->getPath().'/'.$entity->getFilename();
 
         if (is_file($file)) unlink($file);
     }
