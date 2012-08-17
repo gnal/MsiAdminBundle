@@ -20,7 +20,7 @@
             <tag name="doctrine.event_subscriber"></tag>
         </service>
 
-        <service id="msi_admin.crud.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\CrudFormHandler" scope="request">
+        <service id="msi_admin.admin.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\AdminFormHandler" scope="request">
             <argument type="service" id="request" />
         </service>
 

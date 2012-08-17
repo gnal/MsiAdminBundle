@@ -5,7 +5,7 @@ namespace Msi\Bundle\AdminBundle\Form\Handler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\Common\Collections\Collection;
 
-class CrudFormHandler
+class AdminFormHandler
 {
     protected $request;
     protected $admin;

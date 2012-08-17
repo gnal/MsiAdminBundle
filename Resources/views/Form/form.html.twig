@@ -67,7 +67,20 @@
 {% endspaceless %}
 {% endblock checkbox_widget %}
 
-{% block choice_widget %}
+{% block choice_widget_expanded %}
+{% spaceless %}
+    <div class="control-group">
+        {{ form_label(form) }}
+        <div {{ block('widget_container_attributes') }} class="controls">
+        {% for child in form %}
+            {{ form_widget(child, {'multiple': 'multiple'}) }}
+        {% endfor %}
+        </div>
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{#{% block choice_widget %}
 {% spaceless %}
     {% if expanded %}
         <div {{ block('widget_container_attributes') }} class="controls">
@@ -92,7 +105,7 @@
     </select>
     {% endif %}
 {% endspaceless %}
-{% endblock choice_widget %}
+{% endblock choice_widget %}#}
 
 {% block field_rows %}
 {% spaceless %}

@@ -161,7 +161,7 @@ class AdminController extends ContainerAware
     protected function processForm()
     {
         $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.crud.form.handler');
+        $formHandler = $this->container->get('msi_admin.admin.form.handler');
         $process = $formHandler->setAdmin($this->admin)->process($form, $this->entity);
 
         return $process;

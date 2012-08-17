@@ -52,9 +52,6 @@ h1,h2,h3 {
 .chzn-container {
     margin-bottom: 9px;
 }
-textarea {
-    height: 100px;
-}
 .table td, .table th {
     line-height: 23px !important;
     border-radius: 0 !important;
@@ -118,6 +115,10 @@ textarea, input[type="text"], input[type="password"], input[type="datetime"], in
 input,
 textarea {
   width: 290px;
+}
+textarea {
+    height: 80px;
+    width: 460px;
 }
 .btn:hover {
     background-position: 0;

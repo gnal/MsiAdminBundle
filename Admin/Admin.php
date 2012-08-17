@@ -70,7 +70,7 @@ abstract class Admin
     public function getObject()
     {
         if (!$this->object) {
-            $this->object = $this->getObjectManager()->findOneOrCreate($this->container->get('request')->query->get('id'));
+            $this->object = $this->objectManager->findOneOrCreate($this->container->get('request')->query->get('id'));
         }
 
         return $this->object;
@@ -79,7 +79,7 @@ abstract class Admin
     public function getParentObject()
     {
         if (!$this->parentObject) {
-            $this->parentObject = $this->getParent()->getObjectManager()->findOneOrCreate($this->container->get('request')->query->get('parentId'));
+            $this->parentObject = $this->getParent()->objectManager->findOneOrCreate($this->container->get('request')->query->get('parentId'));
         }
 
         return $this->parentObject;
@@ -173,7 +173,7 @@ abstract class Admin
 
             if (!method_exists($this, $method)) return false;
 
-            $builder = $this->createFormBuilder($name, $name ? null : $this->getObject());
+            $builder = $this->createFormBuilder($name, $name ? null : $this->getObject(), array('cascade_validation' => true));
             $this->$method($builder);
             $this->forms[$name] = $builder->getForm();
         }
