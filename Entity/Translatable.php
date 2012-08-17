@@ -2,16 +2,14 @@
 
 namespace Msi\Bundle\AdminBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-
 abstract class Translatable
 {
-    protected $requestLocale;
+    private $requestLocale;
 
-    public function createTranslations($translationClass, array $locales)
+    public function createTranslations($translationClass, array $appLocales)
     {
-        foreach ($locales as $locale) {
-            if (!$this->hasTranslationForLocale($locale)) {
+        foreach ($appLocales as $locale) {
+            if (!$this->hasTranslation($locale)) {
                 $translation = new $translationClass();
                 $translation->setLocale($locale)->setObject($this);
                 $this->getTranslations()->add($translation);
@@ -27,6 +25,7 @@ abstract class Translatable
 
         foreach ($this->translations as $translation) {
             if ($this->requestLocale === $translation->getLocale()) {
+
                 return $translation;
             }
         }
@@ -34,7 +33,7 @@ abstract class Translatable
         return $this->translations->first();
     }
 
-    public function hasTranslationForLocale($locale)
+    public function hasTranslation($locale)
     {
         foreach ($this->getTranslations() as $translation) {
             if ($translation->getLocale() === $locale) {

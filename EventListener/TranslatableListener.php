@@ -5,12 +5,13 @@ namespace Msi\Bundle\AdminBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Events;
 use Doctrine\Common\EventArgs;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class TranslatableListener implements EventSubscriber
 {
     protected $container;
 
-    public function __construct($container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -25,7 +26,10 @@ class TranslatableListener implements EventSubscriber
     public function postLoad(EventArgs $e)
     {
         $entity = $e->getEntity();
-        if (is_subclass_of($entity, 'Msi\Bundle\AdminBundle\Entity\Translatable')) {
+        $em = $e->getEntityManager();
+        $metadata = $em->getClassMetadata(get_class($entity));
+
+        if (is_subclass_of($metadata->rootEntityName, 'Msi\Bundle\AdminBundle\Entity\Translatable')) {
             $entity->setRequestLocale($this->container->get('request')->getLocale());
         }
     }

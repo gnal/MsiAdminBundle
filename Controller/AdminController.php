@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class CrudController extends ContainerAware
+class AdminController extends ContainerAware
 {
     protected $admin;
     protected $request;
@@ -85,7 +85,7 @@ class CrudController extends ContainerAware
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
-        return $this->render('MsiAdminBundle:Crud:index.html.twig', $parameters);
+        return $this->render('MsiAdminBundle:Admin:index.html.twig', $parameters);
     }
 
     public function showAction()
@@ -99,7 +99,7 @@ class CrudController extends ContainerAware
 
         $table->setData(new ArrayCollection(array($this->entity)));
 
-        return $this->render('MsiAdminBundle:Crud:show.html.twig');
+        return $this->render('MsiAdminBundle:Admin:show.html.twig');
     }
 
     public function newAction()
@@ -109,7 +109,7 @@ class CrudController extends ContainerAware
         $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render('MsiAdminBundle:Crud:new.html.twig', array('form' => $this->admin->getForm()->createView()));
+        return $this->render('MsiAdminBundle:Admin:new.html.twig', array('form' => $this->admin->getForm()->createView()));
     }
 
     public function editAction()
@@ -119,7 +119,7 @@ class CrudController extends ContainerAware
         $process = $this->processForm();
         if ($process) return $this->onSuccess();
 
-        return $this->render('MsiAdminBundle:Crud:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
+        return $this->render('MsiAdminBundle:Admin:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
     }
 
     public function deleteAction()

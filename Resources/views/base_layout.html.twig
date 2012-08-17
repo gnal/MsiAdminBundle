@@ -83,7 +83,7 @@ $("select.chosenify").chosen();
                     {% endif %}
                     {% block breadcrumb %}
                     {% if admin is defined %}
-                        {% include 'MsiAdminBundle:Crud:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
+                        {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
                     {% endif %}
                     {% endblock breadcrumb %}
                 </div>

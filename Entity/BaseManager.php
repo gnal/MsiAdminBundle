@@ -5,34 +5,33 @@ namespace Msi\Bundle\AdminBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ObjectManager
+class BaseManager
 {
     protected $em;
     protected $repository;
     protected $class;
+    protected $metadata;
+    protected $appLocales;
 
-    public function __construct(EntityManager $em, $class)
+    public function __construct($class)
     {
-        $this->em = $em;
-        $this->repository = $em->getRepository($class);
-        $this->class = $em->getClassMetadata($class)->name;
+        $this->class = $class;
     }
 
-    public function findBy(array $criteria = array(), array $joins = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function findBy(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
     {
-        $select = array('a');
         $qb = $this->repository->createQueryBuilder('a');
 
         $i = 1;
-        foreach ($criteria as $k => $v) {
+        foreach ($where as $k => $v) {
             $token = 'eqMatch'.$i;
-            $qb->andWhere($k.' = :'.$token)->setParameter($token, $v);
+            $qb->andWhere($qb->expr()->eq($k, ':'.$token))->setParameter($token, $v);
             $i++;
         }
 
-        foreach ($joins as $k => $v) {
+        foreach ($join as $k => $v) {
             $qb->leftJoin($k, $v);
-            $select[] = $v;
+            $qb->addSelect($v);
         }
 
         foreach ($orderBy as $k => $v) {
@@ -47,18 +46,15 @@ class ObjectManager
 
         if ($this->isTranslatable()) {
             $qb->leftJoin('a.translations', 't');
-            $select[] = 't';
+            $qb->addSelect('t');
         }
-
-        $qb->select($select);
 
         return $qb;
     }
 
-    public function findByQ($q, array $searchFields, array $criteria = array(), array $joins = array())
+    public function findByQ($q, array $searchFields, array $where = array(), array $join = array())
     {
         $qb = $this->repository->createQueryBuilder('a');
-        $select = array('a');
 
         $strings = explode(' ', $q);
 
@@ -76,42 +72,40 @@ class ObjectManager
 
         if ($this->isTranslatable()) {
             $qb->leftJoin('a.translations', 't');
-            $select[] = 't';
+            $qb->addSelect('t');
         }
 
         $i = 1;
-        foreach ($criteria as $key => $val) {
+        foreach ($where as $key => $val) {
             $qb->andWhere($qb->expr()->eq($key, ':match'.$i));
             $qb->setParameter('match'.$i, $val);
             $i++;
         }
 
-        foreach ($joins as $k => $v) {
+        foreach ($join as $k => $v) {
             $qb->leftJoin($k, $v);
-            $select[] = $v;
+            $qb->addSelect($v);
         }
-
-        $qb->select($select);
 
         return $qb;
     }
 
-    public function getAdminObject($id, $translationLocales)
+    public function findOneOrCreate($id = null)
     {
         if ($id) {
-            $entity = $this->findBy(array('a.id' => $id))->getQuery()->getOneOrNullResult();
-            if (!$entity) {
+            $object = $this->findBy(array('a.id' => $id))->getQuery()->getOneOrNullResult();
+            if (!$object) {
                 throw new NotFoundHttpException();
             }
         } else {
-            $entity = $this->create();
+            $object = $this->create();
         }
 
         if ($this->isTranslatable()) {
-            $entity->createTranslations($this->getClass().'Translation', $translationLocales);
+            $object->createTranslations($this->class.'Translation', $this->appLocales);
         }
 
-        return $entity;
+        return $object;
     }
 
     public function savePosition($objects, $disposition)
@@ -177,5 +171,30 @@ class ObjectManager
     public function isTranslatable()
     {
         return is_subclass_of($this->class, 'Msi\Bundle\AdminBundle\Entity\Translatable');
+    }
+
+    public function getAppLocales()
+    {
+        return $this->appLocales;
+    }
+
+    public function setAppLocales($appLocales)
+    {
+        $this->appLocales = $appLocales;
+
+        return $this;
+    }
+
+    public function getEntityManager()
+    {
+        return $this->em;
+    }
+
+    public function setEntityManager(EntityManager $em)
+    {
+        $this->em = $em;
+        $this->repository = $em->getRepository($this->class);
+
+        return $this;
     }
 }

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Msi\Bundle\AdminBundle\Table\TableBuilder;
-use Msi\Bundle\AdminBundle\Entity\ObjectManager;
+use Msi\Bundle\AdminBundle\Entity\BaseManager;
 
 abstract class Admin
 {
@@ -29,7 +29,7 @@ abstract class Admin
     protected $forms;
     protected $tables;
 
-    public function __construct(ObjectManager $objectManager)
+    public function __construct(BaseManager $objectManager)
     {
         $this->objectManager = $objectManager;
 
@@ -70,7 +70,7 @@ abstract class Admin
     public function getObject()
     {
         if (!$this->object) {
-            $this->object = $this->getObjectManager()->getAdminObject($this->container->get('request')->query->get('id'), $this->container->getParameter('msi_admin.locales'));
+            $this->object = $this->getObjectManager()->findOneOrCreate($this->container->get('request')->query->get('id'));
         }
 
         return $this->object;
@@ -79,7 +79,7 @@ abstract class Admin
     public function getParentObject()
     {
         if (!$this->parentObject) {
-            $this->parentObject = $this->getParent()->getObjectManager()->getAdminObject($this->container->get('request')->query->get('parentId'), $this->container->getParameter('msi_admin.locales'));
+            $this->parentObject = $this->getParent()->getObjectManager()->findOneOrCreate($this->container->get('request')->query->get('parentId'));
         }
 
         return $this->parentObject;
@@ -307,6 +307,6 @@ abstract class Admin
         $this->tables = array();
         $this->searchFields = array();
         $this->query = new ParameterBag();
-        $this->controller = 'MsiAdminBundle:Crud:';
+        $this->controller = 'MsiAdminBundle:Admin:';
     }
 }

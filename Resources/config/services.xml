@@ -4,25 +4,29 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="msi_admin.request_listener.class">Msi\Bundle\AdminBundle\EventListener\RequestListener</parameter>
+        <parameter key="msi_admin.translatable_listener.class">Msi\Bundle\AdminBundle\EventListener\TranslatableListener</parameter>
+        <parameter key="msi_admin.base_manager.class">Msi\Bundle\AdminBundle\Entity\BaseManager</parameter>
+    </parameters>
+
     <services>
-        <!-- Event Listener -->
-        <service id="msi_admin.request_listener" class="Msi\Bundle\AdminBundle\EventListener\RequestListener">
-            <argument>%msi_admin.locales%</argument>
-            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
+        <service id="msi_admin.request_listener" class="%msi_admin.request_listener.class%">
+            <argument>%msi_admin.app_locales%</argument>
         </service>
 
-        <service id="msi_admin.translatable_listener" class="Msi\Bundle\AdminBundle\EventListener\TranslatableListener">
+        <service id="msi_admin.translatable_listener" class="%msi_admin.translatable_listener.class%">
             <argument type="service" id="service_container" />
             <tag name="doctrine.event_subscriber"></tag>
         </service>
-        <!-- Form -->
+
         <service id="msi_admin.crud.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\CrudFormHandler" scope="request">
             <argument type="service" id="request" />
         </service>
 
         <service id="msi_admin.filter.form.handler" class="Msi\Bundle\AdminBundle\Form\Handler\FilterFormHandler" scope="request">
             <argument type="service" id="request" />
-            <argument type="service" id="msi_admin.entity_manager" />
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
         </service>
 
         <service id="msi_admin.admin_loader" class="Msi\Bundle\AdminBundle\Routing\AdminLoader">
@@ -31,7 +35,13 @@
             <tag name="routing.loader"></tag>
         </service>
 
-        <service id="msi_admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
+        <service id="msi_admin.base_manager" class="%msi_admin.base_manager.class%" abstract="true">
+            <call method="setAppLocales">
+                <argument>%msi_admin.app_locales%</argument>
+            </call>
+            <call method="setEntityManager">
+                <argument type="service" id="doctrine.orm.default_entity_manager" />
+            </call>
         </service>
 
         <service id="msi_admin.admin" class="Msi\Bundle\AdminBundle\Admin\Admin" abstract="true">
@@ -39,9 +49,6 @@
                 <argument type="service" id="service_container" />
             </call>
         </service>
-
-<!--         <service id="acme_hello.twig.extension.debug" class="Twig_Extension_Debug">
-            <tag name="twig.extension" />
-        </service> -->
     </services>
+
 </container>

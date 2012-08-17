@@ -5,11 +5,11 @@ namespace Msi\Bundle\AdminBundle\Controller;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class MainController extends ContainerAware
+class DashboardController extends ContainerAware
 {
     public function dashboardAction()
     {
-        return $this->container->get('templating')->renderResponse('MsiAdminBundle:Main:dashboard.html.twig');
+        return $this->container->get('templating')->renderResponse('MsiAdminBundle:Dashboard:dashboard.html.twig');
     }
 
     public function localeAction()
