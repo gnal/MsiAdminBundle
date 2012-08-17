@@ -57,6 +57,13 @@
 {% endspaceless %}
 {% endblock form_widget_simple %}
 
+{% block textarea_widget %}
+{% spaceless %}
+    <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
+    {{ form_errors(form) }}
+{% endspaceless %}
+{% endblock textarea_widget %}
+
 {% block checkbox_widget %}
 {% spaceless %}
     <label class="checkbox">
