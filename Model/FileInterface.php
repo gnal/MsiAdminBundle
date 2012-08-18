@@ -6,7 +6,7 @@ interface FileInterface
 {
     function getPath();
 
-    function getPathname();
+    function getPathname($predfix);
 
     function processFile(\SplFileInfo $file);
 
