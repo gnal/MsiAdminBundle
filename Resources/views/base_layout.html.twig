@@ -37,7 +37,7 @@ $("select.chosenify").chosen();
                     </li>
                 {% endif %}
 
-                {% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                {#{% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                     <li><a href="{{ path('msi_menu_menu_root_admin_index') }}">{{ 'entity.Menu'|transchoice(2) }}</a></li>
                 {% endif %}
 
@@ -52,11 +52,11 @@ $("select.chosenify").chosen();
                             {% endif %}
                         </ul>
                     </li>
-                {% endif %}
+                {% endif %}#}
                 {% block nav %}{% endblock nav %}
             </ul>
             <ul class="nav pull-right">
-                <li><a target="_blank" href="{{ path('msi_page_show') }}">{{ 'View site'|trans }}</a></li>
+                {#<li><a target="_blank" href="{{ path('msi_page_show') }}">{{ 'View site'|trans }}</a></li>#}
                 <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
                 {% block right_nav %}{% endblock right_nav %}
             </ul>
