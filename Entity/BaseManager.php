@@ -130,6 +130,16 @@ class BaseManager
         $this->em->flush();
     }
 
+    public function saveBatch($entity, $i)
+    {
+        $this->em->persist($entity);
+        $batchSize = 20;
+        if ($i % $batchSize === 0) {
+            $this->em->flush();
+            $this->em->clear();
+        }
+    }
+
     public function delete($entity)
     {
         $this->em->remove($entity);
@@ -183,6 +193,11 @@ class BaseManager
         $this->appLocales = $appLocales;
 
         return $this;
+    }
+
+    public function getRepository()
+    {
+        return $this->repository;
     }
 
     public function getEntityManager()
