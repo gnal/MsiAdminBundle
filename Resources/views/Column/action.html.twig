@@ -9,8 +9,8 @@
     <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}">{{ admin.child.label(2) }}</a>
 {% endif %}
 {% if admin.isGranted('update') %}
-    <a class="btn btn-primary btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}"><i class="icon-pencil icon-white"></i> {{ 'Edit'|trans }}</a>
+    <a class="btn btn-mini" href="{{ admin.genUrl('edit', {'id': object.id}) }}"><i class="icon-pencil"></i> {{ 'Edit'|trans }}</a>
 {% endif %}
 {% if admin.isGranted('delete') %}
-    <a class="btn btn-danger btn-mini{% if column.options.delete.ajax %} action-delete" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}><i class="icon-remove icon-white"></i> {{ 'Delete'|trans }}</a>
+    <a class="btn btn-mini{% if column.options.delete.ajax %} action-delete" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}><i class="icon-remove"></i> {{ 'Delete'|trans }}</a>
 {% endif %}

@@ -2,7 +2,14 @@ html {
     overflow-y: scroll;
 }
 body {
-    background: #f9f9f9;
+    background: #D0D0CF;
+}
+.body {
+    margin-top: 20px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px #999;
+    padding: 20px;
+    margin-bottom: 10px;
 }
 a:hover {
     text-decoration: none !important;
@@ -11,17 +18,10 @@ a:hover {
     position: relative;
 }
 .page-header {
-    background: #fff;
-    margin: -21px -20px 18px;
+    background: whiteSmoke;
+    margin: -21px -20px 20px;
     padding: 20px 20px;
-    border-bottom: 1px solid #ddd;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
-}
-.very-well {
-    background: #fff;
-    /*box-shadow: 0 1px 3px #999;*/
-    border-radius: 0;
+    border-bottom: 1px dotted #e5e5e5;
 }
 h1,h2,h3,.brand {
     font-family: "Trebuchet MS";
@@ -66,23 +66,14 @@ h1,h2,h3 {
     /*border-top: 0 !important;*/
     background: #f9f9f9 !important;
 }
-.pagination {
-    /*background: #fff;*/
-}
-.pagination a:hover, .pagination .active a {
-    /*background-color: #0074CC;*/
-    /*color: #333;*/
-}
 .breadcrumb {
-    margin: -18px -20px 18px;
+    margin: -20px -20px 20px;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid #ddd;
-    padding: 8px 14px 6px;
     padding-left: 20px;
     padding-right: 20px;
-    border-left: 1px solid #ddd;
-    border-right: 1px solid #ddd;
+    border-bottom: 1px dotted #e5e5e5;
+    background: #ffffff;
 }
 .marginless-in * {
     margin-bottom: 0 !important;

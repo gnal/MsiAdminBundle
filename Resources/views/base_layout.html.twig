@@ -65,7 +65,7 @@ $("select.chosenify").chosen();
     </div>
 </div>
 
-<div class="body container well very-well">
+<div class="body container">
     <div class="page-header">
         <div class="btn-toolbar pull-right">
             {% block actions %}{% endblock actions %}
@@ -74,26 +74,21 @@ $("select.chosenify").chosen();
     </div>
     <div class="row">
         <div class="span12">
-            <div class="row">
-                <div class="span12">
-                    {% if app.session.hasFlash('success') %}
-                    <div class="alert alert-success fade in">
-                        <a class="close" data-dismiss="alert" href="#">×</a>
-                        {{ app.session.flash('success')|raw }}
-                    </div>
-                    {% endif %}
-                    {% block breadcrumb %}
-                    {% if admin is defined %}
-                        {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
-                    {% endif %}
-                    {% endblock breadcrumb %}
-                </div>
+            {% if app.session.hasFlash('success') %}
+            <div class="alert alert-success fade in">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                {{ app.session.flash('success')|raw }}
             </div>
-            {% block content %}{% endblock %}
-            <div class="clearfix"></div>
-        </div> <!-- endspan12 -->
-    </div> <!-- endrow -->
-</div> <!-- endcontainer -->
+            {% endif %}
+            {% block breadcrumb %}
+            {% if admin is defined %}
+                {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
+            {% endif %}
+            {% endblock breadcrumb %}
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+</div>
 <div class="footer container">
     <p><small class="muted">&copy; {{ 'now'|date('Y') }} {% block coypright %}GROUPE MSI INC. ALL RIGHTS RESERVED.{% endblock %}</small></p>
 </div>
