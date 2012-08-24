@@ -15,7 +15,6 @@ abstract class Admin
 {
     public $query;
 
-    protected $action;
     protected $controller;
     protected $adminId;
     protected $adminIds;
@@ -46,6 +45,11 @@ abstract class Admin
     public function getAdminIds()
     {
         return $this->adminIds;
+    }
+
+    public function getAction()
+    {
+        return preg_replace(array('#^[a-z]+_([a-z]+_){1,2}[a-z]+_[a-z]+_#'), array(''), $this->container->get('request')->attributes->get('_route'));
     }
 
     public function getBundleName()
@@ -104,7 +108,6 @@ abstract class Admin
     {
         $this->container = $container;
         $this->translator = $this->container->get('translator');
-        $this->action = preg_replace(array('#^[a-z]+_([a-z]+_){1,2}[a-z]+_[a-z]+_#'), array(''), $this->container->get('request')->attributes->get('_route'));
 
         return $this;
     }
