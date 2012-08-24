@@ -15,6 +15,7 @@ abstract class Admin
 {
     public $query;
 
+    protected $action;
     protected $controller;
     protected $adminId;
     protected $adminIds;
@@ -103,6 +104,7 @@ abstract class Admin
     {
         $this->container = $container;
         $this->translator = $this->container->get('translator');
+        $this->action = preg_replace(array('#^[a-z]+_([a-z]+_){1,2}[a-z]+_[a-z]+_#'), array(''), $this->container->get('request')->attributes->get('_route'));
 
         return $this;
     }
@@ -245,7 +247,7 @@ abstract class Admin
         }
 
         if ($action === 'edit') {
-            $crumbs[] = array('label' => $this->getObject(), 'path' => $this->genUrl('show', array('id' => $this->getObject()->getId())));
+            // $crumbs[] = array('label' => $this->getObject(), 'path' => $this->genUrl('show', array('id' => $this->getObject()->getId())));
             $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }

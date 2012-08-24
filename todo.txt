@@ -1,0 +1,2 @@
+- Fix index query paginator bug with translations / left join
+- Fix alerts for 2.1
