@@ -233,7 +233,7 @@ abstract class Admin
     public function buildBreadcrumb()
     {
         $request = $this->container->get('request');
-        $action = preg_replace(array('#^[a-z]+_([a-z]+_){1,2}[a-z]+_[a-z]+_#'), array(''), $request->attributes->get('_route'));
+        $action = $this->getAction();
         $crumbs = array();
         $backLabel = $this->translator->trans('Back');
 
