@@ -5,7 +5,7 @@ Delete: Supprimer
 Show: Afficher
 Cancel: Annuler
 Back: Retour
-Save Changes: Soumettre les modifications
+Save Changes: Sauvegarder les modifications
 View site: Voir le site
 entries: entrées
 Showing %from% to %to% of %of% entries: Résultats %from% à %to% de %of% entrée|Résultats %from% à %to% de %of% entrées
@@ -30,3 +30,4 @@ Name: Nom
 Order: Ordre
 Content: Contenu
 Security: Sécurité
+Lastlogin: Dernière connexion

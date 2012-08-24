@@ -1,1 +1,3 @@
-{{ column.value.format(column.options.format) }}
+{% if column.value %}
+    {{ column.value.format(column.options.format) }}
+{% endif %}

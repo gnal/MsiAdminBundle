@@ -1,10 +1,11 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ admin.getLabel(2) }}{{ parent() }}{% endblock title %}
+{% block title %}{{ admin.getLabel(2) }}{% endblock title %}
 
 {% block actions %}
     {% if admin.isGranted('create') %}
-        <a class="btn btn-primary" href="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>
+        <a href="{{ admin.genUrl('new') }}" class="btn btn-primary"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>
+        {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
     {% endif %}
 {% endblock %}
 
@@ -22,7 +23,7 @@
             <div class="clearfix"></div>
         </form>
     {% endif %}
-    <div class="marginless-in" style="background: #f9f9f9; padding: 8px; border: 1px solid #ddd; border-bottom: 0;">
+    <div class="marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ddd; border-bottom: 0;">
         <form novalidate class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
             <small>{{ 'Show'|trans }}</small>
             <select class="span1" name="limit">
@@ -45,6 +46,7 @@
     </div>
     <div class="clearfix"></div>
     {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
+    {% include 'MsiAdminBundle:Misc:modal.html.twig' %}
 {% endblock %}
 
 {% block js %}
@@ -80,6 +82,32 @@
         $.ajax("{{ admin.genUrl('sort') }}", {
             data: {'disposition': disposition},
         });
+    });
+})(jQuery);
+(function($) {
+    "use strict";
+    $('a.msi_admin_admin_new').on('click', function(e) {
+        $.ajax($(this).data('url'), {
+            success: function(response) {
+                $('div#adminModal div.modal-header h3').html($(response).find('h1').text());
+                $('div#adminModal div.modal-body').html($(response).find('form'));
+            }
+        });
+        e.preventDefault();
+    });
+    $('div#adminModal div.modal-footer a.btn-primary').on('click', function(e) {
+        $.ajax($('div#adminModal div.modal-body form').attr('action'), {
+            type: 'POST',
+            data: $('div#adminModal div.modal-body form').serialize(),
+            success: function(response) {
+                if (response === 'ok') {
+                    location.replace(location);
+                } else {
+                    $('div#adminModal div.modal-body').html($(response).find('form'));
+                }
+            }
+        });
+        e.preventDefault();
     });
 })(jQuery);
 </script>

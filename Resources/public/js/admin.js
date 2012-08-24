@@ -2,25 +2,24 @@
     var $table = $('table.table');
     var $form = $('form.form-crud');
 
-    $table.on('click', 'a.action-change', function(e) {
+    $table.on('click', 'a.msi_admin_admin_change', function(e) {
         var $this = $(this);
-
-        e.preventDefault();
         $.ajax($this.data('url'), {
             success: function(response) {
                 $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());
             },
         });
+        e.preventDefault();
     });
 
-    $form.on('click', 'a.action-delete', function(e) {
+    $form.on('click', 'a.msi_admin_admin_delete', function(e) {
         if (!confirm('Are you sure you want to delete this entry?')) {
             e.preventDefault();
             return;
         }
     });
 
-    $table.on('click', 'a.action-delete', function(e) {
+    $table.on('click', 'a.msi_admin_admin_delete', function(e) {
         var $this = $(this);
 
         e.preventDefault();

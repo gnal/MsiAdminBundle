@@ -1,6 +1,6 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ 'Add'|trans }} {{ admin.getLabel() }}{{ parent() }}{% endblock title %}
+{% block title %}{{ 'Add'|trans }} {{ admin.getLabel() }}{% endblock title %}
 
 {% block page_title %}
     {{ 'Add'|trans }} {{ admin.getLabel() }}
@@ -9,10 +9,12 @@
 {% block content %}
     <form novalidate class="form-horizontal" style="margin-bottom: 0;" action="{{ admin.genUrl('new') }}" method="POST" {{ form_enctype(form) }}>
         {% include 'MsiAdminBundle:Admin:form.html.twig' with {'form': form} %}
+        {% if app.request.isXmlHttpRequest == false %}
         <div class="form-actions" style="margin-bottom: 0;">
             <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans }}</button>
             <a class="btn btn-link" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
         </div>
+        {% endif %}
     </form>
 {% endblock %}
 

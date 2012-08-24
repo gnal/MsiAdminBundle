@@ -107,7 +107,13 @@ class AdminController extends ContainerAware
         $this->check('create');
 
         $process = $this->processForm();
-        if ($process) return $this->onSuccess();
+        if ($process) {
+            if ($this->request->isXmlHttpRequest()) {
+                return new Response('ok');
+            } else {
+                return $this->onSuccess();
+            }
+        }
 
         return $this->render('MsiAdminBundle:Admin:new.html.twig', array('form' => $this->admin->getForm()->createView()));
     }
@@ -117,7 +123,13 @@ class AdminController extends ContainerAware
         $this->check('update');
 
         $process = $this->processForm();
-        if ($process) return $this->onSuccess();
+        if ($process) {
+            if ($this->request->isXmlHttpRequest()) {
+                return new Response('ok');
+            } else {
+                return $this->onSuccess();
+            }
+        }
 
         return $this->render('MsiAdminBundle:Admin:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
     }
