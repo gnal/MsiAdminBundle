@@ -2,8 +2,6 @@
 
 {% block title %}page title here{% endblock %}
 
-{% block brand %}your site name here{% endblock brand %}
-
 {% block css %}
 <link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/bootstrap/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/chosen/chosen.css') }}">
@@ -25,7 +23,7 @@ $("select.chosenify").chosen();
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-            <a class="brand" href="#">{{ block('brand') }}</a>
+            {% if block('brand')|length > 0 %}<a class="brand" href="#">{{ block('brand') }}</a>{% endif %}
             <ul class="nav">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                     <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ 'Security'|trans }} <b class="caret"></b></a>

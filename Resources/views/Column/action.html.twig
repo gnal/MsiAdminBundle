@@ -1,12 +1,12 @@
 {% if column.options.tree and object.lvl != 0 and object.parent.children.count > 1 %}
-    <a class="btn btn-mini" href="{{ admin.genUrl('demote', {'id': object.id}) }}"><i class="icon-arrow-down"></i></a>
-    <a class="btn btn-mini" href="{{ admin.genUrl('promote', {'id': object.id}) }}"><i class="icon-arrow-up"></i></a>
+    <a class="btn" href="{{ admin.genUrl('demote', {'id': object.id}) }}"><i class="icon-arrow-down"></i></a>
+    <a class="btn" href="{{ admin.genUrl('promote', {'id': object.id}) }}"><i class="icon-arrow-up"></i></a>
 {% endif %}
 {% for key, val in column.options.actions %}
-    <a class="btn btn-mini" href="{% if val != '#' %}{{ path(val, {'id': object.id}) }}{% else %}{{ val }}{% endif %}">{{ key|raw }}</a>
+    <a class="btn" href="{% if val != '#' %}{{ path(val, {'id': object.id}) }}{% else %}{{ val }}{% endif %}">{{ key|raw }}</a>
 {% endfor %}
 {% if admin.hasChild and admin.child.isGranted('read') %}
-    <a class="btn btn-mini" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}"><i class="icon-list"></i> {{ admin.child.label(2) }}</a>
+    <a class="btn" href="{{ admin.child.genUrl('index', {'parentId': object.id}) }}"><i class="icon-list"></i> {{ admin.child.label(2) }}</a>
 {% endif %}
 {% if admin.isGranted('update') %}
     <a href="{{ admin.genUrl('edit', {'id': object.id}) }}" class="btn"><i class="icon-pencil"></i> {{ 'Edit'|trans }}</a>

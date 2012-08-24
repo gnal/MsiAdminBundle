@@ -39,7 +39,7 @@ class FilterFormHandler
                     if (isset($mappings[$field])) {
                         switch ($mappings[$field]['type']) {
                             case 8:
-                                $qb->leftJoin('a.'.$field, $field);
+                                $qb->leftJoin('a.'.$field, $field.$i);
                                 $qb->andWhere($field.'.id = :filter'.$i)->setParameter('filter'.$i, $value);
                             case 2:
                                 $qb->leftJoin('a.'.$field, $field);

@@ -16,7 +16,7 @@ Logout: Logout
 Français: Français
 Filter: Filter
 The action was executed successfully!: The action was executed successfully!
-Updatedat: Updated
+Updatedat: Last modified
 Createdat: Created
 Download: Download
 Enabled: Enabled
@@ -31,3 +31,4 @@ Order: Order
 Content: Content
 Security: Security
 Lastlogin: Last login
+Published: Published
