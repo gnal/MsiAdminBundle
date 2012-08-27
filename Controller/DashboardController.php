@@ -22,8 +22,20 @@ class DashboardController extends ContainerAware
 
     public function limitAction()
     {
-        $this->container->get('session')->set('limit', $this->container->get('request')->request->get('limit'));
+        $limit = intval($this->container->get('request')->request->get('limit'));
 
-        return new RedirectResponse(preg_replace('@\??&?page=\d+$@', '', $_SERVER['HTTP_REFERER']));
+        if ($limit < 1) {
+            $limit = 10;
+        }
+
+        $this->container->get('session')->set('limit', $limit);
+
+        if ($_SERVER['HTTP_REFERER']) {
+            $url = preg_replace('@\??&?page=\d+@', '', $_SERVER['HTTP_REFERER']);
+        } else {
+            $url = '/';
+        }
+
+        return new RedirectResponse($url);
     }
 }

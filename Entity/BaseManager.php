@@ -4,6 +4,7 @@ namespace Msi\Bundle\AdminBundle\Entity;
 
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Doctrine\ORM\QueryBuilder;
 
 class BaseManager
 {
@@ -18,41 +19,68 @@ class BaseManager
         $this->class = $class;
     }
 
-    public function findBy(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
+    public function getFindByQueryBuilder(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
     {
         $qb = $this->repository->createQueryBuilder('a');
 
-        $i = 1;
-        foreach ($where as $k => $v) {
-            $token = 'eqMatch'.$i;
-            $qb->andWhere($qb->expr()->eq($k, ':'.$token))->setParameter($token, $v);
-            $i++;
-        }
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
 
-        foreach ($join as $k => $v) {
-            $qb->leftJoin($k, $v);
-            $qb->addSelect($v);
-        }
-
-        foreach ($orderBy as $k => $v) {
-            $qb->addOrderBy($k, $v);
-        }
-
-        if (null !== $limit)
+        if (null !== $limit) {
             $qb->setMaxResults($limit);
+        }
 
-        if (null !== $offset)
+        if (null !== $offset) {
             $qb->setFirstResult($offset);
-
-        if ($this->isTranslatable()) {
-            $qb->leftJoin('a.translations', 't');
-            $qb->addSelect('t');
         }
 
         return $qb;
     }
 
-    public function findByQ($q, array $searchFields, array $where = array(), array $join = array())
+    public function getSearchQueryBuilder($q, array $searchFields, array $where = array(), array $join = array(), array $orderBy = array())
+    {
+        $qb = $this->repository->createQueryBuilder('a');
+
+        $q = trim(preg_replace('@\W@', ' ', trim($q)));
+        $strings = explode(' ', $q);
+
+        $orX = $qb->expr()->orX();
+        $i = 1;
+        foreach ($searchFields as $field) {
+            foreach ($strings as $string) {
+                $token = 'likeMatch'.$i;
+                $orX->add($qb->expr()->like($field, ':'.$token));
+                $qb->setParameter($token, '%'.$string.'%');
+                $i++;
+            }
+        }
+
+        $qb->andWhere($orX);
+
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
+
+        return $qb;
+    }
+
+    // deprecated
+    public function findBy(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
+        $qb = $this->repository->createQueryBuilder('a');
+
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
+
+        if (null !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if (null !== $offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        return $qb;
+    }
+
+    // deprecated
+    public function findByQ($q, array $searchFields, array $where = array(), array $join = array(), array $orderBy = array())
     {
         $qb = $this->repository->createQueryBuilder('a');
 
@@ -70,22 +98,7 @@ class BaseManager
 
         $qb->andWhere($orX);
 
-        if ($this->isTranslatable()) {
-            $qb->leftJoin('a.translations', 't');
-            $qb->addSelect('t');
-        }
-
-        $i = 1;
-        foreach ($where as $key => $val) {
-            $qb->andWhere($qb->expr()->eq($key, ':match'.$i));
-            $qb->setParameter('match'.$i, $val);
-            $i++;
-        }
-
-        foreach ($join as $k => $v) {
-            $qb->leftJoin($k, $v);
-            $qb->addSelect($v);
-        }
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
 
         return $qb;
     }
@@ -93,7 +106,7 @@ class BaseManager
     public function findOneOrCreate($id = null)
     {
         if ($id) {
-            $object = $this->findBy(array('a.id' => $id))->getQuery()->getOneOrNullResult();
+            $object = $this->getFindByQueryBuilder(array('a.id' => $id))->getQuery()->getOneOrNullResult();
             if (!$object) {
                 throw new NotFoundHttpException();
             }
@@ -211,5 +224,31 @@ class BaseManager
         $this->repository = $em->getRepository($this->class);
 
         return $this;
+    }
+
+    protected function buildFindBy(QueryBuilder $qb, array $where, array $join, array $orderBy)
+    {
+        $i = 1;
+        foreach ($where as $k => $v) {
+            $token = 'eqMatch'.$i;
+            $qb->andWhere($qb->expr()->eq($k, ':'.$token))->setParameter($token, $v);
+            $i++;
+        }
+
+        foreach ($join as $k => $v) {
+            $qb->leftJoin($k, $v);
+            $qb->addSelect($v);
+        }
+
+        foreach ($orderBy as $k => $v) {
+            $qb->addOrderBy($k, $v);
+        }
+
+        if ($this->isTranslatable()) {
+            $qb->leftJoin('a.translations', 't');
+            $qb->addSelect('t');
+        }
+
+        return $qb;
     }
 }

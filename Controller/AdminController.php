@@ -74,12 +74,7 @@ class AdminController extends ContainerAware
 
         // Pagination
         $paginator = $this->container->get('msi_paginator.paginator.factory')->create();
-        $paginator->setLimit($this->container->get('session')->get('limit', 10));
-        $paginator->setPage($this->request->query->get('page', 1));
-        $paginator->setData($qb);
-        $paginator->query->set('parentId', $this->parentId);
-        $paginator->query->set('filter', $this->request->query->get('filter'));
-        $paginator->query->set('q', $this->request->query->get('q'));
+        $paginator->paginate($qb, $this->request->query->get('page', 1), $this->container->get('session')->get('limit', 10));
 
         // Table
         $table->setData($paginator->getResult());

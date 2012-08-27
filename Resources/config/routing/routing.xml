@@ -12,7 +12,7 @@
         <default key="_controller">MsiAdminBundle:Dashboard:locale</default>
     </route>
 
-    <route id="msi_admin_main_limit" pattern="/admin/set-limit">
+    <route id="msi_admin_main_limit" pattern="/change-limit">
         <default key="_controller">MsiAdminBundle:Dashboard:limit</default>
     </route>
 </routes>

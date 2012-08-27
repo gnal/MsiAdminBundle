@@ -1,2 +1,4 @@
 - Fix index query paginator bug with translations / left join
 - Fix alerts for 2.1
+- add select all/non function to expanded mltiple fields
+- fix table actions width etc

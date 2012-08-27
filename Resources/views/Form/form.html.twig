@@ -76,6 +76,12 @@
 
 {% block choice_widget_expanded %}
 {% spaceless %}
+    <div class="controls">
+        <div class="btn-toolbar">
+            <button class="btn">Select all</button>
+            <button class="btn">Select none</button>
+        </div>
+    </div>
     <div class="control-group">
         {{ form_label(form) }}
         <div {{ block('widget_container_attributes') }} class="controls">
