@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class TranslatableListener implements EventSubscriber
 {
     protected $container;
+    protected $skipPostLoad = false;
 
     public function __construct(ContainerInterface $container)
     {
@@ -29,8 +30,20 @@ class TranslatableListener implements EventSubscriber
         $em = $e->getEntityManager();
         $metadata = $em->getClassMetadata(get_class($entity));
 
-        if (is_subclass_of($metadata->rootEntityName, 'Msi\Bundle\AdminBundle\Entity\Translatable')) {
+        if (!$this->skipPostLoad && is_subclass_of($metadata->rootEntityName, 'Msi\Bundle\AdminBundle\Entity\Translatable')) {
             $entity->setRequestLocale($this->container->get('request')->getLocale());
         }
+    }
+
+    public function getSkipPostLoad()
+    {
+        return $this->skipPostLoad;
+    }
+
+    public function setSkipPostLoad($skipPostLoad)
+    {
+        $this->skipPostLoad = $skipPostLoad;
+
+        return $this;
     }
 }
