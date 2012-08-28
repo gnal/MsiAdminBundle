@@ -13,6 +13,7 @@
     <services>
         <service id="msi_admin.request_listener" class="%msi_admin.request_listener.class%">
             <argument>%msi_admin.app_locales%</argument>
+            <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest" />
         </service>
 
         <service id="msi_admin.translatable_listener" class="%msi_admin.translatable_listener.class%">
