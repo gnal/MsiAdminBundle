@@ -12,7 +12,7 @@ class ActionColumn extends BaseColumn
                 'ajax' => true,
             ),
             'actions' => array(),
-            'attr' => array('class' => 'text-right span5'),
+            'attr' => array('class' => 'text-right span3'),
         );
     }
 }

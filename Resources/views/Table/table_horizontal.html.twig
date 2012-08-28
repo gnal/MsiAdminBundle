@@ -1,4 +1,4 @@
-<table class="{% if table.sortable %}sortable {% endif %}table table-bordered marginless">
+<table class="{% if table.sortable %}sortable {% endif %}table table-bordered">
     {# Head #}
     <thead>
     <tr>
@@ -27,7 +27,7 @@
         </tr>
     {% endfor %}
     </tbody>
-    {# Foot #}
+    {#
     {% if table.data.count > 0 %}
     <tfoot>
         {% set paginator = table.paginator %}
@@ -38,5 +38,8 @@
             </td>
         </tr>
     </tfoot>
-    {% endif %}
+    {% endif %}#}
 </table>
+{% set paginator = table.paginator %}
+{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length}) }}
+{{ msi_paginator_render(paginator) }}
