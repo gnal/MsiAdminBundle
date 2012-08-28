@@ -19,8 +19,10 @@ class RequestListener
         $request = $event->getRequest();
 
         if (!in_array($request->getLocale(), $this->appLocales)) {
+            $locale = $request->getLocale();
             $request->setLocale(array_shift($this->appLocales));
-            throw new NotFoundHttpException('Locale "'.$request->getLocale().'" is not allowed');
+
+            throw new NotFoundHttpException('Locale "'.$locale.'" is not allowed. See MsiAdminBundle configuration for more details.');
         }
     }
 }
