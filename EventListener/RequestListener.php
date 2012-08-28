@@ -17,7 +17,7 @@ class RequestListener
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
-
+        die('dadad');
         if (!in_array($request->getLocale(), $this->appLocales)) {
             $request->setLocale(array_shift($this->appLocales));
             throw new NotFoundHttpException('Locale "'.$request->getLocale().'" is not allowed');

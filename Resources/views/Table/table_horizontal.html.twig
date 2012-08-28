@@ -34,7 +34,7 @@
         <tr>
             <td style="background: #fff;" colspan="{% if table.sortable %}{{ table.columns|length + 1 }}{% else %}{{ table.columns|length }}{% endif %}">
                 <div style="line-height: 40px; float: left;"><small>{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length})|raw }}</small></div>
-                {{ paginator.render|raw }}
+                {{ msi_paginator_render(paginator) }}
             </td>
         </tr>
     </tfoot>
