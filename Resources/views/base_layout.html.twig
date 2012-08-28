@@ -1,7 +1,5 @@
 {% extends '::base.html.twig' %}
 
-{% block title %}page title here{% endblock %}
-
 {% block css %}
 <link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/bootstrap/css/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/chosen/chosen.css') }}">
@@ -77,16 +75,14 @@ $("select.chosenify").chosen();
         {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
     {% endif %}
     {% endblock breadcrumb %}
-    <div class="row">
-        <div class="span12">
-            {% if app.session.hasFlash('success') %}
-            <div class="alert alert-success fade in">
-                <a class="close" data-dismiss="alert" href="#">×</a>
-                {{ app.session.flash('success')|raw }}
-            </div>
-            {% endif %}
+    {# Flashes #}
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success fade in">
+            <a class="close" data-dismiss="alert" href="#">×</a>
+            {{ flashMessage }}
         </div>
-    </div>
+    {% endfor %}
+    {# Content #}
     {% block content %}{% endblock %}
 </div>
 <div class="footer container">

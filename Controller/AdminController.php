@@ -176,7 +176,7 @@ class AdminController extends ContainerAware
 
     protected function onSuccess()
     {
-        $this->container->get('session')->setFlash('success', $this->container->get('translator')->trans('The action was executed successfully!'));
+        $this->container->get('session')->getFlashBag()->add('success', $this->container->get('translator')->trans('The action was executed successfully!'));
 
         return new RedirectResponse($this->admin->genUrl('index'));
     }
