@@ -2,7 +2,7 @@
     {# Head #}
     <thead>
         <tr>
-            <th colspan="{{ table.columns|length }}" style="text-align: left;">
+            <th colspan="{{ table.length }}" style="text-align: left;">
                 {% if admin.searchFields|length > 0 %}
                     <form novalidate class="pull-right marginless marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
                         {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
@@ -29,7 +29,7 @@
         <tr id="tr{{ object.id }}">
             {% if table.sortable %}
                 <td class="text-center">
-                    <a class="btn btn-mini" href="#"><i class="icon-move"></i></a>
+                    <i class="icon-move"></i>
                 </td>
             {% endif %}
             {% for column in table.columns %}

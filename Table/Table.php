@@ -28,6 +28,13 @@ class Table
         return $this;
     }
 
+    public function getLength()
+    {
+        $count = count($this->columns);
+
+        return $this->sortable ? $count + 1 : $count;
+    }
+
     public function setData(Collection $data)
     {
         $this->data = $data;
