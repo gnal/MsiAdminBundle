@@ -1,14 +1,27 @@
-<table class="{% if table.sortable %}sortable {% endif %}table table-bordered">
+<table class="{% if table.sortable %}sortable {% endif %}table table-bordered table-striped">
     {# Head #}
     <thead>
-    <tr>
+        <tr>
+            <th colspan="{{ table.columns|length }}" style="text-align: left;">
+                {% if admin.searchFields|length > 0 %}
+                    <form novalidate class="pull-right marginless marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
+                        {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
+                        <div class="input-append">
+                            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4"><button type="submit" class="btn">{{ 'Search'|trans }}</button><a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+                        </div>
+                    </form>
+                {% endif %}
+                <h4>{{ admin.getLabel(2) }} <span class="muted">({{ table.paginator.length|number_format }})</span></h4>
+            </th>
+        </tr>
+        <tr>
         {% if table.sortable %}
-        <th>{{ 'Order'|trans }}</th>
+            <th>{{ 'Order'|trans }}</th>
         {% endif %}
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
-    </tr>
+        </tr>
     </thead>
     {# Body #}
     <tbody>
@@ -27,19 +40,14 @@
         </tr>
     {% endfor %}
     </tbody>
-    {#
-    {% if table.data.count > 0 %}
-    <tfoot>
-        {% set paginator = table.paginator %}
-        <tr>
-            <td style="background: #fff;" colspan="{% if table.sortable %}{{ table.columns|length + 1 }}{% else %}{{ table.columns|length }}{% endif %}">
-                <div style="line-height: 40px; float: left;"><small>{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length})|raw }}</small></div>
-                {{ msi_paginator_render(paginator) }}
-            </td>
-        </tr>
-    </tfoot>
-    {% endif %}#}
 </table>
-{% set paginator = table.paginator %}
-{{ 'Showing %from% to %to% of %of% entries'|transchoice(paginator.length, {'%from%': paginator.from, '%to%': paginator.to, '%of%': paginator.length}) }}
-{{ msi_paginator_render(paginator) }}
+<span class="pull-left" style="margin-right: 5px;">{{ 'Show'|trans }}</span>
+<form novalidate class="pull-left form-limit marginless marginless-inner" method="POST" action="{{ path('msi_admin_main_limit') }}">
+    <select class="span1" name="limit">
+        <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
+        <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
+        <option {% if app.session.get('limit') == 50 %}selected=selected{% endif %} value="50">50</option>
+        <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
+    </select>
+</form>
+{{ msi_paginator_render(table.paginator) }}

@@ -1,6 +1,8 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
-{% block title %}{{ admin.getLabel(2) }}{% endblock title %}
+{% block title %}
+{{ 'index_title'|trans({'%label%': admin.getLabel(1)}) }}
+{% endblock title %}
 
 {% block actions %}
     {% if admin.isGranted('create') %}
@@ -9,42 +11,16 @@
     {% endif %}
 {% endblock %}
 
-{% block page_title %}
-    {{ admin.getLabel(2) }}
-{% endblock %}
-
 {% block content %}
     {% if filterForm is defined %}
-        <form novalidate class="marginless marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ddd; border-bottom: 0;" method="GET" action="{{ admin.genUrl('index') }}">
+        <form novalidate class="marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
             {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
             {{ form_widget(filterForm) }}
-            <button type="submit" class="btn btn-primary"><i class="icon-white icon-filter"></i> {{ 'Filter'|trans }}</button>
-            <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-            <div class="clearfix"></div>
+            <div class="input-append">
+                <button type="submit" class="btn">{{ 'Filter'|trans }}</button><a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+            </div>
         </form>
     {% endif %}
-    <div class="marginless-in" style="background: #f5f5f5; padding: 8px; border: 1px solid #ddd; border-bottom: 0;">
-        <form novalidate class="pull-left form-limit" method="POST" action="{{ path('msi_admin_main_limit') }}">
-            <small>{{ 'Show'|trans }}</small>
-            <select class="span1" name="limit">
-                <option {% if app.session.get('limit') == '10' %}selected=selected{% endif %} value="10">10</option>
-                <option {% if app.session.get('limit') == '25' %}selected=selected{% endif %} value="25">25</option>
-                <option {% if app.session.get('limit') == '50' %}selected=selected{% endif %} value="50">50</option>
-                <option {% if app.session.get('limit') == '100' %}selected=selected{% endif %} value="100">100</option>
-            </select>
-            <small>{{ 'entries'|trans }}</small>
-        </form>
-        {% if admin.searchFields|length > 0 %}
-            <form novalidate class="pull-right form-search" method="GET" action="{{ admin.genUrl('index') }}">
-                {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-                <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4 search-query">
-                <button type="submit" class="btn btn-primary" style="padding: 4px 28px;"><i class="icon-white icon-search"></i></button>
-                <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-            </form>
-        {% endif %}
-        <div class="clearfix"></div>
-    </div>
-    <div class="clearfix"></div>
     {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
     {% include 'MsiAdminBundle:Misc:modal.html.twig' %}
 {% endblock %}

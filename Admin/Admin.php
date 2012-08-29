@@ -242,21 +242,21 @@ abstract class Admin
             $crumbs[] = array('label' => $this->getParentObject(), 'path' => $this->getParent()->genUrl('show', array('id' => $this->getParentObject()->getId())));
         }
 
-        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '');
+        $crumbs[] = array('label' => $this->getLabel(2), 'path' => 'index' !== $action ? $this->genUrl('index') : '', 'class' => 'index' !== $action ? '' : 'active');
 
         if ($action === 'new') {
-            $crumbs[] = array('label' => $this->translator->trans('Add'), 'path' => '');
+            $crumbs[] = array('label' => $this->translator->trans('Add'), 'path' => '', 'class' => 'active');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
         if ($action === 'edit') {
             // $crumbs[] = array('label' => $this->getObject(), 'path' => $this->genUrl('show', array('id' => $this->getObject()->getId())));
-            $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '');
+            $crumbs[] = array('label' => $this->translator->trans('Edit'), 'path' => '', 'class' => 'active');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 
         if ($action === 'show') {
-            $crumbs[] = array('label' => $this->getObject(), 'path' => '');
+            $crumbs[] = array('label' => $this->getObject(), 'path' => '', 'class' => 'active');
             $crumbs[] = array('label' => $backLabel, 'path' => $this->genUrl('index'), 'class' => 'pull-right');
         }
 

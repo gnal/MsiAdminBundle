@@ -10,7 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js "></script>
 <script src="{{ asset('/bundles/msiadmin/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('bundles/msiadmin/vendor/chosen/chosen.jquery.min.js') }}"></script>
+<script src="{{ asset('/bundles/msiadmin/vendor/chosen/chosen.jquery.min.js') }}"></script>
 <script src="{{ asset('/bundles/msiadmin/js/admin.js') }}"></script>
 <script>
 $("select.chosenify").chosen();
@@ -18,9 +18,9 @@ $("select.chosenify").chosen();
 {% endblock %}
 
 {% block body %}
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-inverse">
     <div class="navbar-inner">
-        <div class="container">
+        <div class="container-fluid">
             {% if block('brand')|length > 0 %}<a class="brand" href="#">{{ block('brand') }}</a>{% endif %}
             <ul class="nav">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
@@ -56,7 +56,7 @@ $("select.chosenify").chosen();
             </ul>
             <ul class="nav pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                    <li><a href="{{ path('fos_user_profile_show') }}"><i class="icon-user"></i> {{ app.user }}</a></li>
+                    <li><a href="{{ path('fos_user_profile_show') }}">{{ app.user }}</a></li>
                 {% endif %}
                 {% block right_nav %}{% endblock right_nav %}
                 {#<li><a target="_blank" href="{{ path('msi_page_show') }}">{{ 'View site'|trans }}</a></li>#}
@@ -65,27 +65,34 @@ $("select.chosenify").chosen();
         </div>
     </div>
 </div>
-<div class="body container">
-    {% if block('actions')|length > 0 %}
-        <div class="btn-toolbar pull-right">{% block actions %}{% endblock actions %}</div>
-    {% endif %}
-    <h1>{{ block('title') }}</h1>
-    {% block breadcrumb %}
-    {% if admin is defined %}
-        {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
-    {% endif %}
-    {% endblock breadcrumb %}
-    {# Flashes #}
-    {% for flashMessage in app.session.flashbag.get('success') %}
-        <div class="alert alert-success fade in">
-            <a class="close" data-dismiss="alert" href="#">×</a>
-            {{ flashMessage }}
-        </div>
-    {% endfor %}
-    {# Content #}
-    {% block content %}{% endblock %}
+<div id="body">
+    <div class="container-fluid">
+        {# Actions #}
+        {% if block('actions')|length > 0 %}
+            <div class="btn-toolbar pull-right" style="margin-top: 8px">{% block actions %}{% endblock actions %}</div>
+        {% endif %}
+        {# Title #}
+        <h1 style="margin-top: 5px;">{{ block('title') }}</h1>
+        {# Breadcrumb #}
+        {% block breadcrumb %}
+        {% if admin is defined %}
+            {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
+        {% endif %}
+        {% endblock breadcrumb %}
+        {# Flashes #}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success fade in">
+                <a class="close" data-dismiss="alert" href="#">×</a>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {# Content #}
+        {% block content %}{% endblock %}
+    </div>
 </div>
-<div class="footer container">
-    <p><small>&copy; {{ 'now'|date('Y') }} {% block coypright %}GROUPE MSI INC. ALL RIGHTS RESERVED.{% endblock %}</small></p>
+<div id="footer">
+    <div class="container-fluid">
+        <small class="muted">&copy; {{ 'now'|date('Y') }} {% block coypright %}GROUPE MSI INC. ALL RIGHTS RESERVED.{% endblock %}</small>
+    </div>
 </div>
 {% endblock %}
