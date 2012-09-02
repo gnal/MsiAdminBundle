@@ -2,15 +2,15 @@ html {
     overflow-y: scroll;
 }
 body {
-    background: #d2d2d2;
+    background: #999999;
     /*background: #39414A;*/
     padding: 0 10% 0;
 }
 #body .container-fluid, #body .container {
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     background: #ffffff;
     -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
-       -moz-box-shadow: 0 1px 4px rgba(0,0,0,0.065);
+       -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.065);
     padding: 20px;
 }
@@ -127,4 +127,9 @@ textarea {
 .navbar .brand {
     font-weight: bold;
     padding-left: 35px;
+}
+.btn {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
 }
