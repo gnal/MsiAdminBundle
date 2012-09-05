@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -37,34 +36,10 @@ class AdminController extends ContainerAware
     {
         $this->check('read');
 
-        $orderBy = array();
-        $parameters = array();
-        $join = array();
-        $criteria = array();
-        $table = $this->admin->getTable('index');
-        $q = trim($this->request->query->get('q'));
-
-        // Sortable
-        if (property_exists($this->manager->getClass(), 'position')) {
-            $orderBy['a.position'] = 'ASC';
-            $table->setSortable(true);
-        }
-
-        // Nested
-        if ($this->admin->hasParent() && $this->parentId) {
-            $criteria['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->parentId;
-        }
-
-        $this->configureJoins($join);
-        // Doctrine
-        if (!$q) {
-            $qb = $this->manager->findBy($criteria, $join, $orderBy);
-        } else {
-            $qb = $this->manager->findByQ($q, $this->admin->getSearchFields(), $criteria);
-        }
-        $this->configureListQuery($qb);
+        $qb = $this->manager->getAdminListQueryBuilder($this->request, $this->admin);
 
         // Filters
+        $parameters = array();
         $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
         $filterForm = $this->admin->getForm('filter');
         if ($filterForm) {
@@ -77,6 +52,10 @@ class AdminController extends ContainerAware
         $paginator->paginate($qb, $this->request->query->get('page', 1), $this->container->get('session')->get('limit', 10));
 
         // Table
+        $table = $this->admin->getTable('index');
+        if (property_exists($this->manager->getClass(), 'position')) {
+            $table->setSortable(true);
+        }
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
@@ -200,13 +179,5 @@ class AdminController extends ContainerAware
         $this->admin->query->set('q', $this->request->query->get('q'));
         $this->admin->query->set('parentId', $this->parentId);
         $this->admin->query->set('filter', $this->request->query->get('filter'));
-    }
-
-    protected function configureListQuery($qb)
-    {
-    }
-
-    protected function configureJoins(&$join)
-    {
     }
 }

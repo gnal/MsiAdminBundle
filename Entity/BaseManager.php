@@ -5,6 +5,8 @@ namespace Msi\Bundle\AdminBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Msi\Bundle\AdminBundle\Admin\Admin;
 
 class BaseManager
 {
@@ -17,48 +19,6 @@ class BaseManager
     public function __construct($class)
     {
         $this->class = $class;
-    }
-
-    public function getFindByQueryBuilder(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-
-        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
-
-        if (null !== $limit) {
-            $qb->setMaxResults($limit);
-        }
-
-        if (null !== $offset) {
-            $qb->setFirstResult($offset);
-        }
-
-        return $qb;
-    }
-
-    public function getSearchQueryBuilder($q, array $searchFields, array $where = array(), array $join = array(), array $orderBy = array())
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-
-        $q = trim(preg_replace('@\W@', ' ', trim($q)));
-        $strings = explode(' ', $q);
-
-        $orX = $qb->expr()->orX();
-        $i = 1;
-        foreach ($searchFields as $field) {
-            foreach ($strings as $string) {
-                $token = 'likeMatch'.$i;
-                $orX->add($qb->expr()->like($field, ':'.$token));
-                $qb->setParameter($token, '%'.$string.'%');
-                $i++;
-            }
-        }
-
-        $qb->andWhere($orX);
-
-        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
-
-        return $qb;
     }
 
     // deprecated
@@ -101,24 +61,6 @@ class BaseManager
         $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
 
         return $qb;
-    }
-
-    public function findOneOrCreate($id = null)
-    {
-        if ($id) {
-            $object = $this->getFindByQueryBuilder(array('a.id' => $id))->getQuery()->getOneOrNullResult();
-            if (!$object) {
-                throw new NotFoundHttpException();
-            }
-        } else {
-            $object = $this->create();
-        }
-
-        if ($this->isTranslatable()) {
-            $object->createTranslations($this->class.'Translation', $this->appLocales);
-        }
-
-        return $object;
     }
 
     public function savePosition($objects, $disposition)
@@ -226,6 +168,91 @@ class BaseManager
         return $this;
     }
 
+    public function findOneOrCreate($id = null)
+    {
+        if ($id) {
+            $object = $this->getFindByQueryBuilder(array('a.id' => $id))->getQuery()->getOneOrNullResult();
+            if (!$object) {
+                throw new NotFoundHttpException();
+            }
+        } else {
+            $object = $this->create();
+        }
+
+        if ($this->isTranslatable()) {
+            $object->createTranslations($this->class.'Translation', $this->appLocales);
+        }
+
+        return $object;
+    }
+
+    public function getAdminListQueryBuilder(Request $request, Admin $admin)
+    {
+        $where = array();$join = array();$sort = array();
+
+        // If is sortable.
+        if (property_exists($this->getClass(), 'position')) {
+            $sort['a.position'] = 'ASC';
+        }
+
+        // If is nested.
+        if ($admin->hasParent() && $request->query->get('parentId')) {
+            $where['a.'.strtolower($admin->getParent()->getClassName())] = $request->query->get('parentId');
+        }
+
+        if (!$request->query->get('q')) {
+            $qb = $this->getFindByQueryBuilder($where, $join, $sort);
+        } else {
+            $qb = $this->getSearchQueryBuilder($request->query->get('q'), $admin->getSearchFields(), $where, $join, $sort);
+        }
+
+        $this->configureAdminListQuery($qb);
+
+        return $qb;
+    }
+
+    public function getFindByQueryBuilder(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
+    {
+        $qb = $this->repository->createQueryBuilder('a');
+
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
+
+        if (null !== $limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        if (null !== $offset) {
+            $qb->setFirstResult($offset);
+        }
+
+        return $qb;
+    }
+
+    public function getSearchQueryBuilder($q, array $searchFields, array $where = array(), array $join = array(), array $orderBy = array())
+    {
+        $qb = $this->repository->createQueryBuilder('a');
+
+        $q = trim(preg_replace('@\W@', ' ', trim($q)));
+        $strings = explode(' ', $q);
+
+        $orX = $qb->expr()->orX();
+        $i = 1;
+        foreach ($searchFields as $field) {
+            foreach ($strings as $string) {
+                $token = 'likeMatch'.$i;
+                $orX->add($qb->expr()->like($field, ':'.$token));
+                $qb->setParameter($token, '%'.$string.'%');
+                $i++;
+            }
+        }
+
+        $qb->andWhere($orX);
+
+        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
+
+        return $qb;
+    }
+
     protected function buildFindBy(QueryBuilder $qb, array $where, array $join, array $orderBy)
     {
         $i = 1;
@@ -250,5 +277,9 @@ class BaseManager
         }
 
         return $qb;
+    }
+
+    protected function configureAdminListQuery(QueryBuilder $qb)
+    {
     }
 }
