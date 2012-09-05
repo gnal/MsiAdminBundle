@@ -54,6 +54,7 @@
     {% set type = type|default('text') %}
     <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
     {{ form_errors(form) }}
+    {% if attr['data-help'] is defined %}<span class="help-block"><small>{{ attr['data-help'] }}</small></span>{% endif %}
 {% endspaceless %}
 {% endblock form_widget_simple %}
 
@@ -61,6 +62,7 @@
 {% spaceless %}
     <textarea {{ block('widget_attributes') }}>{{ value }}</textarea>
     {{ form_errors(form) }}
+    {% if attr['data-help'] is defined %}<span class="help-block"><small>{{ attr['data-help'] }}</small></span>{% endif %}
 {% endspaceless %}
 {% endblock textarea_widget %}
 
