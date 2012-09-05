@@ -1,19 +1,22 @@
 {% extends '::base.html.twig' %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/bootstrap/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/vendor/chosen/chosen.css') }}">
-<link rel="stylesheet" href="{{ asset('/bundles/msiadmin/css/admin.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/msiadmin/vendor/bootstrap/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/msiadmin/vendor/chosen/chosen.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/msiadmin/vendor/datepicker/css/datepicker.css') }}">
+<link rel="stylesheet" href="{{ asset('bundles/msiadmin/css/admin.css') }}">
 {% endblock %}
 
 {% block js %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js "></script>
-<script src="{{ asset('/bundles/msiadmin/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('/bundles/msiadmin/vendor/chosen/chosen.jquery.min.js') }}"></script>
-<script src="{{ asset('/bundles/msiadmin/js/admin.js') }}"></script>
+<script src="{{ asset('bundles/msiadmin/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('bundles/msiadmin/vendor/chosen/chosen.jquery.min.js') }}"></script>
+<script src="{{ asset('bundles/msiadmin/vendor/datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script src="{{ asset('bundles/msiadmin/js/admin.js') }}"></script>
 <script>
 $("select.chosenify").chosen();
+$('.datepicker').datepicker({format: 'yyyy-mm-dd'});
 </script>
 {% endblock %}
 
