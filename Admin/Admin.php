@@ -11,11 +11,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Msi\Bundle\AdminBundle\Table\TableBuilder;
 use Msi\Bundle\AdminBundle\Entity\BaseManager;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 abstract class Admin
 {
     public $query;
 
-    protected $controller;
+    protected $options = array();
+
     protected $adminId;
     protected $adminIds;
     protected $child;
@@ -23,7 +27,6 @@ abstract class Admin
     protected $entity;
     protected $parentEntity;
     protected $label;
-    protected $searchFields;
     protected $container;
     protected $objectManager;
     protected $forms;
@@ -33,8 +36,8 @@ abstract class Admin
     {
         $this->objectManager = $objectManager;
 
-        $this->init();
         $this->configure();
+        $this->init();
     }
 
     public function getAdminId()
@@ -62,11 +65,6 @@ abstract class Admin
         return $this->container;
     }
 
-    public function getSearchFields()
-    {
-        return $this->searchFields;
-    }
-
     public function getObjectManager()
     {
         return $this->objectManager;
@@ -88,6 +86,16 @@ abstract class Admin
         }
 
         return $this->parentObject;
+    }
+
+    public function getOption($key, $default = null)
+    {
+        return array_key_exists($key, $this->options) ? $this->options[$key] : $default;
+    }
+
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     public function setAdminId($adminId)
@@ -290,7 +298,7 @@ abstract class Admin
                 new Route(
                     $prefix.$name.$suffix,
                     array(
-                        '_controller' => $this->controller.$name,
+                        '_controller' => $this->getOption('controller').$name,
                         '_admin' => $this->adminId,
                     )
                 )
@@ -304,14 +312,25 @@ abstract class Admin
     {
     }
 
-    private function init()
+    protected function init()
     {
         $this->object = null;
         $this->parentObject = null;
         $this->forms = array();
         $this->tables = array();
-        $this->searchFields = array();
         $this->query = new ParameterBag();
-        $this->controller = 'MsiAdminBundle:Admin:';
+
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions($resolver);
+        $this->options = $resolver->resolve($this->options);
+    }
+
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'controller' => 'MsiAdminBundle:Admin:',
+            'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
+            'search_fields' => array(),
+        ));
     }
 }

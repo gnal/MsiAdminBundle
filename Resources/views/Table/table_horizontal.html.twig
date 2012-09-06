@@ -3,7 +3,7 @@
     <thead>
         <tr>
             <th colspan="{{ table.length }}" style="text-align: left;">
-                {% if admin.searchFields|length > 0 %}
+                {% if admin.getOption('search_fields')|length > 0 %}
                     <form novalidate class="pull-right marginless marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
                         {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
                         <div class="input-append">

@@ -3,19 +3,21 @@
 namespace Msi\Bundle\AdminBundle\Form\Handler;
 
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 class FilterFormHandler
 {
     protected $request;
     protected $em;
 
-    public function __construct(Request $request, $em)
+    public function __construct(Request $request, EntityManager $em)
     {
         $this->request = $request;
         $this->em = $em;
     }
 
-    public function process($form, $entity, $qb)
+    public function process($form, $entity, QueryBuilder $qb)
     {
         $mappings = $this->em->getClassMetadata(get_class($entity))->associationMappings;
         $filter = $this->request->query->get('filter');

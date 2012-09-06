@@ -13,7 +13,6 @@ class BaseManager
     protected $em;
     protected $repository;
     protected $class;
-    protected $metadata;
     protected $appLocales;
 
     public function __construct($class)
@@ -155,11 +154,6 @@ class BaseManager
         return $this->repository;
     }
 
-    public function getEntityManager()
-    {
-        return $this->em;
-    }
-
     public function setEntityManager(EntityManager $em)
     {
         $this->em = $em;
@@ -203,7 +197,7 @@ class BaseManager
         if (!$request->query->get('q')) {
             $qb = $this->getFindByQueryBuilder($where, $join, $sort);
         } else {
-            $qb = $this->getSearchQueryBuilder($request->query->get('q'), $admin->getSearchFields(), $where, $join, $sort);
+            $qb = $this->getSearchQueryBuilder($request->query->get('q'), $admin->getOption('search_fields'), $where, $join, $sort);
         }
 
         $this->configureAdminListQuery($qb);
@@ -232,21 +226,23 @@ class BaseManager
     {
         $qb = $this->repository->createQueryBuilder('a');
 
-        $q = trim(preg_replace('@\W@', ' ', trim($q)));
-        $strings = explode(' ', $q);
+        if (count($searchFields)) {
+            $q = trim(preg_replace('@\W@', ' ', trim($q)));
+            $strings = explode(' ', $q);
 
-        $orX = $qb->expr()->orX();
-        $i = 1;
-        foreach ($searchFields as $field) {
-            foreach ($strings as $string) {
-                $token = 'likeMatch'.$i;
-                $orX->add($qb->expr()->like($field, ':'.$token));
-                $qb->setParameter($token, '%'.$string.'%');
-                $i++;
+            $orX = $qb->expr()->orX();
+            $i = 1;
+            foreach ($searchFields as $field) {
+                foreach ($strings as $string) {
+                    $token = 'likeMatch'.$i;
+                    $orX->add($qb->expr()->like($field, ':'.$token));
+                    $qb->setParameter($token, '%'.$string.'%');
+                    $i++;
+                }
             }
-        }
 
-        $qb->andWhere($orX);
+            $qb->andWhere($orX);
+        }
 
         $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
 

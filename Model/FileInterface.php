@@ -16,7 +16,6 @@ interface FileInterface
 
     function processFile(\SplFileInfo $file);
 
-
     /**
      * Whitelist of allowed extensions.
      */

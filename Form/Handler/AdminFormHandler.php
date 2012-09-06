@@ -2,15 +2,14 @@
 
 namespace Msi\Bundle\AdminBundle\Form\Handler;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminFormHandler
 {
     protected $request;
     protected $admin;
 
-    public function __construct($request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
     }

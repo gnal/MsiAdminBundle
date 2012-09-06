@@ -8,13 +8,11 @@
 
 {% block content %}
     <form novalidate class="form-horizontal" style="margin-bottom: 0;" action="{{ admin.genUrl('new') }}" method="POST" {{ form_enctype(form) }}>
-        {% include 'MsiAdminBundle:Admin:form.html.twig' with {'form': form} %}
-        {% if app.request.isXmlHttpRequest == false %}
+        {% include admin.getOption('form_template') %}
         <div class="form-actions" style="margin-bottom: 0;">
             <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans }}</button>
             <a class="btn btn-link" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
         </div>
-        {% endif %}
     </form>
 {% endblock %}
 
