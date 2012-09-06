@@ -13,8 +13,6 @@ class AdminController extends ContainerAware
 {
     protected $admin;
     protected $request;
-    protected $id;
-    protected $parentId;
     protected $entity;
     protected $manager;
 
@@ -80,8 +78,7 @@ class AdminController extends ContainerAware
     {
         $this->check('create');
 
-        $process = $this->processForm();
-        if ($process) {
+        if ($this->processForm()) {
             if ($this->request->isXmlHttpRequest()) {
                 return new Response('ok');
             } else {
@@ -96,8 +93,7 @@ class AdminController extends ContainerAware
     {
         $this->check('update');
 
-        $process = $this->processForm();
-        if ($process) {
+        if ($this->processForm()) {
             if ($this->request->isXmlHttpRequest()) {
                 return new Response('ok');
             } else {
@@ -133,8 +129,8 @@ class AdminController extends ContainerAware
         $disposition = $this->request->query->get('disposition');
         $criteria = array();
 
-        if ($this->parentId) {
-            $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->parentId;
+        if ($this->request->query->get('parentId')) {
+            $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->request->query->get('parentId');
         }
         $orderBy['a.position'] = 'ASC';
         $objects = $this->manager->findBy($criteria, array(), $orderBy)->getQuery()->execute();
@@ -169,15 +165,13 @@ class AdminController extends ContainerAware
 
     protected function init()
     {
-        $this->id = $this->request->query->get('id');
-        $this->parentId = $this->request->query->get('parentId');
         $this->admin = $this->container->get($this->request->attributes->get('_admin'));
         $this->manager = $this->admin->getObjectManager();
         $this->entity = $this->admin->getObject();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
-        $this->admin->query->set('parentId', $this->parentId);
+        $this->admin->query->set('parentId', $this->request->query->get('parentId'));
         $this->admin->query->set('filter', $this->request->query->get('filter'));
     }
 }

@@ -271,10 +271,10 @@ class BaseManager
             $qb->addOrderBy($k, $v);
         }
 
-        if ($this->isTranslatable()) {
-            $qb->leftJoin('a.translations', 't');
-            $qb->addSelect('t');
-        }
+        // if ($this->isTranslatable()) {
+        //     $qb->leftJoin('a.translations', 't');
+        //     $qb->addSelect('t');
+        // }
 
         return $qb;
     }
