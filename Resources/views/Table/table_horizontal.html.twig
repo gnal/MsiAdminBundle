@@ -6,9 +6,9 @@
                 {% if admin.getOption('search_fields')|length > 0 %}
                     <form novalidate class="pull-right marginless marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
                         {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-                        <div class="input-append">
-                            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4"><button type="submit" class="btn">{{ 'Search'|trans }}</button><a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-                        </div>
+                            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4">
+                            <button type="submit" class="btn">{{ 'Search'|trans }}</button>
+                            <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
                     </form>
                 {% endif %}
                 <h4>{{ admin.getLabel(2) }} <span class="muted">({{ table.paginator.length|number_format }})</span></h4>

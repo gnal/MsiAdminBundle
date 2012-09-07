@@ -1,28 +1,27 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block title %}
-{{ 'index_title'|trans({'%label%': admin.getLabel(1)}) }}
+{{ admin.getLabel(2) }}
 {% endblock title %}
 
 {% block actions %}
-    {% if admin.isGranted('create') %}
-        <a href="{{ admin.genUrl('new') }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> {{ admin.getLabel(1) }}</a>
-        {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
-    {% endif %}
+{% if admin.isGranted('create') %}
+    <a href="{{ admin.genUrl('new') }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> {{ admin.getLabel(1) }}</a>
+    {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
+{% endif %}
 {% endblock %}
 
 {% block content %}
-    {% if filterForm is defined %}
-        <form novalidate class="marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
-            {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
-            {{ form_widget(filterForm) }}
-            <div class="input-append">
-                <button type="submit" class="btn">{{ 'Filter'|trans }}</button><a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-            </div>
-        </form>
-    {% endif %}
-    {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
-    {% include 'MsiAdminBundle:Misc:modal.html.twig' %}
+{% if filterForm is defined %}
+    <form novalidate class="marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
+        {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
+        {{ form_widget(filterForm) }}
+        <button type="submit" class="btn">{{ 'Filter'|trans }}</button>
+        <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+    </form>
+{% endif %}
+{% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
+{% include 'MsiAdminBundle:Misc:modal.html.twig' %}
 {% endblock %}
 
 {% block js %}
