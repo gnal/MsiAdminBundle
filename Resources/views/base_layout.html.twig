@@ -40,7 +40,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                     </li>
                 {% endif %}
 
-                {#{% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                {% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                     <li><a href="{{ path('msi_menu_menu_root_admin_index') }}">{{ 'entity.Menu'|transchoice(2) }}</a></li>
                 {% endif %}
 
@@ -55,12 +55,12 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                             {% endif %}
                         </ul>
                     </li>
-                {% endif %}#}
+                {% endif %}
             {% endblock nav %}
             </ul>
             <ul class="nav pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                    <li><a href="{{ path('fos_user_profile_show') }}">{{ app.user }}</a></li>
+                    <li>{{ app.user }}</li>
                 {% endif %}
                 {% block right_nav %}{% endblock right_nav %}
                 {#<li><a target="_blank" href="{{ path('msi_page_show') }}">{{ 'View site'|trans }}</a></li>#}
