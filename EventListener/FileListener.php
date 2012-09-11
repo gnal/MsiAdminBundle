@@ -72,7 +72,9 @@ class FileListener implements EventSubscriber
 
         $ext = $file->guessExtension();
 
-        if (!in_array($ext, $entity->getAllowedExt())) {
+        $allowedExt = $entity->getAllowedExt();
+
+        if (!empty($allowedExt) && !in_array($ext, $allowedExt)) {
             die('"'.$file->guessExtension().'" extension is not allowed. Allowed extensions are "'.implode('", "', $entity->getAllowedExt()).'".');
         }
 

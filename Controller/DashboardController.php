@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class DashboardController extends ContainerAware
 {
-    public function dashboardAction()
+    public function indexAction()
     {
-        return $this->container->get('templating')->renderResponse('MsiAdminBundle:Dashboard:dashboard.html.twig');
+        return $this->container->get('templating')->renderResponse('MsiAdminBundle:Dashboard:index.html.twig');
     }
 
     public function localeAction()
