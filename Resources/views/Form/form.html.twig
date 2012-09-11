@@ -7,6 +7,10 @@
                 {{ form_label(form) }}
                 <div class="controls">
                     {{ form_widget(form) }}
+                    {# View uploaded file button #}
+                    {% if form.parent.vars.value.filename is defined and form.parent.vars.value.filename and form.name == 'file' %}
+                        <a class="btn btn-small btn-info" target="_blank" href="{{ form.parent.vars.value.pathname }}">{{ 'View file'|trans }}</a>
+                    {% endif %}
                     {#{{ form_errors(form) }}#}
                 </div>
             </div>
