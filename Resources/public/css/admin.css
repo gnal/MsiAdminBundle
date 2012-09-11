@@ -8,6 +8,7 @@ body {
 #body .container-fluid, #body .container {
     background: #ffffff;
     margin-top: 60px;
+    margin-bottom: 20px;
     padding: 20px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;

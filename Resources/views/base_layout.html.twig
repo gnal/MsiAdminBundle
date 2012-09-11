@@ -21,10 +21,10 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
 {% endblock %}
 
 {% block body %}
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-fixed-top navbar-inverse">
     <div class="navbar-inner">
         <div class="container-fluid">
-            {% if block('brand')|length > 0 %}<a class="brand" href="#">{{ block('brand') }}</a>{% endif %}
+            {% if block('brand')|length > 0 %}<a class="brand" href="{{ path('msi_admin_dashboard_index') }}">{{ block('brand') }}</a>{% endif %}
             <ul class="nav">
             {% block nav %}
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
@@ -40,7 +40,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                     </li>
                 {% endif %}
 
-                {% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                {#{% if is_granted(['ROLE_MSI_MENU_MENU_ROOT_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                     <li><a href="{{ path('msi_menu_menu_root_admin_index') }}">{{ 'entity.Menu'|transchoice(2) }}</a></li>
                 {% endif %}
 
@@ -55,7 +55,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                             {% endif %}
                         </ul>
                     </li>
-                {% endif %}
+                {% endif %}#}
             {% endblock nav %}
             </ul>
             <ul class="nav pull-right">
