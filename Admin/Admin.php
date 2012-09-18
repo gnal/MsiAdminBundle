@@ -200,16 +200,16 @@ abstract class Admin
 
             return false;
         } else {
-            if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getObject(), 'FOS\UserBundle\Model\UserInterface')) {
-                if ($this->getObject()->isSuperAdmin()) {
+            // if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getObject(), 'FOS\UserBundle\Model\UserInterface')) {
+            //     if ($this->getObject()->isSuperAdmin()) {
 
-                    return false;
-                }
-                if ($this->getObject()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getObject()->getId()) {
+            //         return false;
+            //     }
+            //     if ($this->getObject()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getObject()->getId()) {
 
-                    return false;
-                }
-            }
+            //         return false;
+            //     }
+            // }
 
             return true;
         }
