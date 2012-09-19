@@ -227,7 +227,8 @@ class BaseManager
         $qb = $this->repository->createQueryBuilder('a');
 
         if (count($searchFields)) {
-            $q = trim(preg_replace('@\W@', ' ', trim($q)));
+            // $q = trim(preg_replace('@\W@', ' ', trim($q)));
+            $q = trim($q);
             $strings = explode(' ', $q);
 
             $orX = $qb->expr()->orX();
