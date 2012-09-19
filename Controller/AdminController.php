@@ -38,10 +38,10 @@ class AdminController extends ContainerAware
 
         // Filters
         $parameters = array();
-        $filterFormHandler = $this->container->get('msi_admin.filter.form.handler');
         $filterForm = $this->admin->getForm('filter');
+
         if ($filterForm) {
-            $filterFormHandler->process($filterForm, $this->entity, $qb);
+            $this->getFilterFormHandler()->process($filterForm, $this->entity, $qb);
             $parameters['filterForm'] = $filterForm->createView();
         }
 
@@ -138,6 +138,12 @@ class AdminController extends ContainerAware
         $this->manager->savePosition($objects, $disposition);
 
         return new Response();
+    }
+
+    // override this method if you need a custom form handler for your filters
+    protected function getFilterFormHandler()
+    {
+        return $this->container->get('msi_admin.filter.form.handler');
     }
 
     protected function processForm()
