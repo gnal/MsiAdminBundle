@@ -22,7 +22,26 @@ class AdminFormHandler
             $form->bind($this->request);
 
             if ($form->isValid()) {
-                $this->onSuccess($entity);
+                $isNew = $entity->getId() ? false : true;
+
+                if ($this->admin->hasParent() && !$entity->getId()) {
+                    $setter = 'set'.$this->admin->getParent()->getClassName();
+                    $entity->$setter($this->admin->getParentObject());
+                }
+
+                if ($isNew) {
+                    $this->admin->prePersist($entity);
+                } else {
+                    $this->admin->preUpdate($entity);
+                }
+
+                $this->admin->getObjectManager()->save($entity);
+
+                if ($isNew) {
+                    $this->admin->postPersist($entity);
+                } else {
+                    $this->admin->postUpdate($entity);
+                }
 
                 return true;
             }
@@ -36,14 +55,5 @@ class AdminFormHandler
         $this->admin = $admin;
 
         return $this;
-    }
-
-    protected function onSuccess($entity)
-    {
-        if ($this->admin->hasParent() && !$entity->getId()) {
-            $setter = 'set'.$this->admin->getParent()->getClassName();
-            $entity->$setter($this->admin->getParentObject());
-        }
-        $this->admin->getObjectManager()->save($entity);
     }
 }

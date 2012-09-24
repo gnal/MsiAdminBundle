@@ -308,6 +308,22 @@ abstract class Admin
         return $collection;
     }
 
+    public function prePersist($entity)
+    {
+    }
+
+    public function preUpdate($entity)
+    {
+    }
+
+    public function postPersist($entity)
+    {
+    }
+
+    public function PostUpdate($entity)
+    {
+    }
+
     protected function configure()
     {
     }
