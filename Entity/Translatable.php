@@ -17,15 +17,22 @@ abstract class Translatable
         }
     }
 
-    public function getTranslation()
+    public function getTranslation($locale = null)
     {
         if ($this->translations->count() === 0) {
             die('Translatable entity '.get_class($this).' has no translation. Did you forget to create them?');
         }
 
+        if (null !== $locale) {
+            foreach ($this->translations as $translation) {
+                if ($locale === $translation->getLocale()) {
+                    return $translation;
+                }
+            }
+        }
+
         foreach ($this->translations as $translation) {
             if ($this->requestLocale === $translation->getLocale()) {
-
                 return $translation;
             }
         }
