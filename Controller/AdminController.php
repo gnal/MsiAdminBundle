@@ -146,11 +146,16 @@ class AdminController extends ContainerAware
         return $this->container->get('msi_admin.filter.form.handler');
     }
 
+    // override this method if you need a custom form handler for your crud
+    protected function getCrudFormHandler()
+    {
+        return $this->container->get('msi_admin.admin.form.handler');
+    }
+
     protected function processForm()
     {
         $form = $this->admin->getForm();
-        $formHandler = $this->container->get('msi_admin.admin.form.handler');
-        $process = $formHandler->setAdmin($this->admin)->process($form, $this->entity);
+        $process = $this->getCrudFormHandler()->setAdmin($this->admin)->process($form, $this->entity);
 
         return $process;
     }
