@@ -2,24 +2,23 @@ html {
     overflow-y: scroll;
 }
 body {
-    background: #ffffff;
+    background: #f0f0f0;
+    padding: 0 10% 0;
 }
 #body .container-fluid, #body .container {
     background: #ffffff;
     margin-top: 60px;
     margin-bottom: 20px;
-/*    padding: 10px;*/
-/*    -webkit-border-radius: 6px;
+    padding: 20px;
+    -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px;
     -webkit-box-shadow: 0 1px 2px #999999;
     -moz-box-shadow: 0 1px 2px #999999;
-    box-shadow: 0 1px 2px #999999;*/
+    box-shadow: 0 1px 2px #999999;
 }
-@media (min-width: 1200px) {
-/*    #body .container {
-        padding: 20px;
-    }*/
+.navbar .container-fluid {
+    padding: 0 10% 0;
 }
 #footer {
     margin-bottom: 20px;
@@ -27,9 +26,6 @@ body {
 }
 a:hover {
     text-decoration: none !important;
-}
-h1, .navbar .brand {
-    font-family: "Trebuchet MS";
 }
 .chzn-container {
     margin-bottom: 10px;
