@@ -6,7 +6,7 @@
 
 {% block sidebar %}
 {% if filterForm is defined %}
-    <h4>{{ 'Filter'|trans }}</h4>
+    <h3>{{ 'Filter'|trans }}</h3>
     <form novalidate method="GET" action="{{ admin.genUrl('index') }}">
         {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
         {{ form_widget(filterForm) }}

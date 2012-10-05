@@ -71,10 +71,10 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             </ul>#}
             <div class=" pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                <a class="btn btn-primary" href="{{ path('fos_user_security_logout') }}"><i class="icon-white icon-user"></i></a>
+                <a class="btn" href="{{ path('fos_user_security_logout') }}"><i class="icon-user"></i> Profile</a>
                 {% endif %}
-                <a class="btn btn-primary" href="#"><i class="icon-white icon-share-alt"></i></a>
-                <a class="btn btn-primary" href="{{ path('fos_user_security_logout') }}"><i class="icon-off icon-white"></i></a>
+                <a class="btn btn-primary" style="font-variant:small-caps;" href="#"><i class="icon-white icon-share-alt"></i> View site</a>
+                <a class="btn btn-inverse" style="font-variant:small-caps;" href="{{ path('fos_user_security_logout') }}"><i class="icon-off icon-white"></i> Log out</a>
             </div>
         </div>
     </div>
@@ -97,11 +97,8 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
 
             <div class="well sidebar-nav">
             <ul class="nav nav-list">
-            <li class="nav-header">Sidebar</li>
-            <li class="active"><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
+            <li class="active"><a href="{{ path('msi_user_user_admin_index') }}">Users</a></li>
+            <li><a href="{{ path('msi_user_group_admin_index') }}">Groups</a></li>
             </ul>
             </div>
 
@@ -130,6 +127,6 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% block content %}{% endblock %}
         </div>
     </div>
-    <hr>
+    <hr style="margin-top:10px;">
 </div>
 {% endblock %}

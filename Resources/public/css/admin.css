@@ -10,6 +10,10 @@ a:hover {
     text-decoration: none;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+}
+
 h1, .navbar .brand {
     font-family: "Trebuchet MS";
     font-weight: bold;
@@ -17,8 +21,6 @@ h1, .navbar .brand {
 
 h1 {
     letter-spacing: -1px;
-    font-size: 30px;
-    line-height: 40px;
     margin: 0;
 }
 
@@ -37,4 +39,8 @@ h1 + hr {
 
 #sidebar select {
     width: 100%;
+}
+
+.btn {
+    font-variant: small-caps;
 }
