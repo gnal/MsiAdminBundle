@@ -26,15 +26,6 @@
 {% endblock %}
 
 {% block content %}
-{# Limit #}
-<form novalidate class="pull-right form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
-    <select style="width:100px;" name="limit">
-        <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
-        <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
-        <option {% if app.session.get('limit') == 50 %}selected=selected{% endif %} value="50">50</option>
-        <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
-    </select>
-</form>
 {# Search #}
 {% if admin.getOption('search_fields')|length > 0 %}
     <form novalidate class="form-search" method="GET" action="{{ admin.genUrl('index') }}">
@@ -47,6 +38,15 @@
     </form>
 {% endif %}
 {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
+{# Limit #}
+<form novalidate class="pull-left form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
+    <select style="width:100px;" name="limit">
+        <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
+        <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
+        <option {% if app.session.get('limit') == 50 %}selected=selected{% endif %} value="50">50</option>
+        <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
+    </select>
+</form>
 {% include 'MsiAdminBundle:Misc:modal.html.twig' %}
 {% endblock %}
 
