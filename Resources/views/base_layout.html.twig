@@ -26,6 +26,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
         <div class="container-fluid">
             {% if block('brand')|length > 0 %}<a class="brand" href="{{ path('msi_admin_dashboard_index') }}">{{ block('brand') }}</a>{% endif %}
             <ul class="nav">
+            {% block nav %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         Users
@@ -62,13 +63,8 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                         <li><a href="{{ path('msi_user_user_admin_index') }}">User Manager</a></li>
                     </ul>
                 </li>
+            {% endblock nav %}
             </ul>
-            {#<ul class="nav pull-right">
-                {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                <li><a href="#"><span class="text-info">{{ app.user }}</span></a></li>
-                {% endif %}
-                <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
-            </ul>#}
             <div class=" pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                 <a class="btn" href="{{ path('fos_user_profile_show') }}"><i class="icon-user"></i> Profile</a>
