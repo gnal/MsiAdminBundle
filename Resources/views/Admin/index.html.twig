@@ -58,14 +58,30 @@
     // Return a helper with preserved width of cells
     var fixHelper = function(e, ui) {
         ui.children().each(function() {
-            $(this).width($(this).width());
+            var $this = $(this);
+            $this.width($this.width());
         });
         return ui;
+    };
+
+    // fill empty tr created by jquery ui
+
+    var nbColumn = $('table.table').children().first().children().children().length;
+    var placeholderFiller = '';
+
+    for (var i = 0; i < nbColumn; i++) {
+        placeholderFiller += '<td>&nbsp;</td>';
     };
 
     $("table.sortable tbody").sortable({
         helper: fixHelper,
         handle: $('table i.icon-move').closest('td'),
+        containment: 'parent',
+        placeholder: "ui-state-highlight",
+        forcePlaceholderSize: true,
+        start: function (event, ui) {
+            ui.placeholder.html(placeholderFiller);
+        },
     }).disableSelection();
 })(jQuery);
 (function($) {
@@ -77,7 +93,10 @@
         var disposition = [];
 
         $table.find('tbody tr').each(function(i, e) {
-            disposition.push($(e).attr('id').substr(2));
+            var $e = $(e);
+            if ($e.attr('id')) {
+                disposition.push($e.attr('id').substr(2));
+            }
         });
 
         $.ajax("{{ admin.genUrl('sort') }}", {

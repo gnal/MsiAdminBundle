@@ -13,6 +13,7 @@
     </thead>
     {# Body #}
     <tbody>
+        {#<tr><td colspan={{ table.columns|length + 1 + table.sortable }}></td></tr>#}
     {% for object in table.data %}
         <tr id="tr{{ object.id }}">
             {% if table.sortable %}
@@ -25,9 +26,9 @@
                 {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
                 </td>
             {% endfor %}
-                <td class="span1">
-                    {{ object.id }}
-                </td>
+            <td class="span1">
+                {{ object.id }}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

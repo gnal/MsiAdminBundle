@@ -52,3 +52,12 @@ table + div.pagination {
 .form-horizontal .control-label {
     text-align: left;
 }
+
+.ui-state-highlight {
+    height: 47px;
+    line-height: 47px;
+}
+
+.ui-state-highlight td {
+    background-color: #d9edf7 !important;
+}
