@@ -66,7 +66,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% endblock nav %}
             </ul>
             <div class=" pull-right">
-            {% endblock right_nav %}
+            {% block right_nav %}
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                 <a class="btn" href="{{ path('fos_user_profile_show') }}"><i class="icon-user"></i> Profile</a>
                 {% endif %}
