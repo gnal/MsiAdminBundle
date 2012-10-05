@@ -20,7 +20,7 @@
 
 {% block actions %}
 {% if admin.isGranted('create') %}
-    <a href="{{ admin.genUrl('new') }}" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> {{ 'Add'|trans }}</a>
+    <a href="{{ admin.genUrl('new') }}" class="btn btn-success"><i class="icon-plus icon-white"></i> {{ 'Add'|trans }}</a>
     {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
 {% endif %}
 {% endblock %}
