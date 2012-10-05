@@ -71,10 +71,10 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             </ul>#}
             <div class=" pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
-                <a class="btn" href="{{ path('fos_user_security_logout') }}"><i class="icon-user"></i> Profile</a>
+                <a class="btn" href="{{ path('fos_user_profile_show') }}"><i class="icon-user"></i> Profile</a>
                 {% endif %}
-                <a class="btn btn-primary" style="font-variant:small-caps;" href="#"><i class="icon-white icon-share-alt"></i> View site</a>
-                <a class="btn btn-inverse" style="font-variant:small-caps;" href="{{ path('fos_user_security_logout') }}"><i class="icon-off icon-white"></i> Log out</a>
+                <a class="btn" style="font-variant:small-caps;" href="#"><i class="icon-share-alt"></i> View site</a>
+                <a class="btn" style="font-variant:small-caps;" href="{{ path('fos_user_security_logout') }}"><i class="icon-off"></i> Log out</a>
             </div>
         </div>
     </div>

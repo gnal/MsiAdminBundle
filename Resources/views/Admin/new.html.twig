@@ -11,7 +11,7 @@
         {% include admin.getOption('form_template') %}
         <div class="form-actions" style="margin-bottom: 0;">
             <button class="btn btn-primary" type="submit">{{ 'Save Changes'|trans }}</button>
-            <a class="btn btn-link" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
+            <a class="btn" href="{{ admin.genUrl('index') }}">{{ 'Cancel'|trans }}</a>
         </div>
     </form>
 {% endblock %}

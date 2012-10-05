@@ -44,3 +44,7 @@ h1 + hr {
 .btn {
     font-variant: small-caps;
 }
+
+.form-horizontal .control-label {
+    text-align: left;
+}
