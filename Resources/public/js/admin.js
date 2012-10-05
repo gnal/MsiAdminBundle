@@ -22,7 +22,7 @@
         e.preventDefault();
     });
 
-    $('form.form-limit select').on('change', function() {
+    $('form#limitForm select').on('change', function() {
         $(this).closest('form').submit();
     });
 

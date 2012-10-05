@@ -39,7 +39,7 @@
 {% endif %}
 {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
 {# Limit #}
-<form novalidate class="pull-left form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
+<form id="limitForm" novalidate class="pull-left form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
     <select style="width:100px;" name="limit">
         <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
         <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
