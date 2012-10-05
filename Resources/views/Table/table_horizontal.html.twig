@@ -2,25 +2,13 @@
     {# Head #}
     <thead>
         <tr>
-            <th colspan="{{ table.length }}" style="text-align: left;">
-                {% if admin.getOption('search_fields')|length > 0 %}
-                    <form novalidate class="pull-right marginless marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
-                        {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-                            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span4">
-                            <button type="submit" class="btn">{{ 'Search'|trans }}</button>
-                            <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
-                    </form>
-                {% endif %}
-                <h4>{{ admin.getLabel(2) }} <span class="muted">({{ table.paginator.length|number_format }})</span></h4>
-            </th>
-        </tr>
-        <tr>
         {% if table.sortable %}
             <th>{{ 'Order'|trans }}</th>
         {% endif %}
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
+            <th>ID</th>
         </tr>
     </thead>
     {# Body #}
@@ -37,17 +25,11 @@
                 {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
                 </td>
             {% endfor %}
+                <td class="span1">
+                    {{ object.id }}
+                </td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-<span class="pull-left" style="margin-right: 5px;">{{ 'Show'|trans }}</span>
-<form novalidate class="pull-left form-limit marginless marginless-inner" method="POST" action="{{ path('msi_admin_main_limit') }}">
-    <select class="span1" name="limit">
-        <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
-        <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
-        <option {% if app.session.get('limit') == 50 %}selected=selected{% endif %} value="50">50</option>
-        <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
-    </select>
-</form>
 {{ msi_paginator_render(table.paginator) }}

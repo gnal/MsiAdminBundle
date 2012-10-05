@@ -57,6 +57,8 @@ class AdminController extends ContainerAware
         $table->setData($paginator->getResult());
         $table->setPaginator($paginator);
 
+        $parameters['paginator'] = $paginator;
+
         return $this->render('MsiAdminBundle:Admin:index.html.twig', $parameters);
     }
 

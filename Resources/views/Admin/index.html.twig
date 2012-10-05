@@ -1,23 +1,49 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block title %}
-{{ admin.getLabel(2) }}
+{{ admin.getLabel(2) }} <small class="muted">({{ paginator.length|number_format }})</small>
 {% endblock title %}
+
+{% block sidebar %}
+{% if filterForm is defined %}
+    <h4>{{ 'Filter'|trans }}</h4>
+    <form novalidate method="GET" action="{{ admin.genUrl('index') }}">
+        {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
+        {{ form_widget(filterForm) }}
+        <div class="btn-group">
+            <button type="submit" class="btn"><i class="icon-filter"></i></button>
+            <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}"><i class="icon-remove"></i></a>
+        </div>
+    </form>
+{% endif %}
+{% endblock sidebar %}
 
 {% block actions %}
 {% if admin.isGranted('create') %}
-    <a href="{{ admin.genUrl('new') }}" class="btn btn-primary"><i class="icon-plus-sign icon-white"></i> {{ 'Add'|trans }}</a>
+    <a href="{{ admin.genUrl('new') }}" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> {{ 'Add'|trans }}</a>
     {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
 {% endif %}
 {% endblock %}
 
 {% block content %}
-{% if filterForm is defined %}
-    <form novalidate class="marginless-inner" method="GET" action="{{ admin.genUrl('index') }}">
-        {% form_theme filterForm 'MsiAdminBundle:Form:form.html.twig' %}
-        {{ form_widget(filterForm) }}
-        <button type="submit" class="btn">{{ 'Filter'|trans }}</button>
-        <a class="btn btn-link" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}">{{ 'Reset'|trans }}</a>
+{# Limit #}
+<form novalidate class="pull-right form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
+    <select style="width:100px;" name="limit">
+        <option {% if app.session.get('limit') == 10 %}selected=selected{% endif %} value="10">10</option>
+        <option {% if app.session.get('limit') == 25 %}selected=selected{% endif %} value="25">25</option>
+        <option {% if app.session.get('limit') == 50 %}selected=selected{% endif %} value="50">50</option>
+        <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
+    </select>
+</form>
+{# Search #}
+{% if admin.getOption('search_fields')|length > 0 %}
+    <form novalidate class="form-search" method="GET" action="{{ admin.genUrl('index') }}">
+        {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
+            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3">
+            <div class="btn-group">
+                <button type="submit" class="btn"><i class="icon-search"></i></button>
+                <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}"><i class="icon-remove"></i></a>
+            </div>
     </form>
 {% endif %}
 {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}

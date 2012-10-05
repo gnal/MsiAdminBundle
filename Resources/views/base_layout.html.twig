@@ -25,19 +25,64 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
     <div class="navbar-inner">
         <div class="container-fluid">
             {% if block('brand')|length > 0 %}<a class="brand" href="{{ path('msi_admin_dashboard_index') }}">{{ block('brand') }}</a>{% endif %}
-            <ul class="nav pull-right">
+            <ul class="nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Users
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_user_user_admin_index') }}">User Manager</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Menus
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_user_user_admin_index') }}">User Manager</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Content
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_user_user_admin_index') }}">User Manager</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        Modules
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('msi_user_user_admin_index') }}">User Manager</a></li>
+                    </ul>
+                </li>
+            </ul>
+            {#<ul class="nav pull-right">
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                 <li><a href="#"><span class="text-info">{{ app.user }}</span></a></li>
                 {% endif %}
                 <li><a href="{{ path('fos_user_security_logout') }}">{{ 'Logout'|trans }}</a></li>
-            </ul>
+            </ul>#}
+            <div class=" pull-right">
+                {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
+                <a class="btn btn-primary" href="{{ path('fos_user_security_logout') }}"><i class="icon-white icon-user"></i></a>
+                {% endif %}
+                <a class="btn btn-primary" href="#"><i class="icon-white icon-share-alt"></i></a>
+                <a class="btn btn-primary" href="{{ path('fos_user_security_logout') }}"><i class="icon-off icon-white"></i></a>
+            </div>
         </div>
     </div>
 </div>
 <div class="container-fluid">
     <div class="row-fluid">
-        <div class="span3">
-            <ul class="nav nav-tabs nav-stacked">
+        <div class="span2" id="sidebar">
+            {#<ul class="nav nav-tabs nav-stacked">
             {% block nav %}
                 {% if is_granted(['ROLE_MSI_USER_USER_ADMIN_READ', 'ROLE_SUPER_ADMIN']) %}
                     <li><a href="{{ path('msi_user_user_admin_index') }}"><span class="pull-right"><i class="icon-chevron-right"></i></span>Dashboard</a></li>
@@ -48,7 +93,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
                     <li><a href="{{ path('msi_user_user_admin_index') }}"><span class="pull-right"><i class="icon-chevron-right"></i></span>Help</a></li>
                 {% endif %}
             {% endblock nav %}
-            </ul>
+            </ul>#}
 
             <div class="well sidebar-nav">
             <ul class="nav nav-list">
@@ -57,31 +102,23 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             <li><a href="#">Link</a></li>
             <li><a href="#">Link</a></li>
             <li><a href="#">Link</a></li>
-            <li class="nav-header">Sidebar</li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li class="nav-header">Sidebar</li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
-            <li><a href="#">Link</a></li>
             </ul>
             </div>
+
+            {% block sidebar %}{% endblock sidebar %}
         </div>
-        <div class="span9">
+        <div class="span10">
             {# Breadcrumb #}
-            {% block breadcrumb %}
+            {#{% block breadcrumb %}
             {% if admin is defined %}
                 {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
             {% endif %}
-            {% endblock breadcrumb %}
+            {% endblock breadcrumb %}#}
             {% if block('actions')|length > 0 %}
                 <div class="btn-group pull-right">{% block actions %}{% endblock actions %}</div>
             {% endif %}
             <h1>{{ block('title') }}</h1>
+            <hr>
             {# Flashes #}
             {% for flashMessage in app.session.flashbag.get('success') %}
                 <div class="alert alert-success fade in">
@@ -93,5 +130,6 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% block content %}{% endblock %}
         </div>
     </div>
+    <hr>
 </div>
 {% endblock %}
