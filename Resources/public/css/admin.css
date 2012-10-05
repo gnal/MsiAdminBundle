@@ -24,7 +24,7 @@ h1 {
     margin: 0;
 }
 
-h1 + hr {
+h1 + hr, table + div.pagination {
     margin-top: 10px;
 }
 
