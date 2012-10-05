@@ -1,138 +1,33 @@
 html {
     overflow-y: scroll;
 }
+
 body {
-    background: #ffffff;
+    padding-top: 60px;
+    padding-bottom: 40px;
 }
-#body .container-fluid, #body .container {
-    background: #ffffff;
-    margin-top: 60px;
-    margin-bottom: 20px;
-/*    padding: 10px;*/
-/*    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 0 1px 2px #999999;
-    -moz-box-shadow: 0 1px 2px #999999;
-    box-shadow: 0 1px 2px #999999;*/
-}
-@media (min-width: 1200px) {
-/*    #body .container {
-        padding: 20px;
-    }*/
-}
-#footer {
-    margin-bottom: 20px;
-    text-align: center;
-}
+
 a:hover {
-    text-decoration: none !important;
+    text-decoration: none;
 }
+
 h1, .navbar .brand {
     font-family: "Trebuchet MS";
+    font-weight: bold;
 }
-.chzn-container {
-    margin-bottom: 10px;
+
+h1 {
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    font-size: 30px;
+    line-height: 40px;
 }
-.marginless-inner * {
-    margin-bottom: 0 !important;
-}
-#filter > div {
-    float: left;
-    margin-right: 5px;
-}
-.marginless {
-    margin: 0 !important;
-}
-.text-right {
-    text-align: right !important;
-}
-.text-center {
-    text-align: center !important;
-}
-.table h4 {
-    color: #333333;
-    line-height: 30px;
-    margin: 0;
-}
-.table h4 span {
-    font-weight: normal;
-}
-/*Bootstrap*/
-.pagination {
-    margin: 0;
-}
-input,
-textarea {
-  width: 290px;
-}
-textarea {
-    height: 80px;
-    width: 460px;
-}
-.navbar {
-    margin-bottom: 0;
-}
-.navbar .container-fluid > ul:last-child {
-    margin-right: 0;
-}
-/*.navbar .container-fluid > ul:first-child > li:first-child > a {
-    padding-left: 0;
-}
-.navbar .container-fluid > ul:last-child > li:last-child > a {
-    padding-right: 0;
-}*/
-.navbar-inner {
-    -webkit-border-radius: 0;
-       -moz-border-radius: 0;
-            border-radius: 0;
-    border-left: 0;
-    border-right: 0;
-    padding: 0;
-    border-top: 0;
-}
-.table, .table td, .table th {
-    border-color: #e4e4e4;
+
+.table th,
+.table td {
     vertical-align: middle;
 }
-.table {
-    border: 1px solid #cbcbcb;
-    background: #ffffff;
-}
-.table-bordered tr th:first-child, .table-bordered tr td:first-child {
-    border-left: 0;
-}
-.table th {
-    border-bottom: 1px solid;
-    border-color: #cbcbcb;
-    border-top: 0;
-    text-align: center;
-    color: #999999;
-    font-weight: normal;
 
-    background-color: #fafafa;
-    background-image: -moz-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#f2f2f2));
-    background-image: -webkit-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: -o-linear-gradient(top, #ffffff, #f2f2f2);
-    background-image: linear-gradient(to bottom, #ffffff, #f2f2f2);
-    background-repeat: repeat-x;
-}
-.table tr:nth-child(1) td {
-    border-top: 0;
-}
-.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
-    background-color: #ffffff;
-}
-.table-striped tbody tr:nth-child(even) td, .table-striped tbody tr:nth-child(even) th {
-    background-color: #f9f9f9;
-}
-.navbar .brand {
-    font-weight: bold;
-    padding-left: 35px;
-}
-.btn {
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
+.sidebar-nav {
+    padding: 9px 0;
 }
