@@ -24,8 +24,12 @@ h1 {
     margin: 0;
 }
 
-h1 + hr, table + div.pagination {
+h1 + hr {
     margin-top: 10px;
+}
+
+table + div.pagination {
+    margin: 0;
 }
 
 .table th,
