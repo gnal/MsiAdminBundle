@@ -6,7 +6,7 @@
 
 {% block sidebar_nav %}
 {% if admin.getOption('sidebar_nav') %}
-    {% include admin.bundleName~':sidebar_nav.html.twig' %}
+    {% include admin.bundleName~'::sidebar_nav.html.twig' %}
 {% endif %}
 {% endblock sidebar_nav %}
 
