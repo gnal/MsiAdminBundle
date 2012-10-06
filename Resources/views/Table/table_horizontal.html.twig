@@ -17,8 +17,8 @@
     {% for object in table.data %}
         <tr id="tr{{ object.id }}">
             {% if table.sortable %}
-                <td style="text-align:center;">
-                    <i class="icon-move"></i>
+                <td class="span1" style="text-align:center;">
+                    <i class="icon-resize-vertical"></i>
                 </td>
             {% endif %}
             {% for column in table.columns %}

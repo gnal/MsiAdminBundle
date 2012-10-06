@@ -347,6 +347,7 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array(),
+            'sidebar_nav' => '',
         ));
     }
 }

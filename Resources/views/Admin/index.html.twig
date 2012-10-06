@@ -5,6 +5,9 @@
 {% endblock title %}
 
 {% block sidebar %}
+{% if admin.getOption('sidebar_nav') %}
+    {% include admin.getOption('sidebar_nav') %}
+{% endif %}
 {% if filterForm is defined %}
     <h3>{{ 'Filter'|trans }}</h3>
     <form novalidate method="GET" action="{{ admin.genUrl('index') }}">
@@ -75,7 +78,7 @@
 
     $("table.sortable tbody").sortable({
         helper: fixHelper,
-        handle: $('table i.icon-move').closest('td'),
+        handle: $('table i.icon-resize-vertical').closest('td'),
         containment: 'parent',
         placeholder: "ui-state-highlight",
         forcePlaceholderSize: true,
