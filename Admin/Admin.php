@@ -35,9 +35,6 @@ abstract class Admin
     public function __construct(BaseManager $objectManager)
     {
         $this->objectManager = $objectManager;
-
-        $this->configure();
-        $this->init();
     }
 
     public function getAdminId()
@@ -103,6 +100,9 @@ abstract class Admin
     public function setAdminId($adminId)
     {
         $this->adminId = $adminId;
+
+        $this->configure();
+        $this->init();
 
         return $this;
     }
@@ -349,7 +349,7 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array(),
-            'sidebar_nav' => true,
+            'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
         ));
     }
 }

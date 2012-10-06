@@ -93,12 +93,21 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% endblock nav %}
             </ul>#}
 
-            {% if block('sidebar_nav')|length > 0 %}
+            {#{% if block('sidebar_nav')|length > 0 %}
             <div class="well sidebar-nav">
                 <ul class="nav nav-list">
                     {% block sidebar_nav %}{% endblock sidebar_nav %}
                 </ul>
             </div>
+            {% endif %}#}
+
+
+            {% if admin.getOption('sidebar_nav') %}
+                <div class="well sidebar-nav">
+                    <ul class="nav nav-list">
+                        {% include admin.getOption('sidebar_nav') %}
+                    </ul>
+                </div>
             {% endif %}
             {% block sidebar %}{% endblock sidebar %}
         </div>
