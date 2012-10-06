@@ -349,7 +349,7 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array(),
-            'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
+            'sidebar_nav' => is_file(__DIR__.'/../Resources/views/sidebar_nav.html.twig') ? $this->getBundleName().'::sidebar_nav.html.twig' : '',
         ));
     }
 }
