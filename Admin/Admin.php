@@ -57,7 +57,9 @@ abstract class Admin
 
     public function getBundleName()
     {
-        return ucfirst($this->adminIdParts[0]).ucfirst($this->adminIdParts[1]).'Bundle';
+        $parts = explode('_', $this->adminId);
+
+        return ucfirst($parts[0]).ucfirst($parts[1]).'Bundle';
     }
 
     public function getContainer()
@@ -347,7 +349,7 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array(),
-            'sidebar_nav' => '',
+            'sidebar_nav' => true,
         ));
     }
 }

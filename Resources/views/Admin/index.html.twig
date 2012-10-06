@@ -4,10 +4,13 @@
 {{ admin.getLabel(2) }} <small class="muted">({{ paginator.length|number_format }})</small>
 {% endblock title %}
 
-{% block sidebar %}
+{% block sidebar_nav %}
 {% if admin.getOption('sidebar_nav') %}
-    {% include admin.getOption('sidebar_nav') %}
+    {% include admin.bundleName~':sidebar_nav.html.twig' %}
 {% endif %}
+{% endblock sidebar_nav %}
+
+{% block sidebar %}
 {% if filterForm is defined %}
     <h3>{{ 'Filter'|trans }}</h3>
     <form novalidate method="GET" action="{{ admin.genUrl('index') }}">

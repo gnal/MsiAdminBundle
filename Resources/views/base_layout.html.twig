@@ -93,13 +93,13 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% endblock nav %}
             </ul>#}
 
+            {% if block('sidebar_nav')|length > 0 %}
             <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-            <li class="active"><a href="{{ path('msi_user_user_admin_index') }}">Users</a></li>
-            <li><a href="{{ path('msi_user_group_admin_index') }}">Groups</a></li>
-            </ul>
+                <ul class="nav nav-list">
+                    {% block sidebar_nav %}{% endblock sidebar_nav %}
+                </ul>
             </div>
-
+            {% endif %}
             {% block sidebar %}{% endblock sidebar %}
         </div>
         <div class="span10">
