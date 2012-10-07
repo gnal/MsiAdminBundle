@@ -302,7 +302,8 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array('a.id'),
-            'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
+            // 'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
+            'sidebar_nav' => false,
         ));
     }
 }
