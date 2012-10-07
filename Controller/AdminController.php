@@ -135,7 +135,7 @@ class AdminController extends ContainerAware
             $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->request->query->get('parentId');
         }
         $orderBy['a.position'] = 'ASC';
-        $objects = $this->manager->findBy($criteria, array(), $orderBy)->getQuery()->execute();
+        $objects = $this->manager->getFindByQueryBuilder($criteria, array(), $orderBy)->getQuery()->execute();
 
         $this->manager->savePosition($objects, $disposition);
 
