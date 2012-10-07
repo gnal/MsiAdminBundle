@@ -9,7 +9,7 @@ class BooleanColumn extends BaseColumn
         return array(
             'label_true' => '<span class="badge badge-success"><i class="icon-ok icon-white"><span class="hide">1</span></i></span>',
             'label_false' => '<span class="badge"><i class="icon-ok icon-white"><span class="hide">0</span></i></span>',
-            'attr' => array('class' => 'span1', 'style' => 'text-align:center;'),
+            'attr' => array('style' => 'text-align:center;'),
         );
     }
 }
