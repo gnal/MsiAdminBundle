@@ -80,7 +80,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span2" id="sidebar">
-            {% if admin.getOption('sidebar_nav') %}
+            {% if admin is defined and admin.getOption('sidebar_nav') %}
                 <div class="well sidebar-nav">
                     <ul class="nav nav-list">
                         {% include admin.getOption('sidebar_nav') %}
