@@ -158,7 +158,7 @@ class BaseManager
             $qb = $this->getSearchQueryBuilder($request->query->get('q'), $admin->getOption('search_fields'), $where, $join, $sort);
         }
 
-        $this->configureAdminListQuery($qb);
+        $this->configureAdminListQuery($qb, $admin);
 
         return $qb;
     }
@@ -231,7 +231,7 @@ class BaseManager
         return $qb;
     }
 
-    protected function configureAdminListQuery(QueryBuilder $qb)
+    protected function configureAdminListQuery(QueryBuilder $qb, Admin $admin)
     {
     }
 }
