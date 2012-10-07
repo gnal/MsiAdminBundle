@@ -1,0 +1,3 @@
+{% for k, v in arr %}
+    <li {% if k == admin.adminId %}class="active"{% endif %}><a href="{{ path(k~'_index') }}">{{ v|transchoice(2) }}</a></li>
+{% endfor %}
