@@ -3,8 +3,6 @@
 namespace Msi\Bundle\AdminBundle\Admin;
 
 use Symfony\Component\Form\FormBuilder;
-use Symfony\Component\Routing\Route;
-use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -199,20 +197,8 @@ abstract class Admin
     public function isGranted($role)
     {
         if (!$this->container->get('security.context')->isGranted('ROLE_SUPER_ADMIN') && !$this->container->get('security.context')->isGranted(strtoupper('ROLE_'.$this->adminId.'_'.$role))) {
-
             return false;
         } else {
-            // if (!$this->container->get('security.context')->getToken()->getUser()->isSuperAdmin() && is_a($this->getObject(), 'FOS\UserBundle\Model\UserInterface')) {
-            //     if ($this->getObject()->isSuperAdmin()) {
-
-            //         return false;
-            //     }
-            //     if ($this->getObject()->hasRole('ROLE_ADMIN') && $this->container->get('security.context')->getToken()->getUser()->getId() !== $this->getObject()->getId()) {
-
-            //         return false;
-            //     }
-            // }
-
             return true;
         }
     }
@@ -275,39 +261,6 @@ abstract class Admin
         }
 
         return $crumbs;
-    }
-
-    public function buildRoutes()
-    {
-        $collection = new RouteCollection();
-
-        $prefix = '/{_locale}/admin/'.preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $this->adminId).'/';
-        $suffix = '';
-
-        $names = array(
-            'index',
-            'show',
-            'new',
-            'edit',
-            'delete',
-            'change',
-            'sort',
-        );
-
-        foreach ($names as $name) {
-            $collection->add(
-                $this->adminId.'_'.$name,
-                new Route(
-                    $prefix.$name.$suffix,
-                    array(
-                        '_controller' => $this->getOption('controller').$name,
-                        '_admin' => $this->adminId,
-                    )
-                )
-            );
-        }
-
-        return $collection;
     }
 
     public function prePersist($entity)
