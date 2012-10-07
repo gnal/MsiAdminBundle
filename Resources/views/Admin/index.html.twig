@@ -27,16 +27,14 @@
 
 {% block content %}
 {# Search #}
-{% if admin.getOption('search_fields')|length > 0 %}
-    <form novalidate class="form-search" method="GET" action="{{ admin.genUrl('index') }}">
-        {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
-            <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3">
-            <div class="btn-group">
-                <button type="submit" class="btn"><i class="icon-search"></i></button>
-                <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}"><i class="icon-remove"></i></a>
-            </div>
-    </form>
-{% endif %}
+<form novalidate class="form-search" method="GET" action="{{ admin.genUrl('index') }}">
+    {% if admin.hasParent() %}<input type="hidden" value="{{ app.request.query.get('parentId') }}" name="parentId">{% endif %}
+        <input value="{{ app.request.query.get('q') }}" name="q" type="text" class="span3">
+        <div class="btn-group">
+            <button type="submit" class="btn"><i class="icon-search"></i></button>
+            <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}"><i class="icon-remove"></i></a>
+        </div>
+</form>
 {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
 {# Limit #}
 <form id="limitForm" novalidate class="pull-left form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">

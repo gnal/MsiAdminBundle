@@ -57,6 +57,20 @@ abstract class Admin
         return ucfirst($parts[0]).ucfirst($parts[1]).'Bundle';
     }
 
+    public function getClassName()
+    {
+        return substr($this->getObjectManager()->getClass(), strrpos($this->getObjectManager()->getClass(), '\\') + 1);
+    }
+
+    public function getLabel($number = 1)
+    {
+        if (!$this->label) {
+            $this->label = $this->getClassName();
+        }
+
+        return $this->translator->transChoice('entity.'.$this->label, $number);
+    }
+
     public function getContainer()
     {
         return $this->container;
@@ -212,20 +226,6 @@ abstract class Admin
         return $this->container->get('router')->generate($this->adminId.'_'.$route, $parameters, $absolute);
     }
 
-    public function getClassName()
-    {
-        return substr($this->getObjectManager()->getClass(), strrpos($this->getObjectManager()->getClass(), '\\') + 1);
-    }
-
-    public function getLabel($number = 1)
-    {
-        if (!$this->label) {
-            $this->label = $this->getClassName();
-        }
-
-        return $this->translator->transChoice('entity.'.$this->label, $number);
-    }
-
     public function buildBreadcrumb()
     {
         $request = $this->container->get('request');
@@ -301,7 +301,7 @@ abstract class Admin
         $resolver->setDefaults(array(
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
-            'search_fields' => array(),
+            'search_fields' => array('a.id'),
             'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
         ));
     }

@@ -20,48 +20,6 @@ class BaseManager
         $this->class = $class;
     }
 
-    // deprecated
-    public function findBy(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-
-        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
-
-        if (null !== $limit) {
-            $qb->setMaxResults($limit);
-        }
-
-        if (null !== $offset) {
-            $qb->setFirstResult($offset);
-        }
-
-        return $qb;
-    }
-
-    // deprecated
-    public function findByQ($q, array $searchFields, array $where = array(), array $join = array(), array $orderBy = array())
-    {
-        $qb = $this->repository->createQueryBuilder('a');
-
-        $strings = explode(' ', $q);
-
-        $orX = $qb->expr()->orX();
-        $i = 1;
-        foreach ($searchFields as $field) {
-            foreach ($strings as $str) {
-                $orX->add($qb->expr()->like($field, ':likeMatch'.$i));
-                $qb->setParameter('likeMatch'.$i, '%'.$str.'%');
-                $i++;
-            }
-        }
-
-        $qb->andWhere($orX);
-
-        $qb = $this->buildFindBy($qb, $where, $join, $orderBy);
-
-        return $qb;
-    }
-
     public function savePosition($objects, $disposition)
     {
         $i = 1;
@@ -227,7 +185,6 @@ class BaseManager
         $qb = $this->repository->createQueryBuilder('a');
 
         if (count($searchFields)) {
-            // $q = trim(preg_replace('@\W@', ' ', trim($q)));
             $q = trim($q);
             $strings = explode(' ', $q);
 
@@ -237,7 +194,10 @@ class BaseManager
                 foreach ($strings as $string) {
                     $token = 'likeMatch'.$i;
                     $orX->add($qb->expr()->like($field, ':'.$token));
-                    $qb->setParameter($token, '%'.$string.'%');
+                    $qb->setParameter($token, $string);
+
+                    $orX->add($qb->expr()->like('a.id', ':eqMatchForId'.$i));
+                    $qb->setParameter('eqMatchForId'.$i, $string);
                     $i++;
                 }
             }
@@ -267,11 +227,6 @@ class BaseManager
         foreach ($orderBy as $k => $v) {
             $qb->addOrderBy($k, $v);
         }
-
-        // if ($this->isTranslatable()) {
-        //     $qb->leftJoin('a.translations', 't');
-        //     $qb->addSelect('t');
-        // }
 
         return $qb;
     }
