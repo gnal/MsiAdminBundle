@@ -61,3 +61,7 @@ table + div.pagination {
 .ui-state-highlight td {
     background-color: #d9edf7 !important;
 }
+
+.td-sort {
+    cursor: move;
+}
