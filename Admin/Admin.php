@@ -314,15 +314,15 @@ abstract class Admin
     {
     }
 
-    public function preUpdate($entity)
-    {
-    }
-
     public function postPersist($entity)
     {
     }
 
-    public function PostUpdate($entity)
+    public function preUpdate($entity)
+    {
+    }
+
+    public function postUpdate($entity)
     {
     }
 
