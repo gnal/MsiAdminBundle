@@ -1,8 +1,10 @@
 {% extends 'MsiAdminBundle::layout.html.twig' %}
 
 {% block title %}
-{{ admin.getLabel(2) }} <small class="muted">({{ paginator.length|number_format }})</small>
+{{ admin.getLabel(2) }}
 {% endblock title %}
+
+{% block after_title %}<small class="muted">({{ paginator.length|number_format }})</small>{% endblock after_title %}
 
 {% block sidebar %}
 {% if filterForm is defined %}
