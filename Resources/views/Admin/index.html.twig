@@ -23,7 +23,6 @@
 {% block actions %}
 {% if admin.isGranted('create') %}
     <a href="{{ admin.genUrl('new') }}" class="btn btn-success"><i class="icon-plus icon-white"></i> {{ 'Add'|trans }}</a>
-    {#<a href="#adminModal" role="button" class="btn btn-primary msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('new') }}"><i class="icon-plus icon-white"></i> {{ admin.getLabel(1) }}</a>#}
 {% endif %}
 {% endblock %}
 
@@ -47,7 +46,6 @@
         <option {% if app.session.get('limit') == 100 %}selected=selected{% endif %} value="100">100</option>
     </select>
 </form>
-{% include 'MsiAdminBundle:Misc:modal.html.twig' %}
 {% endblock %}
 
 {% block js %}
@@ -102,32 +100,6 @@
         $.ajax("{{ admin.genUrl('sort') }}", {
             data: {'disposition': disposition},
         });
-    });
-})(jQuery);
-(function($) {
-    "use strict";
-    $('a.msi_admin_admin_new').on('click', function(e) {
-        $.ajax($(this).data('url'), {
-            success: function(response) {
-                $('div#adminModal div.modal-header h3').html($(response).find('h1').text());
-                $('div#adminModal div.modal-body').html($(response).find('form'));
-            }
-        });
-        e.preventDefault();
-    });
-    $('div#adminModal div.modal-footer a.btn-primary').on('click', function(e) {
-        $.ajax($('div#adminModal div.modal-body form').attr('action'), {
-            type: 'POST',
-            data: $('div#adminModal div.modal-body form').serialize(),
-            success: function(response) {
-                if (response === 'ok') {
-                    location.replace(location);
-                } else {
-                    $('div#adminModal div.modal-body').html($(response).find('form'));
-                }
-            }
-        });
-        e.preventDefault();
     });
 })(jQuery);
 </script>

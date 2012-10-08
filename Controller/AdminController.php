@@ -13,8 +13,6 @@ class AdminController extends ContainerAware
 {
     protected $admin;
     protected $request;
-    protected $entity;
-    protected $manager;
 
     public function setContainer(ContainerInterface $container = null)
     {
@@ -34,14 +32,14 @@ class AdminController extends ContainerAware
     {
         $this->check('read');
 
-        $qb = $this->manager->getAdminListQueryBuilder($this->request, $this->admin);
+        $qb = $this->admin->getObjectManager()->getAdminListQueryBuilder($this->request, $this->admin);
 
         // Filters
         $parameters = array();
         $filterForm = $this->admin->getForm('filter');
 
         if ($filterForm) {
-            $this->getFilterFormHandler()->process($filterForm, $this->entity, $qb);
+            $this->getFilterFormHandler()->process($filterForm, $this->admin->getObject(), $qb);
             $parameters['filterForm'] = $filterForm->createView();
         }
 
@@ -51,7 +49,7 @@ class AdminController extends ContainerAware
 
         // Table
         $table = $this->admin->getTable('index');
-        if (property_exists($this->manager->getClass(), 'position')) {
+        if (property_exists($this->admin->getObjectManager()->getClass(), 'position')) {
             $table->setSortable(true);
         }
         $table->setData($paginator->getResult());
@@ -68,10 +66,10 @@ class AdminController extends ContainerAware
 
         $table = $this->admin->getTable('show');
         if (!$table) {
-            return new RedirectResponse($this->admin->genUrl('edit', array('id' => $this->entity->getId())));
+            return new RedirectResponse($this->admin->genUrl('edit', array('id' => $this->admin->getObject()->getId())));
         }
 
-        $table->setData(new ArrayCollection(array($this->entity)));
+        $table->setData(new ArrayCollection(array($this->admin->getObject())));
 
         return $this->render('MsiAdminBundle:Admin:show.html.twig');
     }
@@ -81,11 +79,7 @@ class AdminController extends ContainerAware
         $this->check('create');
 
         if ($this->processForm()) {
-            if ($this->request->isXmlHttpRequest()) {
-                return new Response('ok');
-            } else {
-                return $this->onSuccess();
-            }
+            return $this->onSuccess();
         }
 
         return $this->render('MsiAdminBundle:Admin:new.html.twig', array('form' => $this->admin->getForm()->createView()));
@@ -96,21 +90,17 @@ class AdminController extends ContainerAware
         $this->check('update');
 
         if ($this->processForm()) {
-            if ($this->request->isXmlHttpRequest()) {
-                return new Response('ok');
-            } else {
-                return $this->onSuccess();
-            }
+            return $this->onSuccess();
         }
 
-        return $this->render('MsiAdminBundle:Admin:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->entity->getId()));
+        return $this->render('MsiAdminBundle:Admin:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->admin->getObject()->getId()));
     }
 
     public function deleteAction()
     {
         $this->check('delete');
 
-        $this->manager->delete($this->entity);
+        $this->admin->getObjectManager()->delete($this->admin->getObject());
 
         return $this->onSuccess();
     }
@@ -119,7 +109,7 @@ class AdminController extends ContainerAware
     {
         $this->check('update');
 
-        $this->manager->change($this->entity, $this->request->query->get('field'));
+        $this->admin->getObjectManager()->change($this->admin->getObject(), $this->request->query->get('field'));
 
         return $this->onSuccess();
     }
@@ -135,9 +125,9 @@ class AdminController extends ContainerAware
             $criteria['a.'.lcfirst($this->admin->getParent()->getClassName())] = $this->request->query->get('parentId');
         }
         $orderBy['a.position'] = 'ASC';
-        $objects = $this->manager->getFindByQueryBuilder($criteria, array(), $orderBy)->getQuery()->execute();
+        $objects = $this->admin->getObjectManager()->getFindByQueryBuilder($criteria, array(), $orderBy)->getQuery()->execute();
 
-        $this->manager->savePosition($objects, $disposition);
+        $this->admin->getObjectManager()->savePosition($objects, $disposition);
 
         return new Response();
     }
@@ -157,7 +147,7 @@ class AdminController extends ContainerAware
     protected function processForm()
     {
         $form = $this->admin->getForm();
-        $process = $this->getCrudFormHandler()->setAdmin($this->admin)->process($form, $this->entity);
+        $process = $this->getCrudFormHandler()->setAdmin($this->admin)->process($form, $this->admin->getObject());
 
         return $process;
     }
@@ -179,8 +169,6 @@ class AdminController extends ContainerAware
     protected function init()
     {
         $this->admin = $this->container->get($this->request->attributes->get('_admin'));
-        $this->manager = $this->admin->getObjectManager();
-        $this->entity = $this->admin->getObject();
 
         $this->admin->query->set('page', $this->request->query->get('page'));
         $this->admin->query->set('q', $this->request->query->get('q'));
