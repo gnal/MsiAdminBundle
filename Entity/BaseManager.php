@@ -5,7 +5,6 @@ namespace Msi\Bundle\AdminBundle\Entity;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpFoundation\Request;
 
 class BaseManager
 {
@@ -17,22 +16,6 @@ class BaseManager
     public function __construct($class)
     {
         $this->class = $class;
-    }
-
-    public function savePosition($objects, $disposition)
-    {
-        $i = 1;
-        $l = 0;
-        foreach ($objects as $object) {
-            if (in_array($object->getId(), $disposition)) {
-                $object->setPosition($i + array_search($object->getId(), $disposition) - $l);
-                $l++;
-            } else {
-                $object->setPosition($i);
-            }
-            $i++;
-            $this->save($object);
-        }
     }
 
     public function save($entity)
@@ -65,6 +48,22 @@ class BaseManager
         $entity->$getter() ? $entity->$setter(false) : $entity->$setter(true);
 
         $this->save($entity);
+    }
+
+    public function savePosition($objects, $disposition)
+    {
+        $i = 1;
+        $l = 0;
+        foreach ($objects as $object) {
+            if (in_array($object->getId(), $disposition)) {
+                $object->setPosition($i + array_search($object->getId(), $disposition) - $l);
+                $l++;
+            } else {
+                $object->setPosition($i);
+            }
+            $i++;
+            $this->save($object);
+        }
     }
 
     public function moveUp($entity)
