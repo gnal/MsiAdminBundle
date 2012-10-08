@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\HttpFoundation\Request;
-use Msi\Bundle\AdminBundle\Admin\Admin;
 
 class BaseManager
 {
@@ -138,31 +137,6 @@ class BaseManager
         return $object;
     }
 
-    public function getAdminListQueryBuilder(Request $request, Admin $admin)
-    {
-        $where = array();$join = array();$sort = array();
-
-        // If is sortable.
-        if (property_exists($this->getClass(), 'position')) {
-            $sort['a.position'] = 'ASC';
-        }
-
-        // If is nested.
-        if ($admin->hasParent() && $request->query->get('parentId')) {
-            $where['a.'.strtolower($admin->getParent()->getClassName())] = $request->query->get('parentId');
-        }
-
-        if (!$request->query->get('q')) {
-            $qb = $this->getFindByQueryBuilder($where, $join, $sort);
-        } else {
-            $qb = $this->getSearchQueryBuilder($request->query->get('q'), $admin->getOption('search_fields'), $where, $join, $sort);
-        }
-
-        $this->configureAdminListQuery($qb, $admin);
-
-        return $qb;
-    }
-
     public function getFindByQueryBuilder(array $where = array(), array $join = array(), array $orderBy = array(), $limit = null, $offset = null)
     {
         $qb = $this->repository->createQueryBuilder('a');
@@ -229,9 +203,5 @@ class BaseManager
         }
 
         return $qb;
-    }
-
-    protected function configureAdminListQuery(QueryBuilder $qb, Admin $admin)
-    {
     }
 }

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\QueryBuilder;
 
 class AdminController extends ContainerAware
 {
@@ -32,7 +33,7 @@ class AdminController extends ContainerAware
     {
         $this->check('read');
 
-        $qb = $this->admin->getObjectManager()->getAdminListQueryBuilder($this->request, $this->admin);
+        $qb = $this->getIndexQueryBuilder($this->request, $this->admin);
 
         // Filters
         $parameters = array();
@@ -142,6 +143,37 @@ class AdminController extends ContainerAware
     protected function getCrudFormHandler()
     {
         return $this->container->get('msi_admin.admin.form.handler');
+    }
+
+    protected function getIndexQueryBuilder()
+    {
+        $where = array();
+        $join = array();
+        $sort = array();
+
+        // If is sortable.
+        if (property_exists($this->admin->getObject(), 'position')) {
+            $sort['a.position'] = 'ASC';
+        }
+
+        // If is nested.
+        if ($this->admin->hasParent() && $this->request->query->get('parentId')) {
+            $where['a.'.strtolower($this->admin->getParent()->getClassName())] = $this->request->query->get('parentId');
+        }
+
+        if (!$this->request->query->get('q')) {
+            $qb = $this->admin->getObjectManager()->getFindByQueryBuilder($where, $join, $sort);
+        } else {
+            $qb = $this->admin->getObjectManager()->getSearchQueryBuilder($this->request->query->get('q'), $this->admin->getOption('search_fields'), $where, $join, $sort);
+        }
+
+        $this->configureIndexQueryBuilder($qb);
+
+        return $qb;
+    }
+
+    protected function configureIndexQueryBuilder(QueryBuilder $qb)
+    {
     }
 
     protected function processForm()
