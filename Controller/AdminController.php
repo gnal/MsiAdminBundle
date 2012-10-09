@@ -110,7 +110,7 @@ class AdminController extends ContainerAware
     {
         $this->check('update');
 
-        $this->admin->getObjectManager()->change($this->admin->getObject(), $this->request->query->get('field'));
+        $this->admin->getObjectManager()->change($this->admin->getObject(), $this->request);
 
         return $this->onSuccess();
     }

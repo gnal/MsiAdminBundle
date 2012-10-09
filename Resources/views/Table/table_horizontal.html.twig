@@ -8,10 +8,15 @@
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
+        {% if admin.objectManager.isTranslatable %}
+            {% for locale in admin.appLocales %}
+                <th>{{ locale|upper }}</th>
+            {% endfor %}
+        {% endif %}
         {% if is_granted('ROLE_SUPER_ADMIN') %}
             <th>ID</th>
-        </tr>
         {% endif %}
+        </tr>
     </thead>
     {# Body #}
     <tbody>
@@ -27,6 +32,19 @@
                 {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
                 </td>
             {% endfor %}
+            {% if admin.objectManager.isTranslatable %}
+                {% for locale in admin.appLocales %}
+                    <td style="text-align:center;" class="span1" id="b{{ loop.index }}">
+                        <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}">
+                            {% if object.translation(locale).published %}
+                                <span class="badge badge-success"><i class="icon-ok icon-white"><span class="hide">1</span></i></span>
+                            {% else %}
+                                <span class="badge"><i class="icon-ok icon-white"><span class="hide">0</span></i></span>
+                            {% endif %}
+                        </a>
+                    </td>
+                {% endfor %}
+            {% endif %}
             {% if is_granted('ROLE_SUPER_ADMIN') %}
             <td class="span1">
                 {{ object.id }}

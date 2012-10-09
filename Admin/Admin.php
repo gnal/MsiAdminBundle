@@ -57,6 +57,11 @@ abstract class Admin
         return ucfirst($parts[0]).ucfirst($parts[1]).'Bundle';
     }
 
+    public function isTranslatable()
+    {
+        return is_subclass_of($this->getObjectManager()->getClass(), 'Msi\Bundle\AdminBundle\Entity\Translatable');
+    }
+
     public function getClassName()
     {
         return substr($this->getObjectManager()->getClass(), strrpos($this->getObjectManager()->getClass(), '\\') + 1);
@@ -107,6 +112,11 @@ abstract class Admin
     public function getOptions()
     {
         return $this->options;
+    }
+
+    public function getAppLocales()
+    {
+        return $this->container->getParameter('msi_admin.app_locales');
     }
 
     public function setAdminId($adminId)
