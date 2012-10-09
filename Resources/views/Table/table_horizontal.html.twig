@@ -9,7 +9,7 @@
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
         {% if admin.isTranslatable and admin.areTranslationsPublishable %}
-            {% for locale in admin.appLocales %}
+            {% for locale in admin.appLocales if admin.appLocales|length > 1 %}
                 <th>{{ locale|upper }}</th>
             {% endfor %}
         {% endif %}
@@ -33,7 +33,7 @@
                 </td>
             {% endfor %}
             {% if admin.isTranslatable and admin.areTranslationsPublishable %}
-                {% for locale in admin.appLocales %}
+                {% for locale in admin.appLocales if admin.appLocales|length > 1 %}
                     <td style="text-align:center;" class="span1" id="b{{ loop.index }}">
                         <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}">
                             {% if object.translation(locale).published %}
