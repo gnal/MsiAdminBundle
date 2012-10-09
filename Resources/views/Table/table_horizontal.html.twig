@@ -8,7 +8,7 @@
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
-        {% if admin.objectManager.isTranslatable %}
+        {% if admin.isTranslatable and admin.areTranslationsPublishable %}
             {% for locale in admin.appLocales %}
                 <th>{{ locale|upper }}</th>
             {% endfor %}
@@ -32,7 +32,7 @@
                 {% include 'MsiAdminBundle:Column:'~column.type~'.html.twig' with {'i': loop.index, 'column': column.setObject(object)} %}
                 </td>
             {% endfor %}
-            {% if admin.objectManager.isTranslatable %}
+            {% if admin.isTranslatable and admin.areTranslationsPublishable %}
                 {% for locale in admin.appLocales %}
                     <td style="text-align:center;" class="span1" id="b{{ loop.index }}">
                         <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}">

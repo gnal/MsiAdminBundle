@@ -62,6 +62,11 @@ abstract class Admin
         return is_subclass_of($this->getObjectManager()->getClass(), 'Msi\Bundle\AdminBundle\Entity\Translatable');
     }
 
+    public function areTranslationsPublishable()
+    {
+        return property_exists($this->getObject()->getTranslation(), 'published');
+    }
+
     public function getClassName()
     {
         return substr($this->getObjectManager()->getClass(), strrpos($this->getObjectManager()->getClass(), '\\') + 1);
