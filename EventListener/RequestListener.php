@@ -4,6 +4,7 @@ namespace Msi\Bundle\AdminBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 class RequestListener
 {
@@ -18,11 +19,8 @@ class RequestListener
     {
         $request = $event->getRequest();
 
-        if (!in_array($request->getLocale(), $this->appLocales)) {
-            $locale = $request->getLocale();
+        if ($event->getRequestType() === HttpKernelInterface::MASTER_REQUEST && !in_array($request->getLocale(), $this->appLocales)) {
             $request->setLocale(array_shift($this->appLocales));
-
-            throw new NotFoundHttpException('Locale "'.$locale.'" is not allowed. See MsiAdminBundle configuration for more details.');
         }
     }
 }
