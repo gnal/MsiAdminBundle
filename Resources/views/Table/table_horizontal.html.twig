@@ -5,13 +5,18 @@
         {% if table.sortable %}
             <th>{{ 'Order'|trans }}</th>
         {% endif %}
+        {% if admin.isTranslatable and admin.areTranslationsPublishable %}
+            {% for locale in admin.appLocales %}
+                <th>Status {{ locale|upper }}</th>
+            {% endfor %}
+        {% endif %}
         {% for column in table.columns %}
             <th>{{ column.get('label')|capitalize|trans }}</th>
         {% endfor %}
         {% if is_granted('ROLE_SUPER_ADMIN') %}
             <th>ID</th>
-        </tr>
         {% endif %}
+        </tr>
     </thead>
     {# Body #}
     <tbody>
@@ -21,6 +26,19 @@
                 <td class="span1 td-sort" style="text-align:center;">
                     <i class="icon-resize-vertical"></i>
                 </td>
+            {% endif %}
+            {% if admin.isTranslatable and admin.areTranslationsPublishable %}
+                {% for locale in admin.appLocales %}
+                    <td style="text-align:center;width:70px;" id="b{{ loop.index }}">
+                        <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}">
+                            {% if object.translation(locale).published %}
+                                <span class="badge badge-success"><i class="icon-ok icon-white"><span class="hide">1</span></i></span>
+                            {% else %}
+                                <span class="badge"><i class="icon-ok icon-white"><span class="hide">0</span></i></span>
+                            {% endif %}
+                        </a>
+                    </td>
+                {% endfor %}
             {% endif %}
             {% for column in table.columns %}
                 <td {% for attrname,attrvalue in column.options.attr %}{{attrname}}="{{attrvalue}}" {% endfor %}id="td{{ loop.index~object.id }}">

@@ -34,8 +34,15 @@ abstract class BaseColumn
             if (isset($pieces[1])) {
                 $this->value = $this->object->$getter($pieces[1]);
             // Else translation
-            } else if (!method_exists($this->object, $getter)) {
+            } else if (!property_exists($this->object, $this->name)) {
                 $this->value = $this->object->getTranslation()->$getter();
+                if (!$this->value) {
+                    foreach ($this->object->getTranslations() as $translation) {
+                        if ($this->value = $translation->$getter()) {
+                            break;
+                        }
+                    }
+                }
             // Else normal value
             } else {
                 $this->value = $this->object->$getter();

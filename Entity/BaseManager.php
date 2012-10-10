@@ -40,12 +40,21 @@ class BaseManager
         $this->em->flush();
     }
 
-    public function change($entity, $field)
+    public function change($entity, $request)
     {
+        $field = $request->query->get('field');
+        $locale = $request->query->get('locale');
+
         $getter = 'get'.ucfirst($field);
         $setter = 'set'.ucfirst($field);
 
-        $entity->$getter() ? $entity->$setter(false) : $entity->$setter(true);
+        if ($locale) {
+            $entity->getTranslation($locale)->$getter()
+                ? $entity->getTranslation($locale)->$setter(false)
+                : $entity->getTranslation($locale)->$setter(true);
+        } else {
+            $entity->$getter() ? $entity->$setter(false) : $entity->$setter(true);
+        }
 
         $this->save($entity);
     }
