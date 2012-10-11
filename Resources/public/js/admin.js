@@ -1,15 +1,51 @@
 (function($) {
     "use strict";
     var $table = $('table.table');
+    var changeLoading = false;
 
     $table.on('click', 'a.msi_admin_admin_change', function(e) {
+
+        if (changeLoading === true) {
+            return;
+        }
+
+        changeLoading = true;
         var $this = $(this);
+        var iconTrue = $this.data('icon-true');
+        var iconFalse = $this.data('icon-false');
+        var BadgeTrue = $this.data('badge-true');
+        var BadgeFalse = $this.data('badge-false');
 
         $this.children('span').html('<img src="/bundles/msiadmin/img/ajax-loader2.gif" alt="0">');
 
         $.ajax($this.data('url'), {
-            success: function(response) {
-                $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());
+            success: function() {
+                // $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());
+                // $this.children('span').removeClass('badge-success').html('<i class="icon-white icon-ok"></i>');
+
+                if ($this.children('span').hasClass(BadgeTrue)) {
+                    var i = '<i class="icon-white"><span class="hide">0</span></i>';
+                    $this.children('span')
+                        .empty()
+                        .removeClass(BadgeTrue)
+                        .addClass(BadgeFalse)
+                        .html(i)
+                        .children()
+                        .removeClass(iconTrue)
+                        .addClass(iconFalse);
+                } else {
+                    var i = '<i class="icon-white"><span class="hide">1</span></i>';
+                    $this.children('span')
+                        .empty()
+                        .removeClass(BadgeFalse)
+                        .addClass(BadgeTrue)
+                        .html(i)
+                        .children()
+                        .removeClass(iconFalse)
+                        .addClass(iconTrue);
+                }
+
+                changeLoading = false;
             }
         });
         e.preventDefault();

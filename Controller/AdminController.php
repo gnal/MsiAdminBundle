@@ -112,7 +112,11 @@ class AdminController extends ContainerAware
 
         $this->admin->getObjectManager()->change($this->admin->getObject(), $this->request);
 
-        return $this->onSuccess();
+        if ($this->request->isXmlHttpRequest()) {
+            return new Response('ok');
+        } else {
+            return $this->onSuccess();
+        }
     }
 
     public function sortAction()

@@ -1,7 +1,7 @@
-<a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'id': column.object.id, 'field': column.name}) }}">
+<a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'id': column.object.id, 'field': column.name}) }}" data-icon-true="{{ column.options.icon_true }}" data-icon-false="{{ column.options.icon_false }}" data-badge-true="{{ column.options.badge_true }}" data-badge-false="{{ column.options.badge_false }}">
     {% if column.value %}
-        {{ column.options.label_true|raw }}
+        <span class="badge {{ column.options.badge_true }}"><i class="{{ column.options.icon_true }} icon-white"><span class="hide">1</span></i></span>
     {% else %}
-        {{ column.options.label_false|raw }}
+        <span class="badge {{ column.options.badge_false }}"><i class="{{ column.options.icon_false }} icon-white"><span class="hide">0</span></i></span>
     {% endif %}
 </a>
