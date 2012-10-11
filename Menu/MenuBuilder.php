@@ -5,7 +5,7 @@ namespace Msi\Bundle\AdminBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 
-class Builder extends ContainerAware
+class MenuBuilder extends ContainerAware
 {
     public function adminMenu(FactoryInterface $factory, array $options)
     {
