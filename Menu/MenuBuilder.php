@@ -45,7 +45,7 @@ class MenuBuilder extends ContainerAware
             }
         }
 
-        $this->setCurrent($menu);
+        // $this->setCurrent($menu);
 
         return $menu;
     }
