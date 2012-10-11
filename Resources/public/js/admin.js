@@ -12,7 +12,6 @@
         var cellId = $this.closest('td').attr('id');
 
         if ($.inArray(cellId, loadingCellIds) !== -1) {
-            console.log('no');
             return;
         }
         loadingCellIds.push(cellId);

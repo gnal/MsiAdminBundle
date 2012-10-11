@@ -1,8 +1,10 @@
+{% if 1 == object.lvl %}<span class="badge">{% endif %}{% if 2 == object.lvl %}<span class="badge badge-warning">{% endif %}{% if 3 == object.lvl %}<span class="badge badge-important">{% endif %}
 {% for i in 0..object.lvl %}
     {% if 0 != i %}
-        {% if 1 == i %}<span class="badge">{% endif %}{% if 2 == i %}<span class="badge badge-warning">{% endif %}{% if 3 == i %}<span class="badge badge-important">{% endif %}<i class="{% if object.lvl == i %}icon-chevron-right{% else %}icon-minus{% endif %} icon-white"></i></span>
+        <i class="{% if object.lvl == i %}icon-chevron-right{% else %}icon-minus{% endif %} icon-white"></i>
     {% endif %}
 {% endfor %}
+</span>&nbsp;
 {% if column.options.edit %}
     <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ column.value }}</a>
 {% else %}
