@@ -30,7 +30,7 @@
             {% if admin.isTranslatable and admin.areTranslationsPublishable %}
                 {% for locale in admin.appLocales %}
                     <td style="text-align:center;width:70px;" id="b{{ loop.index }}">
-                        <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}">
+                        <a href="#" class="msi_admin_admin_change" data-url="{{ admin.genUrl('change', {'locale': locale, 'id': object.id, 'field': 'published'}) }}" data-icon-true="icon-ok" data-icon-false="icon-ok" data-badge-true="badge-success" data-badge-false="">
                             {% if object.translation(locale).published %}
                                 <span class="badge badge-success"><i class="icon-ok icon-white"><span class="hide">1</span></i></span>
                             {% else %}

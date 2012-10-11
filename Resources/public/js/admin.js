@@ -20,9 +20,6 @@
 
         $.ajax($this.data('url'), {
             success: function() {
-                // $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());
-                // $this.children('span').removeClass('badge-success').html('<i class="icon-white icon-ok"></i>');
-
                 if ($this.children('span').hasClass(BadgeTrue)) {
                     var i = '<i class="icon-white"><span class="hide">0</span></i>';
                     $this.children('span')
