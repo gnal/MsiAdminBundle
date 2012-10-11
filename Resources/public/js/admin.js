@@ -1,20 +1,21 @@
 (function($) {
     "use strict";
     var $table = $('table.table');
-    var changeLoading = false;
+    var loadingCellIds = [];
 
     $table.on('click', 'a.msi_admin_admin_change', function(e) {
-
-        if (changeLoading === true) {
-            return;
-        }
-
-        changeLoading = true;
         var $this = $(this);
         var iconTrue = $this.data('icon-true');
         var iconFalse = $this.data('icon-false');
         var BadgeTrue = $this.data('badge-true');
         var BadgeFalse = $this.data('badge-false');
+        var cellId = $this.closest('td').attr('id');
+
+        if ($.inArray(cellId, loadingCellIds) !== -1) {
+            console.log('no');
+            return;
+        }
+        loadingCellIds.push(cellId);
 
         $this.children('span').html('<img src="/bundles/msiadmin/img/ajax-loader2.gif" alt="0">');
 
@@ -42,7 +43,7 @@
                         .addClass(iconTrue);
                 }
 
-                changeLoading = false;
+                loadingCellIds.splice(loadingCellIds.indexOf(cellId), 1);
             }
         });
         e.preventDefault();
