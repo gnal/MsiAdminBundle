@@ -1,5 +1,5 @@
 {% for i in 0..object.lvl %}
-    {% if 0 != i %}<i class="icon-arrow-right"></i>{% endif %}
+    {% if 0 != i %}<span class="label label-inverse"><i class="icon-arrow-right icon-white"></i></span>{% endif %}
 {% endfor %}
 {% if column.options.edit %}
     <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ column.value }}</a>
