@@ -56,11 +56,11 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
         </div>
         <div class="span10">
             {# Breadcrumb #}
-            {#{% block breadcrumb %}
+            {% block breadcrumb %}
             {% if admin is defined %}
                 {% include 'MsiAdminBundle:Dashboard:breadcrumb.html.twig' with {'crumbs': admin.buildBreadcrumb } %}
             {% endif %}
-            {% endblock breadcrumb %}#}
+            {% endblock breadcrumb %}
             {% if block('actions')|length > 0 %}
                 <div class="btn-group pull-right">{% block actions %}{% endblock actions %}</div>
             {% endif %}
