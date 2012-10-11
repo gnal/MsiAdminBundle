@@ -62,7 +62,3 @@ table + div.pagination {
 .td-sort {
     cursor: move;
 }
-
-.navbar-inner {
-    border: 0;
-}
