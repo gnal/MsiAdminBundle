@@ -9,7 +9,7 @@ class MenuBuilder extends ContainerAware
 {
     public function adminMenu(FactoryInterface $factory, array $options)
     {
-        $root = $this->container->get('msi_menu.menu_root_manager')->findRootByName('admin', 'en');
+        $root = $this->container->get('msi_menu.menu_root_manager')->findRootByName('admin', $this->container->get('request')->getLocale());
 
         if (!$root) {
             return $factory->createItem('default');
