@@ -4,6 +4,9 @@
 
     $table.on('click', 'a.msi_admin_admin_change', function(e) {
         var $this = $(this);
+
+        $this.children('span').html('<img src="/bundles/msiadmin/img/ajax-loader2.gif" alt="0">');
+
         $.ajax($this.data('url'), {
             success: function(response) {
                 $this.closest('td').html($(response).find('td#'+$this.closest('td').attr('id')).html());

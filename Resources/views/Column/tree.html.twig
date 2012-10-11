@@ -1,6 +1,6 @@
 {% for i in 0..object.lvl %}
     {% if 0 != i %}
-        {% if 1 == i %}<span class="badge">{% endif %}{% if 2 == i %}<span class="badge badge-warning">{% endif %}{% if 3 == i %}<span class="badge badge-important">{% endif %}<i class="{% if object.lvl == i %}icon-chevron-right{% else %}icon-minus{% endif %} icon-white"></i></span>
+        {% if 1 == i %}<span class="badge">{% endif %}{% if 2 == i %}<span class="badge badge-warning">{% endif %}{% if 3 == i %}<span class="badge badge-important">{% endif %}{% if object.lvl == i %}<i class="icon-chevron-right icon-white"></i>{% else %}&nbsp;{% endif %}</span>
     {% endif %}
 {% endfor %}
 {% if column.options.edit %}
