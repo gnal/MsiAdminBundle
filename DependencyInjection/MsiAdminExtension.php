@@ -24,6 +24,7 @@ class MsiAdminExtension extends Extension
 
         $container->setParameter('msi_admin.tiny_mce', $config['tiny_mce']);
         $container->setParameter('msi_admin.app_locales', $config['app_locales']);
+        $container->setParameter('msi_admin.super_admin_routes', $config['super_admin_routes']);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');

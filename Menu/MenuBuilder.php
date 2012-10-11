@@ -57,9 +57,16 @@ class MenuBuilder extends ContainerAware
         }
 
         $route = array_shift($foo);
+
         if (preg_match('@_admin_index$@', $route)) {
             $admin = $this->container->get(substr($route, 0, -6));
             if (!$admin->isGranted('read')) {
+                $menu->getParent()->removeChild($menu);
+            }
+        }
+
+        if (in_array($route, $this->container->getParameter('msi_admin.super_admin_routes'))) {
+            if (!$this->container->get('security.contaxt')->isGranted('ROLE_SUPER_ADMIN')) {
                 $menu->getParent()->removeChild($menu);
             }
         }

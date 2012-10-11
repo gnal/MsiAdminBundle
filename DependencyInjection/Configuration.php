@@ -31,6 +31,9 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(array('fr', 'en'))
                     ->cannotBeEmpty()
                 ->end()
+                ->arrayNode('super_admin_routes')
+                    ->prototype('scalar')->end()
+                ->end()
             ->end()
         ;
 
