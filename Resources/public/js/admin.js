@@ -48,6 +48,17 @@
         e.preventDefault();
     });
 
+    $('form.form-horizontal').on('click', 'a.msi_admin_admin_removeFile', function(e) {
+        var $this = $(this);
+        if (!window.confirm('Are you sure you want to delete this file?')) {
+            return;
+        }
+        $.get($this.data('url'));
+        $this.prev('img').remove();
+        $this.remove();
+        e.preventDefault();
+    });
+
     $table.on('click', 'a.msi_admin_admin_delete', function(e) {
         var $this = $(this);
         if (!window.confirm('Are you sure you want to delete this entry?')) {
