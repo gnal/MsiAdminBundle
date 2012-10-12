@@ -7,7 +7,7 @@ class BooleanColumn extends BaseColumn
     public function getDefaultOptions()
     {
         return array(
-            'attr' => array('style' => 'text-align:center;'),
+            'attr' => array('style' => 'text-align:center;', 'class' => 'span2'),
             'badge_true' => 'badge-success',
             'badge_false' => '',
             'icon_true' => 'icon-ok',

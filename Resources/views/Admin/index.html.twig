@@ -36,6 +36,7 @@
             <a class="btn" href="{{ admin.genUrl('index', {'parentId': app.request.query.get('parentId')}, false) }}"><i class="icon-remove"></i></a>
         </div>
 </form>
+{# Table #}
 {% include 'MsiAdminBundle:Table:table_horizontal.html.twig' with {'table': admin.table('index')} %}
 {# Limit #}
 <form id="limitForm" novalidate class="pull-left form-search" method="POST" action="{{ path('msi_admin_main_limit') }}">
