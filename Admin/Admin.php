@@ -7,7 +7,7 @@ use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
 
-class AdminLoader implements LoaderInterface
+class Admin implements LoaderInterface
 {
     private $loaded = false;
     private $adminIds;
