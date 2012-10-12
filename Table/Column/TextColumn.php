@@ -6,8 +6,6 @@ class TextColumn extends BaseColumn
 {
     public function getDefaultOptions()
     {
-        return array(
-            'edit' => false,
-        );
+        return array();
     }
 }

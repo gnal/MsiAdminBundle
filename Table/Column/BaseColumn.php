@@ -9,6 +9,7 @@ abstract class BaseColumn
     protected $value;
     protected $type;
     protected $options = array();
+    protected $translationValues = array();
 
     public function __construct($name, $builder)
     {
@@ -35,6 +36,7 @@ abstract class BaseColumn
                 $this->value = $this->object->$getter($pieces[1]);
             // Else translation
             } else if (!property_exists($this->object, $this->name)) {
+                // translation fallback
                 $this->value = $this->object->getTranslation()->$getter();
                 if (!$this->value) {
                     foreach ($this->object->getTranslations() as $translation) {
@@ -42,6 +44,9 @@ abstract class BaseColumn
                             break;
                         }
                     }
+                }
+                foreach ($this->object->getTranslations() as $translation) {
+                    $this->translationValues[$translation->getLocale()] = $translation->$getter();
                 }
             // Else normal value
             } else {
@@ -75,6 +80,11 @@ abstract class BaseColumn
     public function getValue()
     {
         return $this->value;
+    }
+
+    public function getTranslationValues()
+    {
+        return $this->translationValues;
     }
 
     public function get($name)

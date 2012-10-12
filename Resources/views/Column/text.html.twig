@@ -1,5 +1,7 @@
-{% if column.options.edit %}
-    <a href="{{ admin.genUrl('edit', {'id': object.id}) }}">{{ column.value }}</a>
+{% if admin.isTranslationField(column.name) %}
+    {% for value in column.translationValues %}
+        {{ value }}<br>
+    {% endfor %}
 {% else %}
     {{ column.value }}
 {% endif %}
