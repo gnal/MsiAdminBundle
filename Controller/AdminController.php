@@ -58,7 +58,7 @@ class AdminController extends ContainerAware
 
         $parameters['paginator'] = $paginator;
 
-        return $this->render('MsiAdminBundle:Admin:index.html.twig', $parameters);
+        return $this->render($this->admin->getOption('index_template'), $parameters);
     }
 
     public function showAction()
@@ -83,7 +83,7 @@ class AdminController extends ContainerAware
             return $this->onSuccess();
         }
 
-        return $this->render('MsiAdminBundle:Admin:new.html.twig', array('form' => $this->admin->getForm()->createView()));
+        return $this->render($this->admin->getOption('new_template'), array('form' => $this->admin->getForm()->createView()));
     }
 
     public function editAction()
@@ -94,7 +94,7 @@ class AdminController extends ContainerAware
             return $this->onSuccess();
         }
 
-        return $this->render('MsiAdminBundle:Admin:edit.html.twig', array('form' => $this->admin->getForm()->createView(), 'id' => $this->admin->getObject()->getId()));
+        return $this->render($this->admin->getOption('edit_template'), array('form' => $this->admin->getForm()->createView(), 'id' => $this->admin->getObject()->getId()));
     }
 
     public function deleteAction()

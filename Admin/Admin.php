@@ -57,6 +57,11 @@ abstract class Admin
         return ucfirst($parts[0]).ucfirst($parts[1]).'Bundle';
     }
 
+    public function isSortable()
+    {
+        return property_exists($this->getObjectManager()->getClass(), 'position');
+    }
+
     public function isTranslatable()
     {
         return is_subclass_of($this->getObjectManager()->getClass(), 'Msi\Bundle\AdminBundle\Entity\Translatable');
@@ -319,6 +324,9 @@ abstract class Admin
             'controller' => 'MsiAdminBundle:Admin:',
             'form_template' => 'MsiAdminBundle:Admin:form.html.twig',
             'search_fields' => array('a.id'),
+            'index_template' => 'MsiAdminBundle:Admin:index.html.twig',
+            'new_template' => 'MsiAdminBundle:Admin:new.html.twig',
+            'edit_template' => 'MsiAdminBundle:Admin:edit.html.twig',
             // 'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
             'sidebar_nav' => false,
         ));
