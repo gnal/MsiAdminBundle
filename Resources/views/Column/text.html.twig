@@ -1,6 +1,10 @@
-{% if admin.isTranslationField(column.name) %}
-    {% for value in column.translationValues %}
-        {{ value }}<br>
+{% if admin.isTranslationField(column.name) and admin.appLocales|length < 3 %}
+    {% for i, value in column.translationValues %}
+        {% if loop.index == 1 %}
+            {{ value }}<br>
+        {% else %}
+            <small class="muted">{{ value }}</small>
+        {% endif %}
     {% endfor %}
 {% else %}
     {{ column.value }}
