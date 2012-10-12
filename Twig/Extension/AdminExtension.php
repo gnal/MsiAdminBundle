@@ -32,6 +32,10 @@ class AdminExtension extends \Twig_Extension
 
     public function isImage($pathname)
     {
+        if (!is_file($_SERVER['DOCUMENT_ROOT'].$pathname)) {
+            return false;
+        }
+
         $handle = getimagesize($_SERVER['DOCUMENT_ROOT'].$pathname);
 
         return $handle ? true : false;
