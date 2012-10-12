@@ -63,6 +63,7 @@ class AdminLoader implements LoaderInterface
             'delete',
             'change',
             'sort',
+            'removeFile',
         );
 
         foreach ($names as $name) {
