@@ -30,9 +30,9 @@ class AdminExtension extends \Twig_Extension
         return 'msi_admin';
     }
 
-    public function isImage($filename)
+    public function isImage($pathname)
     {
-        $handle = imagecreatefromstring($filename);
+        $handle = getimagesize($_SERVER['DOCUMENT_ROOT'].$pathname);
 
         return $handle ? true : false;
     }
