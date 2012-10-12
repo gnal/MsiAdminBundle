@@ -43,9 +43,6 @@ abstract class BaseColumn
                         }
                     }
                 }
-                if ($this->name === 'filename') {
-                    $this->value = $this->object->getTranslation()->getPathname();
-                }
             // Else normal value
             } else {
                 $this->value = $this->object->$getter();
