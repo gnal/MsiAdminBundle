@@ -36,7 +36,7 @@ class AdminExtension extends \Twig_Extension
             return false;
         }
 
-        $handle = getimagesize($_SERVER['DOCUMENT_ROOT'].$pathname);
+        $handle = @getimagesize($_SERVER['DOCUMENT_ROOT'].$pathname);
 
         return $handle ? true : false;
     }
