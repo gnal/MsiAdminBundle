@@ -110,7 +110,18 @@ class AdminController extends ContainerAware
     {
         $this->check('update');
 
-        $file = $this->admin->getObject()->getPath().'/'.$this->admin->getObject()->getFilename();
+        if ($this->admin->isTranslationField('filename')) {
+            $entity = $this->admin->getObject()->getTranslation($this->request->query->get('locale'));
+            $file = $entity->getPath().'/'.$entity->getFilename();
+            $entity->setFilename(null);
+            $this->admin->getObjectManager()->save($entity);
+        } else {
+            $entity = $this->admin->getObject();
+            $file = $entity->getPath().'/'.$entity->getFilename();
+            $entity->setFilename(null);
+            $this->admin->getObjectManager()->save($entity);
+        }
+
         if (is_file($file)) unlink($file);
 
         return $this->onSuccess();
