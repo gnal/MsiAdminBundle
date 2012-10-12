@@ -22,10 +22,9 @@ class AdminController extends ContainerAware
         $this->init();
     }
 
-    // maybe deprecated
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        // $parameters['admin'] = $this->admin;
+        $parameters['admin'] = $this->admin;
 
         return $this->container->get('templating')->renderResponse($view, $parameters, $response);
     }
@@ -107,17 +106,23 @@ class AdminController extends ContainerAware
         return $this->onSuccess();
     }
 
+    public function removeFileAction()
+    {
+        $this->check('update');
+
+        $file = $this->admin->getObject()->getPath().'/'.$this->admin->getObject()->getFilename();
+        if (is_file($file)) unlink($file);
+
+        return $this->onSuccess();
+    }
+
     public function changeAction()
     {
         $this->check('update');
 
         $this->admin->getObjectManager()->change($this->admin->getObject(), $this->request);
 
-        if ($this->request->isXmlHttpRequest()) {
-            return new Response('ok');
-        } else {
-            return $this->onSuccess();
-        }
+        return $this->onSuccess();
     }
 
     public function sortAction()
@@ -191,9 +196,12 @@ class AdminController extends ContainerAware
 
     protected function onSuccess()
     {
-        $this->container->get('session')->getFlashBag()->add('success', $this->container->get('translator')->trans('The action was executed successfully!'));
-
-        return new RedirectResponse($this->admin->genUrl('index'));
+        if ($this->request->isXmlHttpRequest()) {
+            return new Response('ok');
+        } else {
+            $this->container->get('session')->getFlashBag()->add('success', $this->container->get('translator')->trans('The action was executed successfully!'));
+            return new RedirectResponse($this->admin->genUrl('index'));
+        }
     }
 
     protected function check($role)
