@@ -22,9 +22,10 @@ class AdminController extends ContainerAware
         $this->init();
     }
 
+    // maybe deprecated
     public function render($view, array $parameters = array(), Response $response = null)
     {
-        $parameters['admin'] = $this->admin;
+        // $parameters['admin'] = $this->admin;
 
         return $this->container->get('templating')->renderResponse($view, $parameters, $response);
     }

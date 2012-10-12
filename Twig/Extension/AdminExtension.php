@@ -25,9 +25,17 @@ class AdminExtension extends \Twig_Extension
         $this->environment = $environment;
     }
 
-    public function getName()
+    public function getGlobals()
     {
-        return 'msi_admin';
+        $adminId = $this->container->get('request')->attributes->get('_admin');
+
+        if ($adminId) {
+            $admin = $this->container->get($this->container->get('request')->attributes->get('_admin'));
+
+            return array('admin' => $admin);
+        }
+
+        return array();
     }
 
     public function isImage($pathname)
@@ -39,5 +47,10 @@ class AdminExtension extends \Twig_Extension
         $handle = @getimagesize($_SERVER['DOCUMENT_ROOT'].$pathname);
 
         return $handle ? true : false;
+    }
+
+    public function getName()
+    {
+        return 'msi_admin';
     }
 }

@@ -10,7 +10,9 @@
                     {# View uploaded file button #}
                     {% if form.parent.vars.value.filename is defined and form.parent.vars.value.filename and form.name == 'file' %}
                         {% if msi_admin_is_image(form.parent.vars.value.pathname) %}
-                            <img style="height:60px;" src="{{ form.parent.vars.value.pathname }}" alt="0">
+                            <img style="height:60px;" class="img-polaroid" src="{{ form.parent.vars.value.pathname }}" alt="0">
+                            &nbsp;
+                            <a class="btn" href="{{ admin.genUrl('edit', {'id': admin.object.id}) }}"><i class="icon-remove"></i></a>
                         {% else %}
                             <a class="btn btn-small btn-info" target="_blank" href="{{ form.parent.vars.value.pathname }}">{{ 'View file'|trans }}</a>
                         {% endif %}
@@ -122,33 +124,6 @@
     {{ form_errors(form) }}
 {% endspaceless %}
 {% endblock choice_widget_collapsed %}
-
-{#{% block choice_widget %}
-{% spaceless %}
-    {% if expanded %}
-        <div {{ block('widget_container_attributes') }} class="controls">
-        {% for child in form %}
-            {{ form_widget(child, {'multiple': 'multiple'}) }}
-        {% endfor %}
-        </div>
-    {% else %}
-    <select {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
-        {% if empty_value is not none %}
-            <option value="">{{ empty_value|trans }}</option>
-        {% endif %}
-        {% if preferred_choices|length > 0 %}
-            {% set options = preferred_choices %}
-            {{ block('widget_choice_options') }}
-            {% if choices|length > 0 and separator is not none %}
-                <option disabled="disabled">{{ separator }}</option>
-            {% endif %}
-        {% endif %}
-        {% set options = choices %}
-        {{ block('widget_choice_options') }}
-    </select>
-    {% endif %}
-{% endspaceless %}
-{% endblock choice_widget %}#}
 
 {% block field_rows %}
 {% spaceless %}
