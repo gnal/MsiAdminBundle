@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('app_locales')
                     ->prototype('scalar')->end()
-                    ->defaultValue(array('fr', 'en'))
+                    ->defaultValue(array('en', 'fr'))
                     ->cannotBeEmpty()
                 ->end()
                 ->arrayNode('super_admin_routes')
