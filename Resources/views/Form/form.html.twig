@@ -9,7 +9,7 @@
                     {{ form_widget(form) }}
                     {# View uploaded file button #}
                     {% if form.parent.vars.value.filename is defined and form.parent.vars.value.filename and form.name == 'file' %}
-                        {% if msi_admin_is_image(form.parent.vars.value.filename) %}
+                        {% if msi_admin_is_image(form.parent.vars.value.pathname) %}
                             <img height="60" src="{{ form.parent.vars.value.pathname }}" alt="0">
                         {% else %}
                             <a class="btn btn-small btn-info" target="_blank" href="{{ form.parent.vars.value.pathname }}">{{ 'View file'|trans }}</a>
