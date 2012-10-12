@@ -64,7 +64,9 @@ abstract class Admin
 
     public function isTranslationField($field)
     {
-        return property_exists($this->getObject()->getTranslation(), $field);
+        if ($this->isTranslatable()) {
+            return property_exists($this->getObject()->getTranslation(), $field);
+        }
     }
 
     public function getClassName()
