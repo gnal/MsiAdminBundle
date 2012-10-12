@@ -50,10 +50,12 @@ abstract class BaseColumn
                 }
                 // order translation in the good order par rapport a la request locale
                 $requestLocale = $this->object->getRequestLocale();
-                $foo = $this->translationValues[$requestLocale];
-                unset($this->translationValues[$requestLocale]);
-                $this->translationValues[$requestLocale] = $foo;
-                $this->translationValues = array_reverse($this->translationValues);
+                if (isset($this->translationValues[$requestLocale])) {
+                    $foo = $this->translationValues[$requestLocale];
+                    unset($this->translationValues[$requestLocale]);
+                    $this->translationValues[$requestLocale] = $foo;
+                    $this->translationValues = array_reverse($this->translationValues);
+                }
             // Else normal value
             } else {
                 $this->value = $this->object->$getter();
