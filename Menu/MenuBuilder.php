@@ -31,7 +31,7 @@ class MenuBuilder extends ContainerAware
     {
         $menu = $this->getAdminMenu($factory);
         $this->findCurrent($menu);
-        die($this->sidebarMenu->getName());
+
         if (!$this->sidebarMenu || $this->sidebarMenu === $menu) {
             return $factory->createItem('default');
         }
@@ -93,7 +93,7 @@ class MenuBuilder extends ContainerAware
             $menuParts = explode('/', $child->getUri());
             if (isset($menuParts[4]) && isset($requestParts[4]) && $menuParts[4] === $requestParts[4]) {
                 $child->setCurrent(true);
-
+                echo $menuParts[4].'::::::::'.$requestParts[4];
                 $this->sidebarMenu = $child->getParent();
             } else {
                 $this->findCurrent($child);
