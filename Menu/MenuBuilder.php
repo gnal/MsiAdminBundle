@@ -91,6 +91,7 @@ class MenuBuilder extends ContainerAware
 
         foreach ($node->getChildren() as $child) {
             $menuParts = explode('/', $child->getUri());
+            // le 4e element en prod est l'action sauf que en dev c'est le bundle...
             if (isset($menuParts[3]) && isset($requestParts[3]) && $menuParts[3] === $requestParts[3]) {
                 $child->setCurrent(true);
 
