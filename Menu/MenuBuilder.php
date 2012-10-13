@@ -91,9 +91,9 @@ class MenuBuilder extends ContainerAware
 
         foreach ($node->getChildren() as $child) {
             $menuParts = explode('/', $child->getUri());
-            if (isset($menuParts[4]) && isset($requestParts[4]) && $menuParts[4] === $requestParts[4]) {
+            if (isset($menuParts[3]) && isset($requestParts[3]) && $menuParts[3] === $requestParts[3]) {
                 $child->setCurrent(true);
-                echo $menuParts[4].'::::::::'.$requestParts[4];
+
                 $this->sidebarMenu = $child->getParent();
             } else {
                 $this->findCurrent($child);
