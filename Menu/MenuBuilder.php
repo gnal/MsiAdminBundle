@@ -42,7 +42,7 @@ class MenuBuilder extends ContainerAware
         foreach ($menu as $row) {
             $this->checkRole($row);
         }
-
+        die($this->sidebarMenu->getName());
         return $this->sidebarMenu;
     }
 
@@ -93,7 +93,7 @@ class MenuBuilder extends ContainerAware
             $menuParts = explode('/', $child->getUri());
             if (isset($menuParts[4]) && isset($requestParts[4]) && $menuParts[4] === $requestParts[4]) {
                 $child->setCurrent(true);
-                die('WORKS');
+
                 $this->sidebarMenu = $child->getParent();
             } else {
                 $this->findCurrent($child);
