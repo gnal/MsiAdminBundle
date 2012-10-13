@@ -31,7 +31,7 @@ class MenuBuilder extends ContainerAware
     {
         $menu = $this->getAdminMenu($factory);
         $this->findCurrent($menu);
-
+        die($this->sidebarMenu->getName());
         if (!$this->sidebarMenu || $this->sidebarMenu === $menu) {
             return $factory->createItem('default');
         }
@@ -42,7 +42,7 @@ class MenuBuilder extends ContainerAware
         foreach ($menu as $row) {
             $this->checkRole($row);
         }
-        die($this->sidebarMenu->getName());
+
         return $this->sidebarMenu;
     }
 
