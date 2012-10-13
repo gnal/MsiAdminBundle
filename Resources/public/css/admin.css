@@ -34,10 +34,6 @@ table + div.pagination {
     vertical-align: middle;
 }
 
-.sidebar-nav {
-    padding: 9px 0;
-}
-
 #sidebar select {
     width: 100%;
 }

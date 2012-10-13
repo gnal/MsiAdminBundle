@@ -327,8 +327,6 @@ abstract class Admin
             'index_template' => 'MsiAdminBundle:Admin:index.html.twig',
             'new_template' => 'MsiAdminBundle:Admin:new.html.twig',
             'edit_template' => 'MsiAdminBundle:Admin:edit.html.twig',
-            // 'sidebar_nav' => $this->getBundleName().'::sidebar_nav.html.twig',
-            'sidebar_nav' => false,
         ));
     }
 }

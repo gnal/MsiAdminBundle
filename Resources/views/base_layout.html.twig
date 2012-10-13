@@ -27,7 +27,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
             {% if block('brand')|length > 0 %}<a class="brand" href="{{ path('msi_admin_dashboard_index') }}">{{ block('brand') }}</a>{% endif %}
             <ul class="nav">
             {% block nav %}
-            {{ knp_menu_render('MsiAdminBundle:MenuBuilder:adminMenu', {'allow_safe_labels': true, 'depth': 3, 'currentClass': 'active'}) }}
+                {{ knp_menu_render('MsiAdminBundle:MenuBuilder:adminMenu', {'allow_safe_labels': true, 'depth': 3, 'currentClass': 'active'}) }}
             {% endblock nav %}
             </ul>
             <div class=" pull-right">
@@ -45,13 +45,7 @@ $('.datepicker').datepicker({format: 'yyyy-mm-dd'});
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span2" id="sidebar">
-            {% if admin is defined and admin.getOption('sidebar_nav') %}
-                <div class="well sidebar-nav">
-                    <ul class="nav nav-list">
-                        {% include admin.getOption('sidebar_nav') %}
-                    </ul>
-                </div>
-            {% endif %}
+            {{ knp_menu_render('MsiAdminBundle:MenuBuilder:sidebarMenu', {'allow_safe_labels': true, 'depth': 2, 'currentClass': 'active'}) }}
             {% block sidebar %}{% endblock sidebar %}
         </div>
         <div class="span10">
