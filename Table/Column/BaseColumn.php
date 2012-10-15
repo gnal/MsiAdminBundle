@@ -22,9 +22,13 @@ abstract class BaseColumn
         $this->set('label', $name);
         $this->set('attr', array());
 
-        $this->options = array_merge($this->options, $this->getDefaultOptions(), $builder['options']);
+        $this->options = array_merge($this->options, $builder['options']);
 
         $resolver = new OptionsResolver();
+        $resolver->setDefaults(array(
+            'attr' => '',
+            'label' => '',
+        ));
         $this->setDefaultOptions($resolver);
         $this->options = $resolver->resolve($this->options);
     }

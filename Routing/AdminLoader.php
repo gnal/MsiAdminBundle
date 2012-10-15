@@ -51,8 +51,11 @@ class AdminLoader implements LoaderInterface
     protected function buildRoutes($admin)
     {
         $collection = new RouteCollection();
+        $namespace = preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $admin->getAdminId());
+        $namespace = preg_replace('@_@', '-', $namespace);
+        die($namespace);
 
-        $prefix = '/{_locale}/admin/'.preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $admin->getAdminId()).'/';
+        $prefix = '/{_locale}/admin/'.$namespace.'/';
         $suffix = '';
 
         $names = array(
