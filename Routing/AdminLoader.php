@@ -51,15 +51,19 @@ class AdminLoader implements LoaderInterface
     protected function buildRoutes($admin)
     {
         $collection = new RouteCollection();
-        $namespace = preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $admin->getAdminId());
-        $namespace = preg_replace('@_@', '-', $namespace);
+
+        if ($admin->getOption('url_namespace')) {
+
+        } else {
+            $namespace = preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $admin->getAdminId());
+            $namespace = preg_replace('@_@', '-', $namespace).'s';
+        }
 
         $prefix = '/{_locale}/admin/'.$namespace.'/';
         $suffix = '';
 
         $names = array(
             'index',
-            'show',
             'new',
             'edit',
             'delete',
@@ -82,19 +86,32 @@ class AdminLoader implements LoaderInterface
         }
 
         $collection->add(
-            $admin->getAdminId().'_delete',
+            $admin->getAdminId().'_index',
             new Route(
-                $prefix.'{id}'.$suffix,
+                $prefix.$suffix,
                 array(
-                    '_controller' => $admin->getOption('controller').'delete',
+                    '_controller' => $admin->getOption('controller').'index',
                     '_admin' => $admin->getAdminId(),
-                    '_method' => 'DELETE',
                 ),
                 array(
-                    '_method' => 'DELETE',
+                    '_method' => 'GET',
                 )
             )
         );
+
+        // $collection->add(
+        //     $admin->getAdminId().'_delete',
+        //     new Route(
+        //         $prefix.'{id}'.$suffix,
+        //         array(
+        //             '_controller' => $admin->getOption('controller').'delete',
+        //             '_admin' => $admin->getAdminId(),
+        //         ),
+        //         array(
+        //             '_method' => 'DELETE',
+        //         )
+        //     )
+        // );
 
         return $collection;
     }
