@@ -2,16 +2,18 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 class BooleanColumn extends BaseColumn
 {
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array(
+        $resolver->setDefaults(array(
             'attr' => array('style' => 'text-align:center;', 'class' => 'span2'),
             'badge_true' => 'badge-success',
             'badge_false' => '',
             'icon_true' => 'icon-ok',
             'icon_false' => 'icon-ok',
-        );
+        ));
     }
 }

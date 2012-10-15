@@ -2,10 +2,12 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 class TextColumn extends BaseColumn
 {
-    public function getDefaultOptions()
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        return array();
+        $resolver->setDefaults(array());
     }
 }

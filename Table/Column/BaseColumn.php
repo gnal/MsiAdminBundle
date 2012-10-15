@@ -2,6 +2,9 @@
 
 namespace Msi\Bundle\AdminBundle\Table\Column;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 abstract class BaseColumn
 {
     protected $name;
@@ -20,6 +23,10 @@ abstract class BaseColumn
         $this->set('attr', array());
 
         $this->options = array_merge($this->options, $this->getDefaultOptions(), $builder['options']);
+
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions($resolver);
+        $this->options = $resolver->resolve($this->options);
     }
 
     public function setObject($object)
@@ -105,5 +112,5 @@ abstract class BaseColumn
         $this->options[$name] = $val;
     }
 
-    abstract public function getDefaultOptions();
+    abstract public function setDefaultOptions(OptionsResolverInterface $resolver);
 }
