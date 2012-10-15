@@ -19,18 +19,13 @@ abstract class BaseColumn
         $this->name = $name;
         $this->type = $builder['type'];
 
-        $this->set('label', $name);
-        $this->set('attr', array());
-
-        $this->options = array_merge($this->options, $builder['options']);
-
         $resolver = new OptionsResolver();
         $resolver->setDefaults(array(
-            'attr' => '',
-            'label' => '',
+            'attr' => array(),
+            'label' => $name,
         ));
         $this->setDefaultOptions($resolver);
-        $this->options = $resolver->resolve($this->options);
+        $this->options = $resolver->resolve($builder['options']);
     }
 
     public function setObject($object)
