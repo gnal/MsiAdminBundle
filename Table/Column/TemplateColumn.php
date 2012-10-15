@@ -8,6 +8,6 @@ class TemplateColumn extends BaseColumn
 {
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array());
+        $resolver->setRequired(array('template'));
     }
 }
