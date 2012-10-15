@@ -14,6 +14,6 @@
     {#<a href="#adminModal" role="button" class="badge msi_admin_admin_new" data-toggle="modal" data-url="{{ admin.genUrl('edit', {'id': object.id}) }}"><i class="icon-pencil icon-white"></i></a>#}
 {% endif %}
 {% if admin.isGranted('delete') %}
-    <a class="btn{% if column.options.delete.ajax %} msi_admin_admin_delete" href="#" data-url="{{ admin.genUrl('delete', {'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}><i class="icon-remove"></i></a>
+    <a class="btn{% if column.options.delete.ajax %} msi_admin_admin_delete" href="#" data-url="{{ admin.genUrl('delete', {'_method': 'DELETE', 'id': object.id}) }}"{% else %}" href="{{ admin.genUrl('delete', {'id': object.id}) }}"{% endif %}><i class="icon-remove"></i></a>
 {% endif %}
 </div>

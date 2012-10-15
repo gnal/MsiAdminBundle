@@ -53,7 +53,6 @@ class AdminLoader implements LoaderInterface
         $collection = new RouteCollection();
         $namespace = preg_replace(array('@_admin$@', '@^[a-z]+_[a-z]+_@'), array('', ''), $admin->getAdminId());
         $namespace = preg_replace('@_@', '-', $namespace);
-        die($namespace);
 
         $prefix = '/{_locale}/admin/'.$namespace.'/';
         $suffix = '';
@@ -81,6 +80,21 @@ class AdminLoader implements LoaderInterface
                 )
             );
         }
+
+        $collection->add(
+            $admin->getAdminId().'_delete',
+            new Route(
+                $prefix.'{id}'.$suffix,
+                array(
+                    '_controller' => $admin->getOption('controller').'delete',
+                    '_admin' => $admin->getAdminId(),
+                    '_method' => 'DELETE',
+                ),
+                array(
+                    '_method' => 'DELETE',
+                )
+            )
+        );
 
         return $collection;
     }
