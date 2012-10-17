@@ -99,19 +99,47 @@ class AdminLoader implements LoaderInterface
             )
         );
 
-        // $collection->add(
-        //     $admin->getAdminId().'_delete',
-        //     new Route(
-        //         $prefix.'{id}'.$suffix,
-        //         array(
-        //             '_controller' => $admin->getOption('controller').'delete',
-        //             '_admin' => $admin->getAdminId(),
-        //         ),
-        //         array(
-        //             '_method' => 'DELETE',
-        //         )
-        //     )
-        // );
+        $collection->add(
+            $admin->getAdminId().'_new',
+            new Route(
+                $prefix.'new'.$suffix,
+                array(
+                    '_controller' => $admin->getOption('controller').'new',
+                    '_admin' => $admin->getAdminId(),
+                ),
+                array(
+                    '_method' => 'GET|POST',
+                )
+            )
+        );
+
+        $collection->add(
+            $admin->getAdminId().'_edit',
+            new Route(
+                $prefix.'{id}'.$suffix,
+                array(
+                    '_controller' => $admin->getOption('controller').'edit',
+                    '_admin' => $admin->getAdminId(),
+                ),
+                array(
+                    '_method' => 'GET|PUT',
+                )
+            )
+        );
+
+        $collection->add(
+            $admin->getAdminId().'_delete',
+            new Route(
+                $prefix.'{id}'.$suffix,
+                array(
+                    '_controller' => $admin->getOption('controller').'delete',
+                    '_admin' => $admin->getAdminId(),
+                ),
+                array(
+                    '_method' => 'DELETE',
+                )
+            )
+        );
 
         return $collection;
     }

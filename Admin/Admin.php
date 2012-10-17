@@ -101,7 +101,7 @@ abstract class Admin
     public function getObject()
     {
         if (!$this->object) {
-            $this->object = $this->objectManager->findOneOrCreate($this->container->get('request')->query->get('id'));
+            $this->object = $this->objectManager->findOneOrCreate($this->container->get('request')->attributes->get('id'));
         }
 
         return $this->object;

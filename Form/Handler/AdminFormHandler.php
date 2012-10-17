@@ -18,7 +18,7 @@ class AdminFormHandler
     {
         $form->setData($entity);
 
-        if ($this->request->getMethod() === 'POST') {
+        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $form->bind($this->request);
 
             if ($form->isValid()) {
